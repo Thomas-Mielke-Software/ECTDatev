@@ -30,6 +30,7 @@ bld/
 
 # dependencies / install files
 NDP461*.exe
+dotNetFx40_Full*.exe
 
 # MSTest test Results
 [Tt]est[Rr]esult*/

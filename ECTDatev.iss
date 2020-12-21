@@ -24,10 +24,13 @@ Compression=bzip
 Source: ECTDatev\bin\Release\ECTDatev.dll; DestDir: {app}; Flags: ignoreversion        
 Source: ECTDatev\logo.jpg; DestDir: {app}; Flags: ignoreversion
 Source: .\LIZENZ.TXT; DestDir: {app}; Flags: ignoreversion
-; Web-Installer (1,3 MB, von https://www.microsoft.com/de-de/download/details.aspx?id=49977 ):
-Source: .\NDP461-KB3102438-Web.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
-; Offline-Installer (65 MB, von https://www.microsoft.com/de-DE/download/details.aspx?id=49982 ):
+; .NET 4.6.1 Web-Installer (1,3 MB, von https://www.microsoft.com/de-de/download/details.aspx?id=49977 ):
+;Source: .\NDP461-KB3102438-Web.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+; .NET 4.6.1 Offline-Installer (65 MB, von https://www.microsoft.com/de-DE/download/details.aspx?id=49982 ):
 ;Source: .\NDP461-KB3102436-x86-x64-AllOS-ENU.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+; .NET 4.0 von https://dotnet.microsoft.com/download/dotnet-framework/net40
+; Offline-Installer: Source: .\dotNetFx40_Full_x86_x64.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+Source: .\dotNetFx40_Full_setup.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
 
 [Run]
 Filename: "{dotnet40}\RegAsm.exe"; Parameters: ECTDatev.dll; WorkingDir: {app}; StatusMsg: "Registering Controls..."; Flags: runminimized
@@ -117,8 +120,8 @@ end;
 function FrameworkIsNotInstalled: Boolean;
 begin
   Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full');
-  if not FileExists(ExpandConstant('{dotnet40}\regasm.exe')) then  // doppel-check wegen Wine-Unterstuetzung
-    MsgBox('Das Diensprogramm regasm.exe konnte nicht gefunden werden. Wenn diese Installation auf einem Mac- oder Linux-System mit dem Windows-Emulator Wine ausgeführt wird, kann "winetricks dotnet461" evtl. Abhilfe schaffen.', mbError, MB_OK);
+  if not Result and not FileExists(ExpandConstant('{dotnet40}\regasm.exe')) then  // doppel-check wegen Wine-Unterstuetzung
+    MsgBox('Das Diensprogramm regasm.exe konnte nicht gefunden werden. Wenn diese Installation auf einem Mac- oder Linux-System mit dem Windows-Emulator Wine ausgeführt wird, kann "winetricks dotnet40" evtl. Abhilfe schaffen. Bitte danach die Installation des Plugins erneut probieren.', mbError, MB_OK);
 end;
 
 procedure InstallFramework;
