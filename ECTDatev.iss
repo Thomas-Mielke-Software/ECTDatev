@@ -21,7 +21,9 @@ Compression=bzip
 ;SignTool=winsdk81sha256 ; installer
 
 [Files]
-Source: ECTDatev\bin\Release\ECTDatev.dll; DestDir: {app}; Flags: ignoreversion        
+Source: ECTDatev\bin\Release\ECTDatev.dll; DestDir: {app}; Flags: ignoreversion    
+Source: ECTDatev\bin\Release\AxInterop.EASYCTXLib.dll; DestDir: {app}; Flags: ignoreversion
+Source: ECTDatev\bin\Release\Interop.EASYCTXLib.dll; DestDir: {app}; Flags: ignoreversion
 Source: ECTDatev\logo.jpg; DestDir: {app}; Flags: ignoreversion
 Source: .\LIZENZ.TXT; DestDir: {app}; Flags: ignoreversion
 ; .NET 4.6.1 Web-Installer (1,3 MB, von https://www.microsoft.com/de-de/download/details.aspx?id=49977 ):
