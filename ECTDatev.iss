@@ -29,7 +29,8 @@ Source: .\LIZENZ.TXT; DestDir: {app}; Flags: ignoreversion
 ; .NET 4.6.1 Web-Installer (1,3 MB, von https://www.microsoft.com/de-de/download/details.aspx?id=49977 ):
 ;Source: .\NDP461-KB3102438-Web.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
 ; .NET 4.6.1 Offline-Installer (65 MB, von https://www.microsoft.com/de-DE/download/details.aspx?id=49982 ):
-Source: .\NDP461-KB3102436-x86-x64-AllOS-ENU.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
+Source: .\NDP461-KB3102436-x86-x64-AllOS-ENU.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework;
+; ^-  Check: FrameworkIsNotInstalled funktioniert nicht
 ; .NET 4.0 von https://dotnet.microsoft.com/download/dotnet-framework/net40
 ; Offline-Installer: Source: .\dotNetFx40_Full_x86_x64.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
 ;Source: .\dotNetFx40_Full_setup.exe; DestName: "NetFrameworkInstaller.exe"; DestDir: {tmp}; Flags: deleteafterinstall; AfterInstall: InstallFramework; Check: FrameworkIsNotInstalled
