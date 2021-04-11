@@ -21,6 +21,7 @@ Es ist zu empfehlen, die EC&T-Laufzeitdateien in das Verzeichnis D:\<MeinArbeits
 	- EasyCT.exe
 	- EasyCTX.ocx
 	- EasyCTXP.dll
+	- ECTIFace.dll
 	- CrashSender1402.exe
 	- crashrpt_lang.ini
 
