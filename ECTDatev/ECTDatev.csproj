@@ -58,6 +58,7 @@
     <Compile Include="Models\Buchung.cs" />
     <Compile Include="Models\Buchungen.cs" />
     <Compile Include="Models\DatevHeader.cs" />
+    <Compile Include="Models\DatevHeadline.cs" />
     <Compile Include="ToDo.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UserControl1.cs">

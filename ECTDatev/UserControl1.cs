@@ -107,8 +107,10 @@ namespace ECTDatev
             }
 
 #if DEBUG
-            DatevHeader header = new DatevHeader(ToDo.dataCategoryID);
+            DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
             System.Diagnostics.Debug.WriteLine("Header:" + Environment.NewLine + header.GetHeader());
+
+            System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Headline:" + Environment.NewLine + DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 #endif
         }
 
