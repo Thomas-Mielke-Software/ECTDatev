@@ -105,6 +105,11 @@ namespace ECTDatev
                 listView1.Items.Add(listViewItem);
                 this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
             }
+
+#if DEBUG
+            DatevHeader header = new DatevHeader(ToDo.dataCategoryID);
+            System.Diagnostics.Debug.WriteLine("Header:" + Environment.NewLine + header.GetHeader());
+#endif
         }
 
         private void herkunftTextbox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -117,5 +122,6 @@ namespace ECTDatev
                 e.Cancel = true;
             }
         }
+
     }
 }
