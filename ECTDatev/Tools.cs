@@ -1,6 +1,7 @@
 ﻿using ECTDatev.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,18 @@ namespace ECTDatev
         public static string UnWrap(string str)
         {
             return str.Trim(Constants.CharactersAroundText.ToCharArray());
+        }
+
+        /// <summary>
+        /// Wites the given <see cref="String"/> into the given <see cref="FileStream"/>.
+        /// Use this as the wrapper to writing data into a file.
+        /// </summary>
+        /// <param name="fs">The FileStream to write in.</param>
+        /// <param name="str">The String to write.</param>
+        public static void AddTextToUTF8Stream(FileStream fs, string str)
+        {
+            byte[] info = new UTF8Encoding(true).GetBytes(str);
+            fs.Write(info, 0, info.Length);
         }
     }
 }

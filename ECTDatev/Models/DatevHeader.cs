@@ -16,10 +16,13 @@ namespace ECTDatev.Models
     {
         private int dataCategoryID;
         private DateTime createdOn;
+        private bool isShortHeader;
+
         public DatevHeader(int dataCategoryID)
         {
             this.dataCategoryID = dataCategoryID;
             this.createdOn = DateTime.Now;
+            isShortHeader = dataCategoryID != 21 && dataCategoryID != 65;
         }
 
         // 1 DATEV Format Identifier
@@ -125,41 +128,41 @@ namespace ECTDatev.Models
             //TODO: check the possible alternatives for the start of FY
             header.Append(Constants.FieldSeparator + Tools.WrapData(this.BeginningOfFY.ToString(Constants.DateFormat_StartFiscalYear), false));
             // 14 G/L Account Number Length
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.GLAccountNumberLength));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.GLAccountNumberLength)));
             // 15 Date From
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.DateFrom.ToString(Constants.DateFormat_FromUntil), false));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateFrom.ToString(Constants.DateFormat_FromUntil), false)));
             // 16 Date Until
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.DateUntil.ToString(Constants.DateFormat_FromUntil), false));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateUntil.ToString(Constants.DateFormat_FromUntil), false)));
             // 17 Label (entry batch)
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.LabelEntryBatch));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.LabelEntryBatch)));
             // 18 Initials
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Initials));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Initials)));
             // 19 Record Type
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.RecordType) /* Keep it empty, thus, it will be  1 = Financial accounting (alternative would be: 2 = Annual financial statements) */ );
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.RecordType) /* Keep it empty, thus, it will be  1 = Financial accounting (alternative would be: 2 = Annual financial statements) */ ));
             // 20 Accounting Reason
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.AccountingReason) /* Keep it empty, thus, it becomes 0 = not tied to a specific assessment area */ );
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.AccountingReason) /* Keep it empty, thus, it becomes 0 = not tied to a specific assessment area */ ));
             // 21 Locking
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Locking));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Locking)));
             // 22 Currency Code
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.CurrencyCode));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.CurrencyCode)));
             // 23 Reserved
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Reserved23));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved23)));
             // 24 Derivatives Flag
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.DerivativesFlag));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DerivativesFlag)));
             // 25 Reserved
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Reserved25));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved25)));
             // 26 Reserved
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Reserved26));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved26)));
             // 27 COA (Datev-SKR)
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.DatevSKR));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DatevSKR)));
             // 28 Industry Solution ID
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.IndustrySolutionID));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.IndustrySolutionID)));
             // 29 Reserved
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Reserved29));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved29)));
             // 30 Reserved
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.Reserved30));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Reserved30)));
             // 31 Application Information
-            header.Append(Constants.FieldSeparator + Tools.WrapData(this.ApplicationInformation));
+            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.ApplicationInformation)));
 
             header.Append(Constants.LineEndTerminator);
 

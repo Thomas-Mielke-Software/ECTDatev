@@ -16,7 +16,7 @@ namespace ECTDatev.Data
             { 21, "Buchungsstapel" },
             { 65, "Wiederkehrende Buchungen" },
             { 67, "Buchungstextkonstanten" },
-            { 20, "Sachkontenbeschriftungen" },
+            { 20, "Kontenbeschriftungen" },
             { 47, "Konto - Notizen" },
             { 16, "Debitoren -/ Kreditoren" },
             { 44, "Textschlüssel" },

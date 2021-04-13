@@ -108,9 +108,8 @@ namespace ECTDatev
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
-            System.Diagnostics.Debug.WriteLine("Header:" + Environment.NewLine + header.GetHeader());
-
-            System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Headline:" + Environment.NewLine + DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+            System.Diagnostics.Debug.WriteLine("Header (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + header.GetHeader());
+            System.Diagnostics.Debug.WriteLine("Headline (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 #endif
         }
 

@@ -17,7 +17,7 @@ namespace ECTDatev
         /// s. Header 3
         /// Wird je nach Aufgabenstellung ermittelt.
         /// </summary>
-        public static int DataCategoryID { get => 21; }
+        public static int DataCategoryID { get => 20; }
 
         /// <summary>
         /// s. UI -> Herkunft
