@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Data\Constants.cs" />
     <Compile Include="Data\DatevFields.cs" />
+    <Compile Include="Data\ExportManager.cs" />
     <Compile Include="Data\Validator.cs" />
     <Compile Include="Models\Buchung.cs" />
     <Compile Include="Models\Buchungen.cs" />

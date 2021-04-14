@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -9,6 +10,7 @@ namespace ECTDatev
     public partial class UserControl1: UserControl
     {
         private string exportiertVon;  // z.B. "Max Mustermann"
+        private Dictionary<int, Buchung> exportedBuchungen = new Dictionary<int, Buchung>();
 
         // Initialisierung
 
@@ -21,6 +23,7 @@ namespace ECTDatev
         {
             herkunftTextbox.Text = "EC";
             exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
+            this.InitializeDateTimePicker();
         }
 
         // OK- und Cancel-Buttons
@@ -67,13 +70,25 @@ namespace ECTDatev
         // ListView füllen
         private void button2_Click(object sender, EventArgs e)
         {
+            this.listView1.Items.Clear();
+
             axDokument1.ID = (int)m_dokID;
             if (axDokument1.ID == 0) return;
+
+            if (this.exportedBuchungen.Count > 0)
+            {
+                this.exportedBuchungen.Clear();
+            }
 
             // Einnahmen
             var einnahmen = new EinnahmenBuchungen(axDokument1, axBuchung1);
             foreach (Buchung b in einnahmen)
             {
+                if (b.Datum < dtpFrom.Value || b.Datum > dtpUntil.Value)
+                {
+                    // this is the filtering
+                    continue;
+                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
@@ -86,12 +101,19 @@ namespace ECTDatev
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
                 this.listView1.Groups["einnahmen"].Items.Add(listViewItem);
+
+                this.exportedBuchungen.Add(this.exportedBuchungen.Count + 1, b);
             }
 
             // Ausgaben
             var ausgaben = new AusgabenBuchungen(axDokument1, axBuchung1);
             foreach (Buchung b in ausgaben)
             {
+                if (b.Datum < dtpFrom.Value || b.Datum > dtpUntil.Value)
+                {
+                    // this is the filtering
+                    continue;
+                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
@@ -104,6 +126,8 @@ namespace ECTDatev
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
                 this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
+
+                this.exportedBuchungen.Add(this.exportedBuchungen.Count + 1, b);
             }
 
 #if DEBUG
@@ -124,5 +148,55 @@ namespace ECTDatev
             }
         }
 
+        private void InitializeDateTimePicker()
+        {
+            axDokument1.ID = (int)m_dokID;
+            int jahr = (int)axDokument1.Jahr;
+
+            if (jahr == 0)
+            {
+                jahr = DateTime.Now.Year;
+            }
+
+            // Set the MinDate and MaxDate.
+            this.dtpFrom.MinDate = new DateTime(jahr, 1, 1);
+            this.dtpFrom.MaxDate = new DateTime(jahr, 12, 31);
+            this.dtpFrom.Value = new DateTime(jahr, 1, 1);
+            this.dtpUntil.MinDate = new DateTime(jahr, 1, 1);
+            this.dtpUntil.MaxDate = new DateTime(jahr, 12, 31);
+            this.dtpUntil.Value = new DateTime(jahr, 12, 31);
+        }
+
+        private void dtpFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.ValidateDTPs();
+        }
+
+        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.ValidateDTPs();
+        }
+
+        private bool ValidateDTPs()
+        {
+            bool ret = true;
+
+            if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
+            {
+                ret = false;
+
+                this.epFrom.SetError(this.dtpFrom, "Das Von-Datum darf nicht nach dem Bis-Datum liegen!");
+                this.okButton.Enabled = ret;
+                this.button2.Enabled = ret;
+            }
+            else
+            {
+                this.epFrom.SetError(this.dtpFrom, string.Empty);
+                this.okButton.Enabled = ret;
+                this.button2.Enabled = ret;
+            }
+
+            return ret;
+        }
     }
 }

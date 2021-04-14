@@ -56,8 +56,8 @@ namespace ECTDatev
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup15 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup16 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -79,10 +79,20 @@ namespace ECTDatev
             this.axDokument1 = new AxEASYCTXLib.AxDokument();
             this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
             this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
+            this.gbBuchungen = new System.Windows.Forms.GroupBox();
+            this.dtpUntil = new System.Windows.Forms.DateTimePicker();
+            this.dtpFrom = new System.Windows.Forms.DateTimePicker();
+            this.lUntil = new System.Windows.Forms.Label();
+            this.lFrom = new System.Windows.Forms.Label();
+            this.epFrom = new System.Windows.Forms.ErrorProvider(this.components);
+            this.epUntil = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).BeginInit();
+            this.gbBuchungen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epUntil)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -121,13 +131,13 @@ namespace ECTDatev
             this.ustBetrag,
             this.brutto,
             this.exportStatus});
-            listViewGroup15.Header = "Einnahmen";
-            listViewGroup15.Name = "einnahmen";
-            listViewGroup16.Header = "Ausgaben";
-            listViewGroup16.Name = "ausgaben";
+            listViewGroup5.Header = "Einnahmen";
+            listViewGroup5.Name = "einnahmen";
+            listViewGroup6.Header = "Ausgaben";
+            listViewGroup6.Name = "ausgaben";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup15,
-            listViewGroup16});
+            listViewGroup5,
+            listViewGroup6});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 7);
             this.listView1.Name = "listView1";
@@ -175,7 +185,7 @@ namespace ECTDatev
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.AutoSize = true;
             this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button2.Location = new System.Drawing.Point(701, 61);
+            this.button2.Location = new System.Drawing.Point(5, 136);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(79, 23);
             this.button2.TabIndex = 6;
@@ -187,7 +197,7 @@ namespace ECTDatev
             // 
             this.herkunftLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.herkunftLabel.AutoSize = true;
-            this.herkunftLabel.Location = new System.Drawing.Point(708, 109);
+            this.herkunftLabel.Location = new System.Drawing.Point(704, 67);
             this.herkunftLabel.Name = "herkunftLabel";
             this.herkunftLabel.Size = new System.Drawing.Size(48, 13);
             this.herkunftLabel.TabIndex = 7;
@@ -196,7 +206,7 @@ namespace ECTDatev
             // herkunftTextbox
             // 
             this.herkunftTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.herkunftTextbox.Location = new System.Drawing.Point(762, 107);
+            this.herkunftTextbox.Location = new System.Drawing.Point(756, 64);
             this.herkunftTextbox.MaxLength = 2;
             this.herkunftTextbox.Name = "herkunftTextbox";
             this.herkunftTextbox.Size = new System.Drawing.Size(32, 20);
@@ -256,17 +266,76 @@ namespace ECTDatev
             this.axEinstellung1.Size = new System.Drawing.Size(32, 29);
             this.axEinstellung1.TabIndex = 2;
             // 
+            // gbBuchungen
+            // 
+            this.gbBuchungen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbBuchungen.Controls.Add(this.dtpUntil);
+            this.gbBuchungen.Controls.Add(this.dtpFrom);
+            this.gbBuchungen.Controls.Add(this.lUntil);
+            this.gbBuchungen.Controls.Add(this.lFrom);
+            this.gbBuchungen.Controls.Add(this.button2);
+            this.gbBuchungen.Location = new System.Drawing.Point(701, 140);
+            this.gbBuchungen.Name = "gbBuchungen";
+            this.gbBuchungen.Size = new System.Drawing.Size(128, 166);
+            this.gbBuchungen.TabIndex = 11;
+            this.gbBuchungen.TabStop = false;
+            this.gbBuchungen.Text = "Buchungen";
+            // 
+            // dtpUntil
+            // 
+            this.dtpUntil.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpUntil.Location = new System.Drawing.Point(6, 92);
+            this.dtpUntil.Name = "dtpUntil";
+            this.dtpUntil.Size = new System.Drawing.Size(87, 20);
+            this.dtpUntil.TabIndex = 3;
+            this.dtpUntil.Validating += new System.ComponentModel.CancelEventHandler(this.dtpUntil_Validating);
+            // 
+            // dtpFrom
+            // 
+            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpFrom.Location = new System.Drawing.Point(6, 38);
+            this.dtpFrom.Name = "dtpFrom";
+            this.dtpFrom.Size = new System.Drawing.Size(87, 20);
+            this.dtpFrom.TabIndex = 2;
+            this.dtpFrom.Validating += new System.ComponentModel.CancelEventHandler(this.dtpFrom_Validating);
+            // 
+            // lUntil
+            // 
+            this.lUntil.AutoSize = true;
+            this.lUntil.Location = new System.Drawing.Point(3, 76);
+            this.lUntil.Name = "lUntil";
+            this.lUntil.Size = new System.Drawing.Size(24, 13);
+            this.lUntil.TabIndex = 1;
+            this.lUntil.Text = "Bis:";
+            // 
+            // lFrom
+            // 
+            this.lFrom.AutoSize = true;
+            this.lFrom.Location = new System.Drawing.Point(2, 22);
+            this.lFrom.Name = "lFrom";
+            this.lFrom.Size = new System.Drawing.Size(29, 13);
+            this.lFrom.TabIndex = 0;
+            this.lFrom.Text = "Von:";
+            // 
+            // epFrom
+            // 
+            this.epFrom.ContainerControl = this;
+            // 
+            // epUntil
+            // 
+            this.epUntil.ContainerControl = this;
+            // 
             // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.gbBuchungen);
             this.Controls.Add(this.abbrechenButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.herkunftTextbox);
             this.Controls.Add(this.herkunftLabel);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.axDokument1);
             this.Controls.Add(this.axBuchung1);
@@ -280,6 +349,10 @@ namespace ECTDatev
             ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).EndInit();
+            this.gbBuchungen.ResumeLayout(false);
+            this.gbBuchungen.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epUntil)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,5 +389,12 @@ namespace ECTDatev
         private System.Windows.Forms.ColumnHeader exportStatus;
         private System.Windows.Forms.Button abbrechenButton;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.GroupBox gbBuchungen;
+        private System.Windows.Forms.Label lFrom;
+        private System.Windows.Forms.Label lUntil;
+        private System.Windows.Forms.DateTimePicker dtpFrom;
+        private System.Windows.Forms.DateTimePicker dtpUntil;
+        private System.Windows.Forms.ErrorProvider epFrom;
+        private System.Windows.Forms.ErrorProvider epUntil;
     }
 }

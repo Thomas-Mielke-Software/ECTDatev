@@ -16,10 +16,19 @@ namespace ECTDatev.Models
     {
         private int dataCategoryID;
         private DateTime createdOn;
+        /// <summary>
+        /// s. Datev-Doku 3.3: 
+        /// The header for master data contains less information than the header for transaction data.
+        /// </summary>
         private bool isShortHeader;
 
         public DatevHeader(int dataCategoryID)
         {
+            if (!DatevFields.IsDataCategoryValid(dataCategoryID))
+            {
+                throw new KeyNotFoundException("dataCategoryID: " + dataCategoryID.ToString());
+            }
+
             this.dataCategoryID = dataCategoryID;
             this.createdOn = DateTime.Now;
             isShortHeader = dataCategoryID != 21 && dataCategoryID != 65;
@@ -50,8 +59,12 @@ namespace ECTDatev.Models
         // 12 Client
         public int Client { get => ToDo.Client; }
         // 13 Beginning of FY
-        //TODO: check the possible alternatives for the start of FY
+        // TODO: check the possible alternatives for the start of FY
         public DateTime BeginningOfFY { get => new DateTime(ToDo.Buchungsjahr, 1, 1); }
+ 
+        // Following header columns might be empty, s. isShortHeader
+        // TODO Check out whether the property values are needed in case of empty columns!
+
         // 14 G/L Account Number Length
         // TODO: set the length for for the remaing cases (possible values: 5(if data category==16) , 8-9(if personal accounts?))
         public int GLAccountNumberLength { get => 4; }
@@ -127,6 +140,9 @@ namespace ECTDatev.Models
             // 13 Beginning of FY
             //TODO: check the possible alternatives for the start of FY
             header.Append(Constants.FieldSeparator + Tools.WrapData(this.BeginningOfFY.ToString(Constants.DateFormat_StartFiscalYear), false));
+
+            // Following header columns might be empty, s. isShortHeader
+
             // 14 G/L Account Number Length
             header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.GLAccountNumberLength)));
             // 15 Date From
