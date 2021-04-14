@@ -57,8 +57,8 @@ namespace ECTDatev
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup10 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
@@ -72,11 +72,11 @@ namespace ECTDatev
             this.ust = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ustBetrag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.brutto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.exportStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button2 = new System.Windows.Forms.Button();
             this.herkunftLabel = new System.Windows.Forms.Label();
             this.herkunftTextbox = new System.Windows.Forms.TextBox();
             this.herkunftErrorprov = new System.Windows.Forms.ErrorProvider(this.components);
-            this.exportStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.okButton = new System.Windows.Forms.Button();
             this.abbrechenButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).BeginInit();
@@ -148,13 +148,13 @@ namespace ECTDatev
             this.ustBetrag,
             this.brutto,
             this.exportStatus});
-            listViewGroup9.Header = "Einnahmen";
-            listViewGroup9.Name = "einnahmen";
-            listViewGroup10.Header = "Ausgaben";
-            listViewGroup10.Name = "ausgaben";
+            listViewGroup1.Header = "Einnahmen";
+            listViewGroup1.Name = "einnahmen";
+            listViewGroup2.Header = "Ausgaben";
+            listViewGroup2.Name = "ausgaben";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup9,
-            listViewGroup10});
+            listViewGroup1,
+            listViewGroup2});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 7);
             this.listView1.Name = "listView1";
@@ -179,18 +179,27 @@ namespace ECTDatev
             // netto
             // 
             this.netto.Text = "Netto";
+            this.netto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ust
             // 
             this.ust.Text = "USt";
+            this.ust.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ustBetrag
             // 
             this.ustBetrag.Text = "USt-Betrag";
+            this.ustBetrag.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // brutto
             // 
             this.brutto.Text = "Brutto";
+            this.brutto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // exportStatus
+            // 
+            this.exportStatus.Text = "Export-Status";
+            this.exportStatus.Width = 200;
             // 
             // button2
             // 
@@ -228,11 +237,6 @@ namespace ECTDatev
             // herkunftErrorprov
             // 
             this.herkunftErrorprov.ContainerControl = this;
-            // 
-            // exportStatus
-            // 
-            this.exportStatus.Text = "Export-Status";
-            this.exportStatus.Width = 200;
             // 
             // okButton
             // 
@@ -299,6 +303,8 @@ namespace ECTDatev
         public void Init(long dokID)
         {
             m_dokID = dokID;
+
+            InitData();
         }
 
         private System.Windows.Forms.ListView listView1;

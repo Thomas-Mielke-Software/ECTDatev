@@ -23,6 +23,50 @@ namespace ECTDatev
             exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
         }
 
+        private void InitData()
+        {
+            axDokument1.ID = (int)m_dokID;
+            if (axDokument1.ID == 0) return;
+
+            var culture = new System.Globalization.CultureInfo("de-DE");  // wir brauchen DE-Format für DATEV -- unabhängig von den Betriebssystemeinstellungen
+
+            // Einnahmen
+            var einnahmen = new EinnahmenBuchungen(axDokument1, axBuchung1);
+            foreach (Buchung b in einnahmen)
+            {
+                string[] row = {
+                    b.Datum.ToString(),
+                    b.Belegnummer,
+                    b.Beschreibung,
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("0.00", culture),
+                    b.MWSt.ToString(culture),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("0.00", culture),
+                    b.Betrag.ToString("0.00", culture)
+                };
+                var listViewItem = new ListViewItem(row);
+                listView1.Items.Add(listViewItem);
+                this.listView1.Groups["einnahmen"].Items.Add(listViewItem);
+            }
+
+            // Ausgaben
+            var ausgaben = new AusgabenBuchungen(axDokument1, axBuchung1);
+            foreach (Buchung b in ausgaben)
+            {
+                string[] row = {
+                    b.Datum.ToString(),
+                    b.Belegnummer,
+                    b.Beschreibung,
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString(),
+                    b.MWSt.ToString(),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString(),
+                    b.Betrag.ToString()
+                };
+                var listViewItem = new ListViewItem(row);
+                listView1.Items.Add(listViewItem);
+                this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
+            }
+        }
+
         // OK- und Cancel-Buttons
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -67,44 +111,7 @@ namespace ECTDatev
         // ListView füllen
         private void button2_Click(object sender, EventArgs e)
         {
-            axDokument1.ID = (int)m_dokID;
-            if (axDokument1.ID == 0) return;
 
-            // Einnahmen
-            var einnahmen = new EinnahmenBuchungen(axDokument1, axBuchung1);
-            foreach (Buchung b in einnahmen)
-            {
-                string[] row = {
-                    b.Datum.ToString(),
-                    b.Belegnummer,
-                    b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString(),
-                    b.MWSt.ToString(),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString(),
-                    b.Betrag.ToString()
-                };
-                var listViewItem = new ListViewItem(row);
-                listView1.Items.Add(listViewItem);
-                this.listView1.Groups["einnahmen"].Items.Add(listViewItem);
-            }
-
-            // Ausgaben
-            var ausgaben = new AusgabenBuchungen(axDokument1, axBuchung1);
-            foreach (Buchung b in ausgaben)
-            {
-                string[] row = {
-                    b.Datum.ToString(),
-                    b.Belegnummer,
-                    b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString(),
-                    b.MWSt.ToString(),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString(),
-                    b.Betrag.ToString()
-                };
-                var listViewItem = new ListViewItem(row);
-                listView1.Items.Add(listViewItem);
-                this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
-            }
         }
 
         private void herkunftTextbox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
