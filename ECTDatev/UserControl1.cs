@@ -176,34 +176,45 @@ namespace ECTDatev
 
         private void dtpFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.ValidateDTPs();
-        }
-
-        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.ValidateDTPs();
-        }
-
-        private bool ValidateDTPs()
-        {
-            bool ret = true;
-
             if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
             {
-                ret = false;
-
                 this.epFrom.SetError(this.dtpFrom, "Das Von-Datum darf nicht nach dem Bis-Datum liegen!");
-                this.okButton.Enabled = ret;
-                this.button2.Enabled = ret;
+
+                this.okButton.Enabled = false;
+                this.button2.Enabled = false;
+
+                e.Cancel = true;
             }
             else
             {
                 this.epFrom.SetError(this.dtpFrom, string.Empty);
-                this.okButton.Enabled = ret;
-                this.button2.Enabled = ret;
-            }
+                this.okButton.Enabled = true;
+                this.button2.Enabled = true;
 
-            return ret;
+                e.Cancel = false;
+            }
+        }
+
+        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
+            {
+                this.epUntil.SetError(this.dtpUntil, "Das Von-Datum darf nicht nach dem Bis-Datum liegen!");
+
+                this.okButton.Enabled = false;
+                this.button2.Enabled = false;
+
+                e.Cancel = true;
+            }
+            else
+            {
+                this.epUntil.SetError(this.dtpUntil, string.Empty);
+
+                this.okButton.Enabled = true;
+                this.button2.Enabled = true;
+
+                e.Cancel = false;
+            }
         }
 
         private void dtpFrom_ValueChanged(object sender, EventArgs e)
