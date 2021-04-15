@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using ECTDatev.Data;
 using ECTDatev.Models;
 
 namespace ECTDatev
@@ -23,6 +24,7 @@ namespace ECTDatev
         {
             herkunftTextbox.Text = "EC";
             exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
+            this.tbBuchungsjahr_Init();
             this.InitializeDateTimePicker();
         }
 
@@ -46,6 +48,7 @@ namespace ECTDatev
         private void okButton_Click(object sender, EventArgs e)
         {
             // hier den Exportvorgang starten
+            ExportManager.OrderExport(this.exportedBuchungen);
         }
 
         [DllImport("user32.dll")]
@@ -60,11 +63,13 @@ namespace ECTDatev
             SendMessage(hwnd, WM_COMMAND, ID_VIEW_JOURNAL_SWITCH, (IntPtr)0);
         }
 
-        // Buchungsjahr anzeigen
-        private void button1_Click(object sender, EventArgs e)
+        private void tbBuchungsjahr_Init()
         {
-            axDokument1.ID = (int)m_dokID;
-            label1.Text = System.String.Format("Buchungsjahr: {0}", axDokument1.Jahr);
+            if (m_dokID > 0)
+            {
+                axDokument1.ID = (int)m_dokID;
+                tbBuchungsjahr.Text = System.String.Format("Buchungsjahr: {0}", axDokument1.Jahr);
+            }
         }
 
         // ListView füllen
@@ -129,6 +134,8 @@ namespace ECTDatev
 
                 this.exportedBuchungen.Add(this.exportedBuchungen.Count + 1, b);
             }
+
+            this.okButton.Enabled = true;
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
@@ -197,6 +204,16 @@ namespace ECTDatev
             }
 
             return ret;
+        }
+
+        private void dtpFrom_ValueChanged(object sender, EventArgs e)
+        {
+            this.okButton.Enabled = false;
+        }
+
+        private void dtpUntil_ValueChanged(object sender, EventArgs e)
+        {
+            this.okButton.Enabled = false;
         }
     }
 }

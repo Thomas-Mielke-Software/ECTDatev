@@ -12,6 +12,13 @@ namespace ECTDatev.Data
     /// </summary>
     public static class Validator
     {
+        /// <summary>
+        /// Manages the export
+        /// </summary>
+        /// <param name="dataCategoryID"></param>
+        /// <param name="data"></param>
+        /// <param name="columnInfos"></param>
+        /// <returns></returns>
         public static string Manager(int dataCategoryID, Dictionary<int, object> data, Dictionary<int, ColumnInfo> columnInfos)
         {
             if (data == null)

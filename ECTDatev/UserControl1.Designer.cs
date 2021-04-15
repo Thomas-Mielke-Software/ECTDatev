@@ -56,11 +56,10 @@ namespace ECTDatev
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lBuchungsjahr = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.datum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.beleg = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -86,6 +85,7 @@ namespace ECTDatev
             this.lFrom = new System.Windows.Forms.Label();
             this.epFrom = new System.Windows.Forms.ErrorProvider(this.components);
             this.epUntil = new System.Windows.Forms.ErrorProvider(this.components);
+            this.tbBuchungsjahr = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).BeginInit();
@@ -95,27 +95,15 @@ namespace ECTDatev
             ((System.ComponentModel.ISupportInitialize)(this.epUntil)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // lBuchungsjahr
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.AutoSize = true;
-            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.Location = new System.Drawing.Point(701, 7);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Buchungsjahr anzeigen";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(703, 38);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 13);
-            this.label1.TabIndex = 1;
+            this.lBuchungsjahr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lBuchungsjahr.AutoSize = true;
+            this.lBuchungsjahr.Location = new System.Drawing.Point(755, 38);
+            this.lBuchungsjahr.Name = "lBuchungsjahr";
+            this.lBuchungsjahr.Size = new System.Drawing.Size(72, 13);
+            this.lBuchungsjahr.TabIndex = 1;
+            this.lBuchungsjahr.Text = "Buchungsjahr";
             // 
             // listView1
             // 
@@ -131,17 +119,17 @@ namespace ECTDatev
             this.ustBetrag,
             this.brutto,
             this.exportStatus});
-            listViewGroup5.Header = "Einnahmen";
-            listViewGroup5.Name = "einnahmen";
-            listViewGroup6.Header = "Ausgaben";
-            listViewGroup6.Name = "ausgaben";
+            listViewGroup1.Header = "Einnahmen";
+            listViewGroup1.Name = "einnahmen";
+            listViewGroup2.Header = "Ausgaben";
+            listViewGroup2.Name = "ausgaben";
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup5,
-            listViewGroup6});
+            listViewGroup1,
+            listViewGroup2});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 7);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(692, 421);
+            this.listView1.Size = new System.Drawing.Size(744, 421);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -197,7 +185,7 @@ namespace ECTDatev
             // 
             this.herkunftLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.herkunftLabel.AutoSize = true;
-            this.herkunftLabel.Location = new System.Drawing.Point(704, 67);
+            this.herkunftLabel.Location = new System.Drawing.Point(756, 67);
             this.herkunftLabel.Name = "herkunftLabel";
             this.herkunftLabel.Size = new System.Drawing.Size(48, 13);
             this.herkunftLabel.TabIndex = 7;
@@ -206,7 +194,7 @@ namespace ECTDatev
             // herkunftTextbox
             // 
             this.herkunftTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.herkunftTextbox.Location = new System.Drawing.Point(756, 64);
+            this.herkunftTextbox.Location = new System.Drawing.Point(849, 64);
             this.herkunftTextbox.MaxLength = 2;
             this.herkunftTextbox.Name = "herkunftTextbox";
             this.herkunftTextbox.Size = new System.Drawing.Size(32, 20);
@@ -220,7 +208,7 @@ namespace ECTDatev
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(701, 405);
+            this.okButton.Location = new System.Drawing.Point(753, 405);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(55, 23);
             this.okButton.TabIndex = 9;
@@ -231,7 +219,7 @@ namespace ECTDatev
             // abbrechenButton
             // 
             this.abbrechenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.abbrechenButton.Location = new System.Drawing.Point(762, 405);
+            this.abbrechenButton.Location = new System.Drawing.Point(814, 405);
             this.abbrechenButton.Name = "abbrechenButton";
             this.abbrechenButton.Size = new System.Drawing.Size(67, 23);
             this.abbrechenButton.TabIndex = 10;
@@ -274,7 +262,7 @@ namespace ECTDatev
             this.gbBuchungen.Controls.Add(this.lUntil);
             this.gbBuchungen.Controls.Add(this.lFrom);
             this.gbBuchungen.Controls.Add(this.button2);
-            this.gbBuchungen.Location = new System.Drawing.Point(701, 140);
+            this.gbBuchungen.Location = new System.Drawing.Point(753, 140);
             this.gbBuchungen.Name = "gbBuchungen";
             this.gbBuchungen.Size = new System.Drawing.Size(128, 166);
             this.gbBuchungen.TabIndex = 11;
@@ -288,6 +276,7 @@ namespace ECTDatev
             this.dtpUntil.Name = "dtpUntil";
             this.dtpUntil.Size = new System.Drawing.Size(87, 20);
             this.dtpUntil.TabIndex = 3;
+            this.dtpUntil.ValueChanged += new System.EventHandler(this.dtpUntil_ValueChanged);
             this.dtpUntil.Validating += new System.ComponentModel.CancelEventHandler(this.dtpUntil_Validating);
             // 
             // dtpFrom
@@ -297,6 +286,7 @@ namespace ECTDatev
             this.dtpFrom.Name = "dtpFrom";
             this.dtpFrom.Size = new System.Drawing.Size(87, 20);
             this.dtpFrom.TabIndex = 2;
+            this.dtpFrom.ValueChanged += new System.EventHandler(this.dtpFrom_ValueChanged);
             this.dtpFrom.Validating += new System.ComponentModel.CancelEventHandler(this.dtpFrom_Validating);
             // 
             // lUntil
@@ -325,12 +315,22 @@ namespace ECTDatev
             // 
             this.epUntil.ContainerControl = this;
             // 
+            // tbBuchungsjahr
+            // 
+            this.tbBuchungsjahr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbBuchungsjahr.Location = new System.Drawing.Point(833, 35);
+            this.tbBuchungsjahr.Name = "tbBuchungsjahr";
+            this.tbBuchungsjahr.ReadOnly = true;
+            this.tbBuchungsjahr.Size = new System.Drawing.Size(48, 20);
+            this.tbBuchungsjahr.TabIndex = 12;
+            // 
             // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.tbBuchungsjahr);
             this.Controls.Add(this.gbBuchungen);
             this.Controls.Add(this.abbrechenButton);
             this.Controls.Add(this.okButton);
@@ -340,10 +340,9 @@ namespace ECTDatev
             this.Controls.Add(this.axDokument1);
             this.Controls.Add(this.axBuchung1);
             this.Controls.Add(this.axEinstellung1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.lBuchungsjahr);
             this.Name = "UserControl1";
-            this.Size = new System.Drawing.Size(832, 431);
+            this.Size = new System.Drawing.Size(884, 431);
             this.Load += new System.EventHandler(this.UserControl1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).EndInit();
@@ -359,9 +358,7 @@ namespace ECTDatev
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lBuchungsjahr;
         private AxEASYCTXLib.AxEinstellung axEinstellung1;
         private AxEASYCTXLib.AxBuchung axBuchung1;
         private AxEASYCTXLib.AxDokument axDokument1;
@@ -396,5 +393,6 @@ namespace ECTDatev
         private System.Windows.Forms.DateTimePicker dtpUntil;
         private System.Windows.Forms.ErrorProvider epFrom;
         private System.Windows.Forms.ErrorProvider epUntil;
+        private System.Windows.Forms.TextBox tbBuchungsjahr;
     }
 }

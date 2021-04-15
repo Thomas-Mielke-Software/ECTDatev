@@ -14,13 +14,13 @@ namespace ECTDatev.Models
     /// </summary>
     public class DatevHeader
     {
-        private int dataCategoryID;
-        private DateTime createdOn;
+        private readonly int dataCategoryID;
+        private readonly DateTime createdOn;
         /// <summary>
         /// s. Datev-Doku 3.3: 
         /// The header for master data contains less information than the header for transaction data.
         /// </summary>
-        private bool isShortHeader;
+        private readonly bool isShortHeader;
 
         public DatevHeader(int dataCategoryID)
         {

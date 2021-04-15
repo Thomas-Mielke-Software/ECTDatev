@@ -162,7 +162,7 @@ namespace ECTDatev.Data
                     return new string[] { };
             }
 
-            public string getMacroKeyword()
+            public string GetMacroKeyword()
             {
                 if (HasOptionalInfo)
                 {
