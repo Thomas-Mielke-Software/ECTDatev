@@ -60,6 +60,9 @@ namespace ECTDatev
             System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
             this.lBuchungsjahr = new System.Windows.Forms.Label();
+            this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
+            this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
+            this.axDokument1 = new AxEASYCTXLib.AxDokument();
             this.listView1 = new System.Windows.Forms.ListView();
             this.datum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.beleg = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -83,9 +86,6 @@ namespace ECTDatev
             this.epFrom = new System.Windows.Forms.ErrorProvider(this.components);
             this.epUntil = new System.Windows.Forms.ErrorProvider(this.components);
             this.tbBuchungsjahr = new System.Windows.Forms.TextBox();
-            this.axDokument1 = new AxEASYCTXLib.AxDokument();
-            this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
-            this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).BeginInit();
             this.gbBuchungen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epFrom)).BeginInit();
@@ -150,18 +150,27 @@ namespace ECTDatev
             // netto
             // 
             this.netto.Text = "Netto";
+            this.netto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ust
             // 
             this.ust.Text = "USt";
+            this.ust.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ustBetrag
             // 
             this.ustBetrag.Text = "USt-Betrag";
+            this.ustBetrag.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // brutto
             // 
             this.brutto.Text = "Brutto";
+            this.brutto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // exportStatus
+            // 
+            this.exportStatus.Text = "Export-Status";
+            this.exportStatus.Width = 200;
             // 
             // exportStatus
             // 
@@ -343,7 +352,6 @@ namespace ECTDatev
             this.Controls.Add(this.lBuchungsjahr);
             this.Name = "UserControl1";
             this.Size = new System.Drawing.Size(884, 723);
-            this.Load += new System.EventHandler(this.UserControl1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).EndInit();
             this.gbBuchungen.ResumeLayout(false);
             this.gbBuchungen.PerformLayout();

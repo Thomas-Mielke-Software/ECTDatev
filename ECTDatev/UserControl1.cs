@@ -21,19 +21,18 @@ namespace ECTDatev
         public void Init(long dokID)
         {
             m_dokID = dokID;
+            axDokument1.ID = (int)m_dokID;
+            if (axDokument1.ID == 0) return;
+
+            herkunftTextbox.Text = "EC";
+            exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
+            this.tbBuchungsjahr_Init();
+            this.InitializeDateTimePicker();
         }
 
         public UserControl1()
         {
             InitializeComponent();
-        }
-
-        private void UserControl1_Load(object sender, EventArgs e)
-        {
-            herkunftTextbox.Text = "EC";
-            exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
-            this.tbBuchungsjahr_Init();
-            this.InitializeDateTimePicker();
         }
 
         // OK- und Cancel-Buttons
@@ -76,7 +75,7 @@ namespace ECTDatev
             if (m_dokID > 0)
             {
                 axDokument1.ID = (int)m_dokID;
-                tbBuchungsjahr.Text = System.String.Format("Buchungsjahr: {0}", axDokument1.Jahr);
+                tbBuchungsjahr.Text = System.String.Format("{0}", axDokument1.Jahr);
             }
         }
 
@@ -85,62 +84,47 @@ namespace ECTDatev
         {
             this.listView1.Items.Clear();
 
-            axDokument1.ID = (int)m_dokID;
-            if (axDokument1.ID == 0) return;
-
             if (this.exportedBuchungen.Count > 0)
             {
                 this.exportedBuchungen.Clear();
             }
 
-            // Einnahmen
+            var culture = new System.Globalization.CultureInfo("de-DE");  // wir brauchen DE-Format für DATEV -- unabhängig von den
+                                                                          // 
+                                                                          // Einnahmen
             var einnahmen = new EinnahmenBuchungen(axDokument1, axBuchung1);
             foreach (Buchung b in einnahmen)
             {
-                if (b.Datum < dtpFrom.Value || b.Datum > dtpUntil.Value)
-                {
-                    // this is the filtering
-                    continue;
-                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
                     b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString(),
-                    b.MWSt.ToString(),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString(),
-                    b.Betrag.ToString()
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("0.00", culture),
+                    b.MWSt.ToString(culture),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("0.00", culture),
+                    b.Betrag.ToString("0.00", culture)
                 };
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
                 this.listView1.Groups["einnahmen"].Items.Add(listViewItem);
-
-                this.exportedBuchungen.Add(this.exportedBuchungen.Count + 1, b);
             }
 
             // Ausgaben
             var ausgaben = new AusgabenBuchungen(axDokument1, axBuchung1);
             foreach (Buchung b in ausgaben)
             {
-                if (b.Datum < dtpFrom.Value || b.Datum > dtpUntil.Value)
-                {
-                    // this is the filtering
-                    continue;
-                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
                     b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString(),
-                    b.MWSt.ToString(),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString(),
-                    b.Betrag.ToString()
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("0.00", culture),
+                    b.MWSt.ToString(culture),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("0.00", culture),
+                    b.Betrag.ToString("0.00", culture)
                 };
                 var listViewItem = new ListViewItem(row);
                 listView1.Items.Add(listViewItem);
                 this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
-
-                this.exportedBuchungen.Add(this.exportedBuchungen.Count + 1, b);
             }
 
             this.okButton.Enabled = true;
