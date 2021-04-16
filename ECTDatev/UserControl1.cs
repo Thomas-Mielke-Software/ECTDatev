@@ -15,6 +15,14 @@ namespace ECTDatev
 
         // Initialisierung
 
+        private long m_dokID;
+
+        [ComVisible(true)]
+        public void Init(long dokID)
+        {
+            m_dokID = dokID;
+        }
+
         public UserControl1()
         {
             InitializeComponent();

@@ -75,9 +75,6 @@ namespace ECTDatev
             this.herkunftErrorprov = new System.Windows.Forms.ErrorProvider(this.components);
             this.okButton = new System.Windows.Forms.Button();
             this.abbrechenButton = new System.Windows.Forms.Button();
-            this.axDokument1 = new AxEASYCTXLib.AxDokument();
-            this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
-            this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
             this.gbBuchungen = new System.Windows.Forms.GroupBox();
             this.dtpUntil = new System.Windows.Forms.DateTimePicker();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
@@ -86,13 +83,16 @@ namespace ECTDatev
             this.epFrom = new System.Windows.Forms.ErrorProvider(this.components);
             this.epUntil = new System.Windows.Forms.ErrorProvider(this.components);
             this.tbBuchungsjahr = new System.Windows.Forms.TextBox();
+            this.axDokument1 = new AxEASYCTXLib.AxDokument();
+            this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
+            this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).BeginInit();
             this.gbBuchungen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.epUntil)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).BeginInit();
             this.SuspendLayout();
             // 
             // lBuchungsjahr
@@ -127,9 +127,9 @@ namespace ECTDatev
             listViewGroup1,
             listViewGroup2});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(3, 7);
+            this.listView1.Location = new System.Drawing.Point(10, 276);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(744, 421);
+            this.listView1.Size = new System.Drawing.Size(743, 311);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -208,7 +208,7 @@ namespace ECTDatev
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(753, 405);
+            this.okButton.Location = new System.Drawing.Point(759, 564);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(55, 23);
             this.okButton.TabIndex = 9;
@@ -219,40 +219,13 @@ namespace ECTDatev
             // abbrechenButton
             // 
             this.abbrechenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.abbrechenButton.Location = new System.Drawing.Point(814, 405);
+            this.abbrechenButton.Location = new System.Drawing.Point(817, 564);
             this.abbrechenButton.Name = "abbrechenButton";
             this.abbrechenButton.Size = new System.Drawing.Size(67, 23);
             this.abbrechenButton.TabIndex = 10;
             this.abbrechenButton.Text = "Abbrechen";
             this.abbrechenButton.UseVisualStyleBackColor = true;
             this.abbrechenButton.Click += new System.EventHandler(this.abbrechenButton_Click);
-            // 
-            // axDokument1
-            // 
-            this.axDokument1.Enabled = true;
-            this.axDokument1.Location = new System.Drawing.Point(714, 340);
-            this.axDokument1.Name = "axDokument1";
-            this.axDokument1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axDokument1.OcxState")));
-            this.axDokument1.Size = new System.Drawing.Size(33, 29);
-            this.axDokument1.TabIndex = 4;
-            // 
-            // axBuchung1
-            // 
-            this.axBuchung1.Enabled = true;
-            this.axBuchung1.Location = new System.Drawing.Point(753, 340);
-            this.axBuchung1.Name = "axBuchung1";
-            this.axBuchung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axBuchung1.OcxState")));
-            this.axBuchung1.Size = new System.Drawing.Size(34, 29);
-            this.axBuchung1.TabIndex = 3;
-            // 
-            // axEinstellung1
-            // 
-            this.axEinstellung1.Enabled = true;
-            this.axEinstellung1.Location = new System.Drawing.Point(793, 340);
-            this.axEinstellung1.Name = "axEinstellung1";
-            this.axEinstellung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axEinstellung1.OcxState")));
-            this.axEinstellung1.Size = new System.Drawing.Size(32, 29);
-            this.axEinstellung1.TabIndex = 2;
             // 
             // gbBuchungen
             // 
@@ -324,6 +297,33 @@ namespace ECTDatev
             this.tbBuchungsjahr.Size = new System.Drawing.Size(48, 20);
             this.tbBuchungsjahr.TabIndex = 12;
             // 
+            // axDokument1
+            // 
+            this.axDokument1.Enabled = true;
+            this.axDokument1.Location = new System.Drawing.Point(754, 340);
+            this.axDokument1.Name = "axDokument1";
+            this.axDokument1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axDokument1.OcxState")));
+            this.axDokument1.Size = new System.Drawing.Size(33, 29);
+            this.axDokument1.TabIndex = 4;
+            // 
+            // axBuchung1
+            // 
+            this.axBuchung1.Enabled = true;
+            this.axBuchung1.Location = new System.Drawing.Point(793, 340);
+            this.axBuchung1.Name = "axBuchung1";
+            this.axBuchung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axBuchung1.OcxState")));
+            this.axBuchung1.Size = new System.Drawing.Size(34, 29);
+            this.axBuchung1.TabIndex = 3;
+            // 
+            // axEinstellung1
+            // 
+            this.axEinstellung1.Enabled = true;
+            this.axEinstellung1.Location = new System.Drawing.Point(833, 340);
+            this.axEinstellung1.Name = "axEinstellung1";
+            this.axEinstellung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axEinstellung1.OcxState")));
+            this.axEinstellung1.Size = new System.Drawing.Size(32, 29);
+            this.axEinstellung1.TabIndex = 2;
+            // 
             // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -342,16 +342,16 @@ namespace ECTDatev
             this.Controls.Add(this.axEinstellung1);
             this.Controls.Add(this.lBuchungsjahr);
             this.Name = "UserControl1";
-            this.Size = new System.Drawing.Size(884, 431);
+            this.Size = new System.Drawing.Size(884, 723);
             this.Load += new System.EventHandler(this.UserControl1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).EndInit();
             this.gbBuchungen.ResumeLayout(false);
             this.gbBuchungen.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epFrom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.epUntil)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -362,14 +362,6 @@ namespace ECTDatev
         private AxEASYCTXLib.AxEinstellung axEinstellung1;
         private AxEASYCTXLib.AxBuchung axBuchung1;
         private AxEASYCTXLib.AxDokument axDokument1;
-
-        private long m_dokID;
-
-        [ComVisible(true)]
-        public void Init(long dokID)
-        {
-            m_dokID = dokID;
-        }
 
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader datum;
