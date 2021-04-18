@@ -57,8 +57,8 @@ namespace ECTDatev
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             this.lBookingsyear = new System.Windows.Forms.Label();
             this.axEinstellung = new AxEASYCTXLib.AxEinstellung();
             this.axBuchung = new AxEASYCTXLib.AxBuchung();
@@ -142,13 +142,14 @@ namespace ECTDatev
             this.ustBetrag,
             this.brutto,
             this.exportStatus});
-            listViewGroup3.Header = "Einnahmen";
-            listViewGroup3.Name = "einnahmen";
-            listViewGroup4.Header = "Ausgaben";
-            listViewGroup4.Name = "ausgaben";
+            this.lvBookings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            listViewGroup1.Header = "Einnahmen";
+            listViewGroup1.Name = "einnahmen";
+            listViewGroup2.Header = "Ausgaben";
+            listViewGroup2.Name = "ausgaben";
             this.lvBookings.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
             this.lvBookings.HideSelection = false;
             this.lvBookings.Location = new System.Drawing.Point(10, 276);
             this.lvBookings.Name = "lvBookings";
@@ -160,6 +161,7 @@ namespace ECTDatev
             // datum
             // 
             this.datum.Text = "Datum";
+            this.datum.Width = 70;
             // 
             // beleg
             // 
@@ -174,21 +176,25 @@ namespace ECTDatev
             // 
             this.netto.Text = "Netto";
             this.netto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.netto.Width = 70;
             // 
             // ust
             // 
             this.ust.Text = "USt";
             this.ust.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ust.Width = 50;
             // 
             // ustBetrag
             // 
             this.ustBetrag.Text = "USt-Betrag";
             this.ustBetrag.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.ustBetrag.Width = 70;
             // 
             // brutto
             // 
             this.brutto.Text = "Brutto";
             this.brutto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.brutto.Width = 70;
             // 
             // exportStatus
             // 
@@ -316,7 +322,7 @@ namespace ECTDatev
             this.tbBookingsyear.Size = new System.Drawing.Size(48, 20);
             this.tbBookingsyear.TabIndex = 12;
             // 
-            // ucForm
+            // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -333,7 +339,7 @@ namespace ECTDatev
             this.Controls.Add(this.axBuchung);
             this.Controls.Add(this.axEinstellung);
             this.Controls.Add(this.lBookingsyear);
-            this.Name = "ucForm";
+            this.Name = "UserControl1";
             this.Size = new System.Drawing.Size(884, 723);
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung)).EndInit();

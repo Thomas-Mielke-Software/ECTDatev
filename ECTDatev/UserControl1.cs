@@ -103,13 +103,13 @@ namespace ECTDatev
                     continue; 
                 }
                 string[] row = {
-                    b.Datum.ToString(),
+                    b.Datum.ToString("dd.MM.yyyy", culture),
                     b.Belegnummer,
                     b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("0.00", culture),
-                    b.MWSt.ToString(culture),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("0.00", culture),
-                    b.Betrag.ToString("0.00", culture)
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("N", culture),
+                    (b.MWSt/100).ToString("0%", culture),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("N", culture),
+                    b.Betrag.ToString("N", culture)
                 };
                 var listViewItem = new ListViewItem(row);
                 lvBookings.Items.Add(listViewItem);
@@ -126,13 +126,13 @@ namespace ECTDatev
                     continue;
                 }
                 string[] row = {
-                    b.Datum.ToString(),
+                    b.Datum.ToString("dd.MM.yyyy", culture),
                     b.Belegnummer,
                     b.Beschreibung,
-                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("0.00", culture),
-                    b.MWSt.ToString(culture),
-                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("0.00", culture),
-                    b.Betrag.ToString("0.00", culture)
+                    b.HoleBuchungsjahrNetto((int)m_dokID).ToString("N", culture),
+                    (b.MWSt/100).ToString("0%", culture),
+                    (b.Betrag - b.HoleBuchungsjahrNetto((int)m_dokID)).ToString("N", culture),
+                    b.Betrag.ToString("N", culture)
                 };
                 var listViewItem = new ListViewItem(row);
                 lvBookings.Items.Add(listViewItem);
