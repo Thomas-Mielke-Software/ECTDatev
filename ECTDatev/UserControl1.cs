@@ -97,6 +97,11 @@ namespace ECTDatev
             var einnahmen = new EinnahmenBuchungen(axDokument, axBuchung);
             foreach (Buchung b in einnahmen)
             {
+                // filtering by date
+                if (b.Datum < this.dtpFrom.Value || this.dtpUntil.Value < b.Datum)
+                {
+                    continue; 
+                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
@@ -115,6 +120,11 @@ namespace ECTDatev
             var ausgaben = new AusgabenBuchungen(axDokument, axBuchung);
             foreach (Buchung b in ausgaben)
             {
+                // filtering by date
+                if (b.Datum < this.dtpFrom.Value || this.dtpUntil.Value < b.Datum)
+                {
+                    continue;
+                }
                 string[] row = {
                     b.Datum.ToString(),
                     b.Belegnummer,
@@ -129,7 +139,7 @@ namespace ECTDatev
                 this.lvBookings.Groups["ausgaben"].Items.Add(listViewItem);
             }
 
-            this.bExport.Enabled = true;
+            this.bExport.Enabled = this.lvBookings.Items.Count > 0;
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
