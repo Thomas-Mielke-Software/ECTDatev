@@ -56,14 +56,14 @@ namespace ECTDatev
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            this.lBuchungsjahr = new System.Windows.Forms.Label();
-            this.axEinstellung1 = new AxEASYCTXLib.AxEinstellung();
-            this.axBuchung1 = new AxEASYCTXLib.AxBuchung();
-            this.axDokument1 = new AxEASYCTXLib.AxDokument();
-            this.listView1 = new System.Windows.Forms.ListView();
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            this.lBookingsyear = new System.Windows.Forms.Label();
+            this.axEinstellung = new AxEASYCTXLib.AxEinstellung();
+            this.axBuchung = new AxEASYCTXLib.AxBuchung();
+            this.axDokument = new AxEASYCTXLib.AxDokument();
+            this.lvBookings = new System.Windows.Forms.ListView();
             this.datum = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.beleg = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.beschreibung = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -72,45 +72,68 @@ namespace ECTDatev
             this.ustBetrag = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.brutto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.exportStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button2 = new System.Windows.Forms.Button();
-            this.herkunftLabel = new System.Windows.Forms.Label();
-            this.herkunftTextbox = new System.Windows.Forms.TextBox();
-            this.herkunftErrorprov = new System.Windows.Forms.ErrorProvider(this.components);
-            this.okButton = new System.Windows.Forms.Button();
-            this.abbrechenButton = new System.Windows.Forms.Button();
+            this.bFillList = new System.Windows.Forms.Button();
+            this.lOrigin = new System.Windows.Forms.Label();
+            this.tbOrigin = new System.Windows.Forms.TextBox();
+            this.epOrigin = new System.Windows.Forms.ErrorProvider(this.components);
+            this.bExport = new System.Windows.Forms.Button();
+            this.bCancel = new System.Windows.Forms.Button();
             this.gbBuchungen = new System.Windows.Forms.GroupBox();
             this.dtpUntil = new System.Windows.Forms.DateTimePicker();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.lUntil = new System.Windows.Forms.Label();
             this.lFrom = new System.Windows.Forms.Label();
-            this.epFrom = new System.Windows.Forms.ErrorProvider(this.components);
-            this.epUntil = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tbBuchungsjahr = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).BeginInit();
+            this.tbBookingsyear = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axBuchung)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axDokument)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epOrigin)).BeginInit();
             this.gbBuchungen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.epFrom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.epUntil)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).BeginInit();
             this.SuspendLayout();
             // 
-            // lBuchungsjahr
+            // lBookingsyear
             // 
-            this.lBuchungsjahr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lBuchungsjahr.AutoSize = true;
-            this.lBuchungsjahr.Location = new System.Drawing.Point(755, 38);
-            this.lBuchungsjahr.Name = "lBuchungsjahr";
-            this.lBuchungsjahr.Size = new System.Drawing.Size(72, 13);
-            this.lBuchungsjahr.TabIndex = 1;
-            this.lBuchungsjahr.Text = "Buchungsjahr";
+            this.lBookingsyear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lBookingsyear.AutoSize = true;
+            this.lBookingsyear.Location = new System.Drawing.Point(755, 38);
+            this.lBookingsyear.Name = "lBookingsyear";
+            this.lBookingsyear.Size = new System.Drawing.Size(72, 13);
+            this.lBookingsyear.TabIndex = 1;
+            this.lBookingsyear.Text = "Buchungsjahr";
             // 
-            // listView1
+            // axEinstellung
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.axEinstellung.Enabled = true;
+            this.axEinstellung.Location = new System.Drawing.Point(833, 340);
+            this.axEinstellung.Name = "axEinstellung";
+            this.axEinstellung.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axEinstellung.OcxState")));
+            this.axEinstellung.Size = new System.Drawing.Size(32, 29);
+            this.axEinstellung.TabIndex = 2;
+            // 
+            // axBuchung
+            // 
+            this.axBuchung.Enabled = true;
+            this.axBuchung.Location = new System.Drawing.Point(793, 340);
+            this.axBuchung.Name = "axBuchung";
+            this.axBuchung.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axBuchung.OcxState")));
+            this.axBuchung.Size = new System.Drawing.Size(34, 29);
+            this.axBuchung.TabIndex = 3;
+            // 
+            // axDokument
+            // 
+            this.axDokument.Enabled = true;
+            this.axDokument.Location = new System.Drawing.Point(754, 340);
+            this.axDokument.Name = "axDokument";
+            this.axDokument.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axDokument.OcxState")));
+            this.axDokument.Size = new System.Drawing.Size(33, 29);
+            this.axDokument.TabIndex = 4;
+            // 
+            // lvBookings
+            // 
+            this.lvBookings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvBookings.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.datum,
             this.beleg,
             this.beschreibung,
@@ -119,20 +142,20 @@ namespace ECTDatev
             this.ustBetrag,
             this.brutto,
             this.exportStatus});
-            listViewGroup1.Header = "Einnahmen";
-            listViewGroup1.Name = "einnahmen";
-            listViewGroup2.Header = "Ausgaben";
-            listViewGroup2.Name = "ausgaben";
-            this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(10, 276);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(743, 311);
-            this.listView1.TabIndex = 5;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            listViewGroup3.Header = "Einnahmen";
+            listViewGroup3.Name = "einnahmen";
+            listViewGroup4.Header = "Ausgaben";
+            listViewGroup4.Name = "ausgaben";
+            this.lvBookings.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup3,
+            listViewGroup4});
+            this.lvBookings.HideSelection = false;
+            this.lvBookings.Location = new System.Drawing.Point(10, 276);
+            this.lvBookings.Name = "lvBookings";
+            this.lvBookings.Size = new System.Drawing.Size(743, 311);
+            this.lvBookings.TabIndex = 5;
+            this.lvBookings.UseCompatibleStateImageBehavior = false;
+            this.lvBookings.View = System.Windows.Forms.View.Details;
             // 
             // datum
             // 
@@ -172,69 +195,64 @@ namespace ECTDatev
             this.exportStatus.Text = "Export-Status";
             this.exportStatus.Width = 200;
             // 
-            // exportStatus
+            // bFillList
             // 
-            this.exportStatus.Text = "Export-Status";
-            this.exportStatus.Width = 200;
+            this.bFillList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bFillList.AutoSize = true;
+            this.bFillList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.bFillList.Location = new System.Drawing.Point(5, 136);
+            this.bFillList.Name = "bFillList";
+            this.bFillList.Size = new System.Drawing.Size(79, 23);
+            this.bFillList.TabIndex = 6;
+            this.bFillList.Text = "<- Liste füllen";
+            this.bFillList.UseVisualStyleBackColor = true;
+            this.bFillList.Click += new System.EventHandler(this.bFillList_Click);
             // 
-            // button2
+            // lOrigin
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.AutoSize = true;
-            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button2.Location = new System.Drawing.Point(5, 136);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(79, 23);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "<- Liste füllen";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.lOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lOrigin.AutoSize = true;
+            this.lOrigin.Location = new System.Drawing.Point(756, 67);
+            this.lOrigin.Name = "lOrigin";
+            this.lOrigin.Size = new System.Drawing.Size(48, 13);
+            this.lOrigin.TabIndex = 7;
+            this.lOrigin.Text = "Herkunft";
             // 
-            // herkunftLabel
+            // tbOrigin
             // 
-            this.herkunftLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.herkunftLabel.AutoSize = true;
-            this.herkunftLabel.Location = new System.Drawing.Point(756, 67);
-            this.herkunftLabel.Name = "herkunftLabel";
-            this.herkunftLabel.Size = new System.Drawing.Size(48, 13);
-            this.herkunftLabel.TabIndex = 7;
-            this.herkunftLabel.Text = "Herkunft";
+            this.tbOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbOrigin.Location = new System.Drawing.Point(849, 64);
+            this.tbOrigin.MaxLength = 2;
+            this.tbOrigin.Name = "tbOrigin";
+            this.tbOrigin.Size = new System.Drawing.Size(32, 20);
+            this.tbOrigin.TabIndex = 8;
+            this.tbOrigin.Validating += new System.ComponentModel.CancelEventHandler(this.tbBookingsyear_Validating);
             // 
-            // herkunftTextbox
+            // epOrigin
             // 
-            this.herkunftTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.herkunftTextbox.Location = new System.Drawing.Point(849, 64);
-            this.herkunftTextbox.MaxLength = 2;
-            this.herkunftTextbox.Name = "herkunftTextbox";
-            this.herkunftTextbox.Size = new System.Drawing.Size(32, 20);
-            this.herkunftTextbox.TabIndex = 8;
-            this.herkunftTextbox.Validating += new System.ComponentModel.CancelEventHandler(this.herkunftTextbox_Validating);
+            this.epOrigin.ContainerControl = this;
             // 
-            // herkunftErrorprov
+            // bExport
             // 
-            this.herkunftErrorprov.ContainerControl = this;
+            this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bExport.Location = new System.Drawing.Point(759, 564);
+            this.bExport.Name = "bExport";
+            this.bExport.Size = new System.Drawing.Size(55, 23);
+            this.bExport.TabIndex = 9;
+            this.bExport.Text = "Export";
+            this.bExport.UseVisualStyleBackColor = true;
+            this.bExport.Click += new System.EventHandler(this.bExport_Click);
             // 
-            // okButton
+            // bCancel
             // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(759, 564);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(55, 23);
-            this.okButton.TabIndex = 9;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
-            // abbrechenButton
-            // 
-            this.abbrechenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.abbrechenButton.Location = new System.Drawing.Point(817, 564);
-            this.abbrechenButton.Name = "abbrechenButton";
-            this.abbrechenButton.Size = new System.Drawing.Size(67, 23);
-            this.abbrechenButton.TabIndex = 10;
-            this.abbrechenButton.Text = "Abbrechen";
-            this.abbrechenButton.UseVisualStyleBackColor = true;
-            this.abbrechenButton.Click += new System.EventHandler(this.abbrechenButton_Click);
+            this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.bCancel.Location = new System.Drawing.Point(817, 564);
+            this.bCancel.Name = "bCancel";
+            this.bCancel.Size = new System.Drawing.Size(67, 23);
+            this.bCancel.TabIndex = 10;
+            this.bCancel.Text = "Abbrechen";
+            this.bCancel.UseVisualStyleBackColor = true;
+            this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
             // 
             // gbBuchungen
             // 
@@ -243,7 +261,7 @@ namespace ECTDatev
             this.gbBuchungen.Controls.Add(this.dtpFrom);
             this.gbBuchungen.Controls.Add(this.lUntil);
             this.gbBuchungen.Controls.Add(this.lFrom);
-            this.gbBuchungen.Controls.Add(this.button2);
+            this.gbBuchungen.Controls.Add(this.bFillList);
             this.gbBuchungen.Location = new System.Drawing.Point(753, 140);
             this.gbBuchungen.Name = "gbBuchungen";
             this.gbBuchungen.Size = new System.Drawing.Size(128, 166);
@@ -289,89 +307,52 @@ namespace ECTDatev
             this.lFrom.TabIndex = 0;
             this.lFrom.Text = "Von:";
             // 
-            // epFrom
+            // tbBookingsyear
             // 
-            this.epFrom.ContainerControl = this;
+            this.tbBookingsyear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbBookingsyear.Location = new System.Drawing.Point(833, 35);
+            this.tbBookingsyear.Name = "tbBookingsyear";
+            this.tbBookingsyear.ReadOnly = true;
+            this.tbBookingsyear.Size = new System.Drawing.Size(48, 20);
+            this.tbBookingsyear.TabIndex = 12;
             // 
-            // epUntil
-            // 
-            this.epUntil.ContainerControl = this;
-            // 
-            // tbBuchungsjahr
-            // 
-            this.tbBuchungsjahr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbBuchungsjahr.Location = new System.Drawing.Point(833, 35);
-            this.tbBuchungsjahr.Name = "tbBuchungsjahr";
-            this.tbBuchungsjahr.ReadOnly = true;
-            this.tbBuchungsjahr.Size = new System.Drawing.Size(48, 20);
-            this.tbBuchungsjahr.TabIndex = 12;
-            // 
-            // axDokument1
-            // 
-            this.axDokument1.Enabled = true;
-            this.axDokument1.Location = new System.Drawing.Point(754, 340);
-            this.axDokument1.Name = "axDokument1";
-            this.axDokument1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axDokument1.OcxState")));
-            this.axDokument1.Size = new System.Drawing.Size(33, 29);
-            this.axDokument1.TabIndex = 4;
-            // 
-            // axBuchung1
-            // 
-            this.axBuchung1.Enabled = true;
-            this.axBuchung1.Location = new System.Drawing.Point(793, 340);
-            this.axBuchung1.Name = "axBuchung1";
-            this.axBuchung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axBuchung1.OcxState")));
-            this.axBuchung1.Size = new System.Drawing.Size(34, 29);
-            this.axBuchung1.TabIndex = 3;
-            // 
-            // axEinstellung1
-            // 
-            this.axEinstellung1.Enabled = true;
-            this.axEinstellung1.Location = new System.Drawing.Point(833, 340);
-            this.axEinstellung1.Name = "axEinstellung1";
-            this.axEinstellung1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axEinstellung1.OcxState")));
-            this.axEinstellung1.Size = new System.Drawing.Size(32, 29);
-            this.axEinstellung1.TabIndex = 2;
-            // 
-            // UserControl1
+            // ucForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.Controls.Add(this.tbBuchungsjahr);
+            this.Controls.Add(this.tbBookingsyear);
             this.Controls.Add(this.gbBuchungen);
-            this.Controls.Add(this.abbrechenButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.herkunftTextbox);
-            this.Controls.Add(this.herkunftLabel);
-            this.Controls.Add(this.listView1);
-            this.Controls.Add(this.axDokument1);
-            this.Controls.Add(this.axBuchung1);
-            this.Controls.Add(this.axEinstellung1);
-            this.Controls.Add(this.lBuchungsjahr);
-            this.Name = "UserControl1";
+            this.Controls.Add(this.bCancel);
+            this.Controls.Add(this.bExport);
+            this.Controls.Add(this.tbOrigin);
+            this.Controls.Add(this.lOrigin);
+            this.Controls.Add(this.lvBookings);
+            this.Controls.Add(this.axDokument);
+            this.Controls.Add(this.axBuchung);
+            this.Controls.Add(this.axEinstellung);
+            this.Controls.Add(this.lBookingsyear);
+            this.Name = "ucForm";
             this.Size = new System.Drawing.Size(884, 723);
-            ((System.ComponentModel.ISupportInitialize)(this.herkunftErrorprov)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axBuchung)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axDokument)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epOrigin)).EndInit();
             this.gbBuchungen.ResumeLayout(false);
             this.gbBuchungen.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.epFrom)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.epUntil)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axDokument1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axBuchung1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.axEinstellung1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Label lBuchungsjahr;
-        private AxEASYCTXLib.AxEinstellung axEinstellung1;
-        private AxEASYCTXLib.AxBuchung axBuchung1;
-        private AxEASYCTXLib.AxDokument axDokument1;
+        private System.Windows.Forms.Label lBookingsyear;
+        private AxEASYCTXLib.AxEinstellung axEinstellung;
+        private AxEASYCTXLib.AxBuchung axBuchung;
+        private AxEASYCTXLib.AxDokument axDokument;
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lvBookings;
         private System.Windows.Forms.ColumnHeader datum;
         private System.Windows.Forms.ColumnHeader beleg;
         private System.Windows.Forms.ColumnHeader beschreibung;
@@ -379,20 +360,18 @@ namespace ECTDatev
         private System.Windows.Forms.ColumnHeader ust;
         private System.Windows.Forms.ColumnHeader ustBetrag;
         private System.Windows.Forms.ColumnHeader brutto;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label herkunftLabel;
-        private System.Windows.Forms.TextBox herkunftTextbox;
-        private System.Windows.Forms.ErrorProvider herkunftErrorprov;
+        private System.Windows.Forms.Button bFillList;
+        private System.Windows.Forms.Label lOrigin;
+        private System.Windows.Forms.TextBox tbOrigin;
+        private System.Windows.Forms.ErrorProvider epOrigin;
         private System.Windows.Forms.ColumnHeader exportStatus;
-        private System.Windows.Forms.Button abbrechenButton;
-        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button bCancel;
+        private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.GroupBox gbBuchungen;
         private System.Windows.Forms.Label lFrom;
         private System.Windows.Forms.Label lUntil;
         private System.Windows.Forms.DateTimePicker dtpFrom;
         private System.Windows.Forms.DateTimePicker dtpUntil;
-        private System.Windows.Forms.ErrorProvider epFrom;
-        private System.Windows.Forms.ErrorProvider epUntil;
-        private System.Windows.Forms.TextBox tbBuchungsjahr;
+        private System.Windows.Forms.TextBox tbBookingsyear;
     }
 }

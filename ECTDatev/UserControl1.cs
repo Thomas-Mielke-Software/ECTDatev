@@ -21,13 +21,14 @@ namespace ECTDatev
         public void Init(long dokID)
         {
             m_dokID = dokID;
-            axDokument1.ID = (int)m_dokID;
-            if (axDokument1.ID == 0) return;
+            axDokument.ID = (int)m_dokID;
+            if (axDokument.ID == 0) return;
 
-            herkunftTextbox.Text = "EC";
-            exportiertVon = axEinstellung1.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung1.HoleEinstellung("[Persoenliche_Daten]name");
-            this.tbBuchungsjahr_Init();
+            tbOrigin.Text = "EC";
+            exportiertVon = axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+            this.tbBookingsyear_Init();
             this.InitializeDateTimePicker();
+            this.ValidateButtons();
         }
 
         public UserControl1()
@@ -41,18 +42,18 @@ namespace ECTDatev
         {
             if (keyData == Keys.Enter)
             {
-                okButton.PerformClick();
+                bExport.PerformClick();
                 return true;
             }
             else if (keyData == Keys.Escape)
             {
-                abbrechenButton.PerformClick();
+                bCancel.PerformClick();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void bExport_Click(object sender, EventArgs e)
         {
             // hier den Exportvorgang starten
             ExportManager.OrderExport(this.exportedBuchungen);
@@ -64,25 +65,26 @@ namespace ECTDatev
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
         const int WM_COMMAND = 0x0111;
         IntPtr ID_VIEW_JOURNAL_SWITCH = (IntPtr)32788;
-        private void abbrechenButton_Click(object sender, EventArgs e)
+
+        private void bCancel_Click(object sender, EventArgs e)
         {
             IntPtr hwnd = FindWindow(null, "EasyCash&&Tax");
             SendMessage(hwnd, WM_COMMAND, ID_VIEW_JOURNAL_SWITCH, (IntPtr)0);
         }
 
-        private void tbBuchungsjahr_Init()
+        private void tbBookingsyear_Init()
         {
             if (m_dokID > 0)
             {
-                axDokument1.ID = (int)m_dokID;
-                tbBuchungsjahr.Text = System.String.Format("{0}", axDokument1.Jahr);
+                //axDokument1.ID = (int)m_dokID;
+                tbBookingsyear.Text = System.String.Format("{0}", axDokument.Jahr);
             }
         }
 
         // ListView füllen
-        private void button2_Click(object sender, EventArgs e)
+        private void bFillList_Click(object sender, EventArgs e)
         {
-            this.listView1.Items.Clear();
+            this.lvBookings.Items.Clear();
 
             if (this.exportedBuchungen.Count > 0)
             {
@@ -92,7 +94,7 @@ namespace ECTDatev
             var culture = new System.Globalization.CultureInfo("de-DE");  // wir brauchen DE-Format für DATEV -- unabhängig von den
                                                                           // 
                                                                           // Einnahmen
-            var einnahmen = new EinnahmenBuchungen(axDokument1, axBuchung1);
+            var einnahmen = new EinnahmenBuchungen(axDokument, axBuchung);
             foreach (Buchung b in einnahmen)
             {
                 string[] row = {
@@ -105,12 +107,12 @@ namespace ECTDatev
                     b.Betrag.ToString("0.00", culture)
                 };
                 var listViewItem = new ListViewItem(row);
-                listView1.Items.Add(listViewItem);
-                this.listView1.Groups["einnahmen"].Items.Add(listViewItem);
+                lvBookings.Items.Add(listViewItem);
+                this.lvBookings.Groups["einnahmen"].Items.Add(listViewItem);
             }
 
             // Ausgaben
-            var ausgaben = new AusgabenBuchungen(axDokument1, axBuchung1);
+            var ausgaben = new AusgabenBuchungen(axDokument, axBuchung);
             foreach (Buchung b in ausgaben)
             {
                 string[] row = {
@@ -123,11 +125,11 @@ namespace ECTDatev
                     b.Betrag.ToString("0.00", culture)
                 };
                 var listViewItem = new ListViewItem(row);
-                listView1.Items.Add(listViewItem);
-                this.listView1.Groups["ausgaben"].Items.Add(listViewItem);
+                lvBookings.Items.Add(listViewItem);
+                this.lvBookings.Groups["ausgaben"].Items.Add(listViewItem);
             }
 
-            this.okButton.Enabled = true;
+            this.bExport.Enabled = true;
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
@@ -136,28 +138,28 @@ namespace ECTDatev
 #endif
         }
 
-        private void herkunftTextbox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void tbBookingsyear_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Regex.IsMatch(herkunftTextbox.Text, @"^[A-Z][A-Z]$"))
-                herkunftErrorprov.SetError(herkunftTextbox, "");
+            if (Regex.IsMatch(tbOrigin.Text, @"^[A-Z][A-Z]$"))
+                epOrigin.SetError(tbOrigin, "");
             else
             {
-                herkunftErrorprov.SetError(herkunftTextbox, "Bitte zwei Großbuchstaben als Herkunftscode angeben.");
+                epOrigin.SetError(tbOrigin, "Bitte zwei Großbuchstaben als Herkunftscode angeben.");
                 e.Cancel = true;
             }
         }
 
         private void InitializeDateTimePicker()
         {
-            axDokument1.ID = (int)m_dokID;
-            int jahr = (int)axDokument1.Jahr;
+            //axDokument.ID = (int)m_dokID;
+            int jahr = (int)axDokument.Jahr;
 
             if (jahr == 0)
             {
                 jahr = DateTime.Now.Year;
             }
 
-            // Set the MinDate and MaxDate.
+            // Set the MinDate, MaxDate and Value of the DTPs.
             this.dtpFrom.MinDate = new DateTime(jahr, 1, 1);
             this.dtpFrom.MaxDate = new DateTime(jahr, 12, 31);
             this.dtpFrom.Value = new DateTime(jahr, 1, 1);
@@ -166,57 +168,41 @@ namespace ECTDatev
             this.dtpUntil.Value = new DateTime(jahr, 12, 31);
         }
 
-        private void dtpFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ValidateButtons(bool oneOfTheDTPsChanged = true)
         {
             if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
             {
-                this.epFrom.SetError(this.dtpFrom, "Das Von-Datum darf nicht nach dem Bis-Datum liegen!");
-
-                this.okButton.Enabled = false;
-                this.button2.Enabled = false;
-
-                e.Cancel = true;
+                this.bFillList.Enabled = false;
+                this.bExport.Enabled = false;
             }
             else
             {
-                this.epFrom.SetError(this.dtpFrom, string.Empty);
-                this.okButton.Enabled = true;
-                this.button2.Enabled = true;
-
-                e.Cancel = false;
-            }
-        }
-
-        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
-            {
-                this.epUntil.SetError(this.dtpUntil, "Das Von-Datum darf nicht nach dem Bis-Datum liegen!");
-
-                this.okButton.Enabled = false;
-                this.button2.Enabled = false;
-
-                e.Cancel = true;
-            }
-            else
-            {
-                this.epUntil.SetError(this.dtpUntil, string.Empty);
-
-                this.okButton.Enabled = true;
-                this.button2.Enabled = true;
-
-                e.Cancel = false;
+                this.bFillList.Enabled = oneOfTheDTPsChanged;
+                this.bExport.Enabled = !oneOfTheDTPsChanged && this.lvBookings.Items.Count > 0;
             }
         }
 
         private void dtpFrom_ValueChanged(object sender, EventArgs e)
         {
-            this.okButton.Enabled = false;
+            this.ValidateButtons();
+            this.bExport.Enabled = false;
         }
 
         private void dtpUntil_ValueChanged(object sender, EventArgs e)
         {
-            this.okButton.Enabled = false;
+            this.ValidateButtons();
+            this.bExport.Enabled = false;
         }
+
+        private void dtpFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.ValidateButtons();
+        }
+
+        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.ValidateButtons();
+        }
+
     }
 }
