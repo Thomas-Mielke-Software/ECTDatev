@@ -24,8 +24,13 @@ namespace ECTDatev
             axDokument.ID = (int)m_dokID;
             if (axDokument.ID == 0) return;
 
+            // PropertyGrid initialisieren
+            var pgdata = new DatevHeaderForPropertyGrid();
+            pgdata.ExportedBy = axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+            pgDatevHeader.SelectedObject = pgdata;
+
             tbOrigin.Text = "EC";
-            exportiertVon = axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+
             this.tbBookingsyear_Init();
             this.InitializeDateTimePicker();
             this.ValidateButtons();
@@ -112,6 +117,7 @@ namespace ECTDatev
                     b.Betrag.ToString("N", culture)
                 };
                 var listViewItem = new ListViewItem(row);
+                listViewItem.Tag = b;
                 lvBookings.Items.Add(listViewItem);
                 this.lvBookings.Groups["einnahmen"].Items.Add(listViewItem);
             }
@@ -135,6 +141,7 @@ namespace ECTDatev
                     b.Betrag.ToString("N", culture)
                 };
                 var listViewItem = new ListViewItem(row);
+                listViewItem.Tag = b;
                 lvBookings.Items.Add(listViewItem);
                 this.lvBookings.Groups["ausgaben"].Items.Add(listViewItem);
             }
