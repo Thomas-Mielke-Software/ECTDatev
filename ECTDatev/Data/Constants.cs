@@ -29,6 +29,7 @@ namespace ECTDatev.Data
         public const string SeparatorAtEndOfDataSet = "";
         public const string LineEndTerminator = "\r\n";
         public const bool ExportLineFeed = false;
+        public const string OriginDefault = "EC";
 
         /// <summary>
         /// The start of the macro.

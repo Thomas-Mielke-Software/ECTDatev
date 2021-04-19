@@ -38,7 +38,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>netAssemblyKeyfile.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>.NetAssemblyKeyFile.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -54,8 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Constants.cs" />
+    <Compile Include="Data\DataManager.cs" />
     <Compile Include="Data\DatevFields.cs" />
     <Compile Include="Data\ExportManager.cs" />
+    <Compile Include="Data\DatevPropertyItems.cs" />
     <Compile Include="Data\Validator.cs" />
     <Compile Include="Models\Buchung.cs" />
     <Compile Include="Models\Buchungen.cs" />
@@ -98,7 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".NetAssemblyKeyFile.pfx" />
-    <None Include="netAssemblyKeyfile.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

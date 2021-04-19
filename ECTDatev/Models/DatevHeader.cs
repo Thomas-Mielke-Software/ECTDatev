@@ -8,37 +8,6 @@ using System.Threading.Tasks;
 
 namespace ECTDatev.Models
 {
-    class DatevHeaderForPropertyGrid
-    {
-        int m_DisplayInt;
-        [Category("erste Kategorie")]
-        public int DisplayInt
-        {
-            get { return m_DisplayInt; }
-            set { m_DisplayInt = value; }
-        }
-
-        string m_ExportedBy;
-        [Browsable(true)]                                                   // this property should be visible
-        //[ReadOnly(true)]                                                  // so sind Read-only-Felder möglich
-        [Description("Name der Person, die den Exported durchgeführt hat*")] // Beschreibung (* = Pflichtfeld)
-        [Category("erste Kategorie")]
-        [DisplayName("Exportiert von")]
-        public string ExportedBy
-        {
-            get { return m_ExportedBy; }
-            set { m_ExportedBy = value; }
-        }
-
-        bool m_DisplayBool;
-        [Category("zweite Kategorie")]
-        public bool DisplayBool
-        {
-            get { return m_DisplayBool; }
-            set { m_DisplayBool = value; }
-        }
-    }
-
     /// <summary>
     /// The “header” is the first line of the text file. It contains information used to interpret 
     /// the file during batch processing (information pertaining to import automation).

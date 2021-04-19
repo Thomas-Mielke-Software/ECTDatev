@@ -16,6 +16,7 @@ namespace ECTDatev
         // Initialisierung
 
         private long m_dokID;
+        //private DataManager m_dataManager;
 
         [ComVisible(true)]
         public void Init(long dokID)
@@ -24,15 +25,18 @@ namespace ECTDatev
             axDokument.ID = (int)m_dokID;
             if (axDokument.ID == 0) return;
 
+            //this.m_dataManager = new DataManager(axDokument);
+
             // PropertyGrid initialisieren
-            var pgdata = new DatevHeaderForPropertyGrid();
-            pgdata.ExportedBy = axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+            var pgdata = new DatevPropertyItems(axDokument);
             pgDatevHeader.SelectedObject = pgdata;
 
             tbOrigin.Text = "EC";
 
             this.tbBookingsyear_Init();
             this.InitializeDateTimePicker();
+            //this.InitializePG();
+
             this.ValidateButtons();
         }
 
@@ -184,6 +188,12 @@ namespace ECTDatev
             this.dtpUntil.MaxDate = new DateTime(jahr, 12, 31);
             this.dtpUntil.Value = new DateTime(jahr, 12, 31);
         }
+
+        
+        //private void InitializePG()
+        //{
+        //    this.pgDatevHeader.SelectedObject = new DatevPropertyItems(axDokument);
+        //}
 
         private void ValidateButtons(bool oneOfTheDTPsChanged = true)
         {
