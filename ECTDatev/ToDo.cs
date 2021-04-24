@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECTDatev.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,12 +18,12 @@ namespace ECTDatev
         /// s. Header 3
         /// Wird je nach Aufgabenstellung ermittelt.
         /// </summary>
-        public static int DataCategoryID { get => 20; }
+        public static int DataCategoryID { get => 21; }
 
         /// <summary>
         /// s. UI -> Herkunft
         /// </summary>
-        public static string Origin { get => "EC"; }
+        public static string Origin { get => Constants.OriginDefault; }
 
         /// <summary>
         /// s. Header 9
@@ -34,7 +35,7 @@ namespace ECTDatev
         /// s. Header 11
         /// Soll in UI eingegeben werden. Speichern + vorschlagen für nächste Session.
         /// </summary>
-        public static int Consultant { get => 29098; }
+        public static int ConsultantID { get => 29098; }
 
         /// <summary>
         /// s. Header 12

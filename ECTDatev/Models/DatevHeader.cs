@@ -56,7 +56,7 @@ namespace ECTDatev.Models
         // 10 Imported By
         public string ImportedBy { get => string.Empty; }
         // 11 Consultant
-        public int Consultant { get => ToDo.Consultant; }
+        public int Consultant { get => ToDo.ConsultantID; }
         // 12 Client
         public int Client { get => ToDo.Client; }
         // 13 Beginning of FY

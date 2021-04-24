@@ -1,6 +1,7 @@
 ﻿using ECTDatev.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace ECTDatev.Data
         /// With this call will the export be ordered.
         /// </summary>
         /// <param name="exportedBuchungen">The data to be exported.</param>
-        public static void OrderExport(Dictionary<int, Buchung> exportedBuchungen)
+        /// <param name="pgData">The data of the property grid</param>
+        public static void Export(Collection<Buchung> exportedBuchungen, DatevPropertyItems pgData)
         {
 
         }

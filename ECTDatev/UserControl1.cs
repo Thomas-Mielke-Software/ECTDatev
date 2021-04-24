@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -10,11 +11,7 @@ namespace ECTDatev
 {
     public partial class UserControl1: UserControl
     {
-        private string exportiertVon;  // z.B. "Max Mustermann"
-        private Dictionary<int, Buchung> exportedBuchungen = new Dictionary<int, Buchung>();
-
-        // Initialisierung
-
+        private Collection<Buchung> BookingList = new Collection<Buchung>();
         private long m_dokID;
         //private DataManager m_dataManager;
 
@@ -27,15 +24,8 @@ namespace ECTDatev
 
             //this.m_dataManager = new DataManager(axDokument);
 
-            // PropertyGrid initialisieren
-            var pgdata = new DatevPropertyItems(axDokument);
-            pgDatevHeader.SelectedObject = pgdata;
-
-            tbOrigin.Text = "EC";
-
-            this.tbBookingsyear_Init();
-            this.InitializeDateTimePicker();
-            //this.InitializePG();
+            
+            this.InitializePG();    // PropertyGrid initialisieren
 
             this.ValidateButtons();
         }
@@ -64,8 +54,32 @@ namespace ECTDatev
 
         private void bExport_Click(object sender, EventArgs e)
         {
+            if (this.BookingList.Count > 0)
+            {
+                this.BookingList.Clear();
+            }
+
             // hier den Exportvorgang starten
-            ExportManager.OrderExport(this.exportedBuchungen);
+            if (this.m_pgData.ExportSelected)
+            {
+                // only the selected bookings will be exported
+                foreach (ListViewItem lvi in this.lvBookings.SelectedItems)
+                {
+                    if (lvi.Selected)
+                    {
+                        this.BookingList.Add((Buchung)lvi.Tag);
+                    }
+                }
+            }
+            else
+            {
+                // all show bookings will be exported
+                foreach (ListViewItem lvi in this.lvBookings.Items)
+                {
+                    this.BookingList.Add((Buchung)lvi.Tag);
+                }
+            }
+            ExportManager.Export(this.BookingList, this.m_pgData);
         }
 
         [DllImport("user32.dll")]
@@ -81,24 +95,14 @@ namespace ECTDatev
             SendMessage(hwnd, WM_COMMAND, ID_VIEW_JOURNAL_SWITCH, (IntPtr)0);
         }
 
-        private void tbBookingsyear_Init()
-        {
-            if (m_dokID > 0)
-            {
-                //axDokument1.ID = (int)m_dokID;
-                tbBookingsyear.Text = System.String.Format("{0}", axDokument.Jahr);
-            }
-        }
+        
 
         // ListView füllen
         private void bFillList_Click(object sender, EventArgs e)
         {
-            this.lvBookings.Items.Clear();
+            // find out the from and until date values
 
-            if (this.exportedBuchungen.Count > 0)
-            {
-                this.exportedBuchungen.Clear();
-            }
+            this.lvBookings.Items.Clear();
 
             var culture = new System.Globalization.CultureInfo("de-DE");  // wir brauchen DE-Format für DATEV -- unabhängig von den
                                                                           // 
@@ -107,7 +111,7 @@ namespace ECTDatev
             foreach (Buchung b in einnahmen)
             {
                 // filtering by date
-                if (b.Datum < this.dtpFrom.Value || this.dtpUntil.Value < b.Datum)
+                if (b.Datum < this.m_pgData.FromDate || this.m_pgData.UntilDate < b.Datum)
                 {
                     continue; 
                 }
@@ -131,7 +135,7 @@ namespace ECTDatev
             foreach (Buchung b in ausgaben)
             {
                 // filtering by date
-                if (b.Datum < this.dtpFrom.Value || this.dtpUntil.Value < b.Datum)
+                if (b.Datum < this.m_pgData.FromDate || this.m_pgData.UntilDate < b.Datum)
                 {
                     continue;
                 }
@@ -159,77 +163,51 @@ namespace ECTDatev
 #endif
         }
 
-        private void tbBookingsyear_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        DatevPropertyItems m_pgData;
+        private void InitializePG()
         {
-            if (Regex.IsMatch(tbOrigin.Text, @"^[A-Z][A-Z]$"))
-                epOrigin.SetError(tbOrigin, "");
-            else
-            {
-                epOrigin.SetError(tbOrigin, "Bitte zwei Großbuchstaben als Herkunftscode angeben.");
-                e.Cancel = true;
-            }
+            this.m_pgData = new DatevPropertyItems(axDokument, axEinstellung);
+            this.pgDatevHeader.SelectedObject = this.m_pgData;
+            this.lvBookings.MultiSelect = this.m_pgData.ExportSelected;
         }
 
-        private void InitializeDateTimePicker()
+        private void ValidateButtons(bool oneOfThedateValuesChanged = true)
         {
-            //axDokument.ID = (int)m_dokID;
-            int jahr = (int)axDokument.Jahr;
-
-            if (jahr == 0)
-            {
-                jahr = DateTime.Now.Year;
-            }
-
-            // Set the MinDate, MaxDate and Value of the DTPs.
-            this.dtpFrom.MinDate = new DateTime(jahr, 1, 1);
-            this.dtpFrom.MaxDate = new DateTime(jahr, 12, 31);
-            this.dtpFrom.Value = new DateTime(jahr, 1, 1);
-            this.dtpUntil.MinDate = new DateTime(jahr, 1, 1);
-            this.dtpUntil.MaxDate = new DateTime(jahr, 12, 31);
-            this.dtpUntil.Value = new DateTime(jahr, 12, 31);
-        }
-
-        
-        //private void InitializePG()
-        //{
-        //    this.pgDatevHeader.SelectedObject = new DatevPropertyItems(axDokument);
-        //}
-
-        private void ValidateButtons(bool oneOfTheDTPsChanged = true)
-        {
-            if (this.dtpUntil.Value < this.dtpFrom.Value || this.dtpFrom.Value > this.dtpUntil.Value)
+            if (this.m_pgData.UntilDate < this.m_pgData.FromDate || this.m_pgData.FromDate > this.m_pgData.UntilDate)
             {
                 this.bFillList.Enabled = false;
                 this.bExport.Enabled = false;
             }
             else
             {
-                this.bFillList.Enabled = oneOfTheDTPsChanged;
-                this.bExport.Enabled = !oneOfTheDTPsChanged && this.lvBookings.Items.Count > 0;
+                this.bFillList.Enabled = oneOfThedateValuesChanged;
+                this.bExport.Enabled = !oneOfThedateValuesChanged && this.lvBookings.Items.Count > 0;
             }
         }
 
-        private void dtpFrom_ValueChanged(object sender, EventArgs e)
+        private void pgDatevHeader_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            this.ValidateButtons();
-            this.bExport.Enabled = false;
+            switch (e.ChangedItem.PropertyDescriptor.DisplayName)
+            {
+                case "Von":
+                    this.ValidateButtons();
+                    this.bExport.Enabled = false;
+                    break;
+                case "Bis":
+                    this.ValidateButtons();
+                    this.bExport.Enabled = false;
+                    break;
+                case "ExportPerSelektion":
+                    this.lvBookings.MultiSelect = this.m_pgData.ExportSelected;
+                    if (!this.m_pgData.ExportSelected)
+                    {
+                        foreach (ListViewItem lvi in this.lvBookings.SelectedItems)
+                        {
+                            lvi.Selected = false;
+                        }
+                    }
+                    break;
+            }
         }
-
-        private void dtpUntil_ValueChanged(object sender, EventArgs e)
-        {
-            this.ValidateButtons();
-            this.bExport.Enabled = false;
-        }
-
-        private void dtpFrom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.ValidateButtons();
-        }
-
-        private void dtpUntil_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.ValidateButtons();
-        }
-
     }
 }
