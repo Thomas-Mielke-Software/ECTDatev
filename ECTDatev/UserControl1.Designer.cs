@@ -141,6 +141,7 @@ namespace ECTDatev
             this.lvBookings.TabIndex = 5;
             this.lvBookings.UseCompatibleStateImageBehavior = false;
             this.lvBookings.View = System.Windows.Forms.View.Details;
+            this.lvBookings.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lvBookings_ItemSelectionChanged);
             // 
             // datum
             // 

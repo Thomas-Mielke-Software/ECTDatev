@@ -209,5 +209,16 @@ namespace ECTDatev
                     break;
             }
         }
+
+        private void lvBookings_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.IsSelected)
+            {
+                if (!this.m_pgData.ExportSelected)
+                {
+                    e.Item.Selected = false;
+                }
+            }
+        }
     }
 }
