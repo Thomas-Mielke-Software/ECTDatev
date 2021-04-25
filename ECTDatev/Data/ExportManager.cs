@@ -24,10 +24,28 @@ namespace ECTDatev.Data
             this.m_PropertyGridData = propertyGridData;
 
             this.m_dataCategoryList = new List<int>() { 21, 20 }; // list of needed actions for above data
+
+            foreach (int dataCategory in this.m_dataCategoryList)
+            {
+                CreateExportFile(dataCategory, this.m_Buchungen, this.m_PropertyGridData);
+            }
         }
 
         private Collection<Buchung> m_Buchungen; // the bookings
         private DatevPropertyItems m_PropertyGridData; // additional data (in property grid)
         private List<int> m_dataCategoryList; // the list of action for the given data
+
+        public void CreateExportFile(int dataCategory, Collection<Buchung> buchungen, DatevPropertyItems propertyGridData)
+        {
+            switch (dataCategory)
+            {
+                case 21:
+                    break;
+                case 20:
+                    break;
+                default:
+                    throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);
+            }
+        }
     }
 }
