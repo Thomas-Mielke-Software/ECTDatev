@@ -52,6 +52,11 @@ namespace ECTDatev
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        /// <summary>
+        /// This button starts the export.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bExport_Click(object sender, EventArgs e)
         {
             if (this.BookingList.Count > 0)
@@ -68,6 +73,7 @@ namespace ECTDatev
                     if (lvi.Selected)
                     {
                         this.BookingList.Add((Buchung)lvi.Tag);
+                        lvi.SubItems.Add("gesendet");
                     }
                 }
             }
@@ -77,6 +83,7 @@ namespace ECTDatev
                 foreach (ListViewItem lvi in this.lvBookings.Items)
                 {
                     this.BookingList.Add((Buchung)lvi.Tag);
+                    lvi.SubItems.Add("gesendet");
                 }
             }
             ExportManager.Export(this.BookingList, this.m_pgData);
