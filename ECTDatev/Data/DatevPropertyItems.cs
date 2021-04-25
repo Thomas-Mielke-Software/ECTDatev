@@ -43,8 +43,8 @@ namespace ECTDatev.Data
         /// </summary>
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Herkunfts-Kennzeichen. (2 Zeichen)")] 
-        [Category("Mussdaten")]
+        [Description("Herkunfts-Kennzeichen. (2 Zeichen)")]
+        [Category("Optionale Daten")]
         [DisplayName("Herkunft")]
         public string Origin { get => this.m_Origin; set => this.m_Origin = value; }
 
@@ -184,6 +184,29 @@ namespace ECTDatev.Data
             this.BeginningOfFiscalYear = new DateTime(this.BookingsYear, 1, 1);
             this.LabelEntryBatch = "Belege";
             this.Initials = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname").Substring(0, 1) + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name").Substring(0, 1);
+        }
+
+        /// <summary>
+        /// Checks, whether all must-have-fields have value set:
+        /// <list type="bullet">
+        /// <item>int</item><term>must be different than 0</term>
+        /// <item>string</item><term>must be not empty</term>
+        /// </list>
+        /// </summary>
+        /// <returns></returns>
+        [Browsable(false)]
+        public bool DataValidator()
+        {
+            // TODO: There shall be a nice and automatic way to do it with PropertyDescriptorCollection 
+            return (
+                this.ConsultantID != 0 &&
+                this.ClientID != 0 &&
+                this.BeginningOfFiscalYear != null &&
+                this.LabelEntryBatch != null &&
+                this.FromDate != null &&
+                this.UntilDate != null
+                );
+
         }
     }
 }

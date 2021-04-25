@@ -79,7 +79,7 @@ namespace ECTDatev
             }
             else
             {
-                // all show bookings will be exported
+                // all shown bookings will be exported
                 foreach (ListViewItem lvi in this.lvBookings.Items)
                 {
                     this.BookingList.Add((Buchung)lvi.Tag);
@@ -161,13 +161,18 @@ namespace ECTDatev
                 this.lvBookings.Groups["ausgaben"].Items.Add(listViewItem);
             }
 
-            this.bExport.Enabled = this.lvBookings.Items.Count > 0;
+            this.bExport_CheckEnabled();
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
             System.Diagnostics.Debug.WriteLine("Header (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + header.GetHeader());
             System.Diagnostics.Debug.WriteLine("Headline (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 #endif
+        }
+
+        private void bExport_CheckEnabled()
+        {
+            this.bExport.Enabled = this.lvBookings.Items.Count > 0 && this.m_pgData.DataValidator();
         }
 
         DatevPropertyItems m_pgData;
@@ -213,6 +218,9 @@ namespace ECTDatev
                             lvi.Selected = false;
                         }
                     }
+                    break;
+                default:
+                    this.bExport_CheckEnabled();
                     break;
             }
         }
