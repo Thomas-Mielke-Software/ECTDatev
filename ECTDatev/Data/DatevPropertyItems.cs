@@ -121,7 +121,7 @@ namespace ECTDatev.Data
         /// </summary>
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Mandantennummer, Wert zwischen 1 und 99999")]
+        [Description("Mandantennummer, Wert zwischen 1 und 99999. Diese Angabe befindet sich normalerweise auf der Rechnung der Steuerberater.")]
         [Category("Mussdaten")]
         [DisplayName("Mandantennummer")]
         public int ClientID { get => this.m_ClientID; set => this.m_ClientID = value; }
