@@ -11,16 +11,23 @@ namespace ECTDatev.Data
     /// <summary>
     /// Managing the export
     /// </summary>
-    public static class ExportManager
+    public class ExportManager
     {
         /// <summary>
         /// With this call will the export be ordered.
         /// </summary>
-        /// <param name="exportedBuchungen">The data to be exported.</param>
-        /// <param name="pgData">The data of the property grid</param>
-        public static void Export(Collection<Buchung> exportedBuchungen, DatevPropertyItems pgData)
+        /// <param name="buchungen">The data to be exported.</param>
+        /// <param name="propertyGridData">The data of the property grid</param>
+        public void Export(Collection<Buchung> buchungen, DatevPropertyItems propertyGridData)
         {
+            this.m_Buchungen = buchungen;
+            this.m_PropertyGridData = propertyGridData;
 
+            this.m_dataCategoryList = new List<int>() { 21, 20 }; // list of needed actions for above data
         }
+
+        private Collection<Buchung> m_Buchungen; // the bookings
+        private DatevPropertyItems m_PropertyGridData; // additional data (in property grid)
+        private List<int> m_dataCategoryList; // the list of action for the given data
     }
 }

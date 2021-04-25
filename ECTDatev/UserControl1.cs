@@ -86,7 +86,7 @@ namespace ECTDatev
                     lvi.SubItems.Add("gesendet");
                 }
             }
-            ExportManager.Export(this.BookingList, this.m_pgData);
+            (new ExportManager()).Export(this.BookingList, this.m_pgData);
         }
 
         [DllImport("user32.dll")]
