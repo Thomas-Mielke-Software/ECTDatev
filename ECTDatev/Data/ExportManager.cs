@@ -40,6 +40,13 @@ namespace ECTDatev.Data
             switch (dataCategory)
             {
                 case 21:
+                    StringBuilder fileContent = new StringBuilder();
+
+                    DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
+                    fileContent.Append(header.GetHeader());
+                    fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+
+                    fileContent.Append(Validator.Manager(dataCategory, buchungen));
                     break;
                 case 20:
                     break;
