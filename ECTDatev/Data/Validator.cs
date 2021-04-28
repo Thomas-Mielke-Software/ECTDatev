@@ -38,7 +38,7 @@ namespace ECTDatev.Data
                         bookingID++;
                         for (int j = 1; j <= columnInfo.Count; j++)
                         {
-                            if (j > 0)
+                            if (j > 1)
                             {
                                 ret.Append(Constants.FieldSeparator);
                             }
