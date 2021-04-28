@@ -38,7 +38,10 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>netAssemblyKeyfile.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>abcd.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -99,11 +102,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".NetAssemblyKeyFile.pfx" />
-    <None Include="netAssemblyKeyfile.pfx" />
+    <Content Include="logo.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="logo.jpg" />
+    <None Include="abcd.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
