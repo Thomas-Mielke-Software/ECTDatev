@@ -148,28 +148,99 @@ namespace ECTDatev.Data
             return ret.ToString();
         }
 
-        private static string ValidateDatum(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
+        private static string ValidateDatum(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
             return ret.ToString();
         }
 
-        private static string ValidateKonto(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
+        private static string ValidateKonto(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
             return ret.ToString();
         }
 
-        private static string ValidateText(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
+        private static string ValidateText(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
+            decimal d = 0;
+            string str = string.Empty;
+            switch (dataCategoryID)
+            {
+                case 21:
+                    switch (columnID)
+                    {
+                        case 2:
+                            d = buchung.Betrag;
+                            break;  
+                    }
+                    break;
+                case 65:
+                    switch (columnID)
+                    {
+                        case 4:
+                            d = buchung.Betrag;
+                            break;
+                    }
+                    break;
+            }
+            string oi = columnInfo.OptionalInfo;
+            if (oi != null)
+            {
+                if (oi.StartsWith(Constants.MacroStart) && oi.EndsWith(Constants.MacroEnd))
+                {
+                    oi = oi.Substring(Constants.MacroStart.Length, oi.Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
+                    if (oi.StartsWith(Constants.MacroKeyword_SetDebitOrCredit))
+                    {
+                        string[] strArr = oi.Split(Constants.FieldSeparator.ToCharArray());
+                        if (strArr.Length != 3)
+                        {
+                            throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Unexpected macro parameters (3 fields were expected): {2}", bookingID, columnID, oi));
+                        }
+                        if (Math.Sign(d) >= 0)
+                        {
+                            ret.Append(strArr[2]);
+                        }
+                        else if (Math.Sign(d) < 0)
+                        {
+                            ret.Append(strArr[1]);
+                        }
+                    }
+                    else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
+                    {
+                        if (columnInfo.IsMandatory)
+                        {
+                            throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                        }
+                        else
+                        {
+                            if (str.Equals(string.Empty))
+                            {
+                                // nothing to do
+                            }
+                            else
+                            {
+                                throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                    }
+                }
+                else if (oi.Length > 0)
+                {
+                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Invalid optional data: {2}", bookingID, columnID, oi));
+                }
+            }
 
-            return ret.ToString();
+            return Tools.WrapData(ret.ToString());
         }
 
-        private static string ValidateZahl(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
+        private static string ValidateZahl(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
