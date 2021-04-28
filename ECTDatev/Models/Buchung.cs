@@ -23,23 +23,24 @@ namespace ECTDatev.Models
             this.buchCtrl = buchCtrl;
             this.ID = id;  // handle zur Buchung setzen; tatsächlich ist es die 32-bit Speicheradresse des C++-Objekts, also Vorsicht damit!
         }
-        public int ID { get => buchCtrl.ID; set => buchCtrl.ID = value; }  
-        public decimal Betrag { get => buchCtrl.Betrag; set => buchCtrl.Betrag = value; }
-        public double MWSt { get => buchCtrl.MWSt; set => buchCtrl.MWSt = value; }
-        public short AbschreibungNr { get => buchCtrl.AbschreibungNr; set => buchCtrl.AbschreibungNr = value; }
-        public short AbschreibungJahre { get => buchCtrl.AbschreibungJahre; set => buchCtrl.AbschreibungJahre = value; }
-        public string Beschreibung { get => buchCtrl.Beschreibung; set => buchCtrl.Beschreibung = value; }
-        public DateTime Datum { get => buchCtrl.Datum; set => buchCtrl.Datum = value; }
-        public string Konto { get => buchCtrl.Konto; set => buchCtrl.Konto = value; }
-        public string Belegnummer { get => buchCtrl.Belegnummer; set => buchCtrl.Belegnummer = value; }
-        public decimal AbschreibungRestwert { get => buchCtrl.AbschreibungRestwert; set => buchCtrl.AbschreibungRestwert = value; }
-        public bool AbschreibungDegressiv { get => buchCtrl.AbschreibungDegressiv; set => buchCtrl.AbschreibungDegressiv = value; }
-        public double AbschreibungSatz { get => buchCtrl.AbschreibungSatz; set => buchCtrl.AbschreibungSatz = value; }
-        public int AbschreibungGenauigkeit { get => buchCtrl.AbschreibungGenauigkeit; set => buchCtrl.AbschreibungGenauigkeit = value; }
-        public decimal HoleNetto { get => buchCtrl.HoleNetto(); }
-        public decimal HoleBuchungsjahrNetto(int dokID) { return buchCtrl.HoleBuchungsjahrNetto(dokID); }  // dokID wird für die Berechnung des Abschreibungswerts im spezifischen Jahr benötigt
-        public string Betrieb { get => buchCtrl.Betrieb; set => buchCtrl.Betrieb = value; }
-        public string Bestandskonto { get => buchCtrl.Bestandskonto; set => buchCtrl.Bestandskonto = value; }
-        public Dictionary<string,string> BenutzerdefWert { get => throw new NotImplementedException(); }  // TODO
+        private int id;
+        public int ID { get => id; set => id = value; }  
+        public decimal Betrag { get { buchCtrl.ID = id; return buchCtrl.Betrag; } set { buchCtrl.ID = id; buchCtrl.Betrag = value; } }
+        public double MWSt { get { buchCtrl.ID = id; return buchCtrl.MWSt; } set { buchCtrl.ID = id; buchCtrl.MWSt = value; } }
+        public short AbschreibungNr { get { buchCtrl.ID = id; return buchCtrl.AbschreibungNr; } set { buchCtrl.ID = id; buchCtrl.AbschreibungNr = value; } }
+        public short AbschreibungJahre { get { buchCtrl.ID = id; return buchCtrl.AbschreibungJahre; } set { buchCtrl.ID = id; buchCtrl.AbschreibungJahre = value; } }
+        public string Beschreibung { get { buchCtrl.ID = id; return buchCtrl.Beschreibung; } set { buchCtrl.ID = id; buchCtrl.Beschreibung = value; } }
+        public DateTime Datum { get { buchCtrl.ID = id; return buchCtrl.Datum; } set { buchCtrl.ID = id; buchCtrl.Datum = value; } }
+        public string Konto { get { buchCtrl.ID = id; return buchCtrl.Konto; } set { buchCtrl.ID = id; buchCtrl.Konto = value; } }
+        public string Belegnummer { get { buchCtrl.ID = id; return buchCtrl.Belegnummer; } set { buchCtrl.ID = id; buchCtrl.Belegnummer = value; } }
+        public decimal AbschreibungRestwert { get { buchCtrl.ID = id; return buchCtrl.AbschreibungRestwert; } set { buchCtrl.ID = id; buchCtrl.AbschreibungRestwert = value; } }
+        public bool AbschreibungDegressiv { get { buchCtrl.ID = id; return buchCtrl.AbschreibungDegressiv; } set { buchCtrl.ID = id; buchCtrl.AbschreibungDegressiv = value; } }
+        public double AbschreibungSatz { get { buchCtrl.ID = id; return buchCtrl.AbschreibungSatz; } set { buchCtrl.ID = id; buchCtrl.AbschreibungSatz = value; } }
+        public int AbschreibungGenauigkeit { get { buchCtrl.ID = id; return buchCtrl.AbschreibungGenauigkeit; } set { buchCtrl.ID = id; buchCtrl.AbschreibungGenauigkeit = value; } }
+        public decimal HoleNetto { get { buchCtrl.ID = id; return buchCtrl.HoleNetto(); } }
+        public decimal HoleBuchungsjahrNetto(int dokID) { buchCtrl.ID = id; return buchCtrl.HoleBuchungsjahrNetto(dokID); }  // dokID wird für die Berechnung des Abschreibungswerts im spezifischen Jahr benötigt
+        public string Betrieb { get { buchCtrl.ID = id; return buchCtrl.Betrieb; } set { buchCtrl.ID = id; buchCtrl.Betrieb = value; } }
+        public string Bestandskonto { get { buchCtrl.ID = id; return buchCtrl.Bestandskonto; } set { buchCtrl.ID = id; buchCtrl.Bestandskonto = value; } }
+        public Dictionary<string,string> BenutzerdefWert { get { throw new NotImplementedException(); } }  // TODO
     }
 }

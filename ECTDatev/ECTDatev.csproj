@@ -38,7 +38,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>.NetAssemblyKeyFile.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>netAssemblyKeyfile.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".NetAssemblyKeyFile.pfx" />
+    <None Include="netAssemblyKeyfile.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.jpg" />

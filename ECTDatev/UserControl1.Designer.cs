@@ -57,8 +57,8 @@ namespace ECTDatev
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             this.axEinstellung = new AxEASYCTXLib.AxEinstellung();
             this.axBuchung = new AxEASYCTXLib.AxBuchung();
             this.axDokument = new AxEASYCTXLib.AxDokument();
@@ -77,6 +77,7 @@ namespace ECTDatev
             this.bCancel = new System.Windows.Forms.Button();
             this.gbBuchungen = new System.Windows.Forms.GroupBox();
             this.pgDatevHeader = new System.Windows.Forms.PropertyGrid();
+            this.btnCheckErsteBuchungsbeschreibung = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDokument)).BeginInit();
@@ -127,13 +128,13 @@ namespace ECTDatev
             this.exportStatus});
             this.lvBookings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvBookings.FullRowSelect = true;
-            listViewGroup1.Header = "Einnahmen";
-            listViewGroup1.Name = "einnahmen";
-            listViewGroup2.Header = "Ausgaben";
-            listViewGroup2.Name = "ausgaben";
+            listViewGroup3.Header = "Einnahmen";
+            listViewGroup3.Name = "einnahmen";
+            listViewGroup4.Header = "Ausgaben";
+            listViewGroup4.Name = "ausgaben";
             this.lvBookings.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
             this.lvBookings.HideSelection = false;
             this.lvBookings.Location = new System.Drawing.Point(9, 276);
             this.lvBookings.Name = "lvBookings";
@@ -246,12 +247,24 @@ namespace ECTDatev
             this.pgDatevHeader.TabIndex = 13;
             this.pgDatevHeader.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.pgDatevHeader_PropertyValueChanged);
             // 
+            // btnCheckErsteBuchungsbeschreibung
+            // 
+            this.btnCheckErsteBuchungsbeschreibung.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCheckErsteBuchungsbeschreibung.Location = new System.Drawing.Point(752, 109);
+            this.btnCheckErsteBuchungsbeschreibung.Name = "btnCheckErsteBuchungsbeschreibung";
+            this.btnCheckErsteBuchungsbeschreibung.Size = new System.Drawing.Size(128, 40);
+            this.btnCheckErsteBuchungsbeschreibung.TabIndex = 14;
+            this.btnCheckErsteBuchungsbeschreibung.Text = "Checke erste Buchungsbeschreibung";
+            this.btnCheckErsteBuchungsbeschreibung.UseVisualStyleBackColor = true;
+            this.btnCheckErsteBuchungsbeschreibung.Click += new System.EventHandler(this.btnCheckErsteBuchungsbeschreibung_Click);
+            // 
             // UserControl1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.btnCheckErsteBuchungsbeschreibung);
             this.Controls.Add(this.pgDatevHeader);
             this.Controls.Add(this.gbBuchungen);
             this.Controls.Add(this.bCancel);
@@ -292,5 +305,6 @@ namespace ECTDatev
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.GroupBox gbBuchungen;
         private System.Windows.Forms.PropertyGrid pgDatevHeader;
+        private System.Windows.Forms.Button btnCheckErsteBuchungsbeschreibung;
     }
 }

@@ -170,6 +170,22 @@ namespace ECTDatev
 #endif
         }
 
+        private void btnCheckErsteBuchungsbeschreibung_Click(object sender, EventArgs e)
+        {
+            var einnahmenItems = this.lvBookings.Groups["einnahmen"].Items;
+            if (einnahmenItems.Count <= 1)
+                MessageBox.Show("Bitte erst die Liste füllen ;)");
+            else
+            {
+                var tag = einnahmenItems[0].Tag;
+                var tag2 = einnahmenItems[1].Tag;
+                if (tag != null && tag is Buchung && tag2 != null && tag2 is Buchung)
+                    MessageBox.Show("1. Buchung: " + (tag as Buchung).Beschreibung + " -- 2. Buchung: " + (tag2 as Buchung).Beschreibung);
+                else
+                    MessageBox.Show("Tag des ListView-Item noch nicht gesetzt oder mit falschem Typ :-/");
+            }            
+        }
+
         private void bExport_CheckEnabled()
         {
             this.bExport.Enabled = this.lvBookings.Items.Count > 0 && this.m_pgData.DataValidator();
