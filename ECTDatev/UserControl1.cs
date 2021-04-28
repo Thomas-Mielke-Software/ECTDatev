@@ -11,7 +11,7 @@ namespace ECTDatev
 {
     public partial class UserControl1: UserControl
     {
-        private Collection<Buchung> BookingList = new Collection<Buchung>();
+        private Collection<Buchung> m_bookingList = new Collection<Buchung>();
         private long m_dokID;
         //private DataManager m_dataManager;
 
@@ -59,9 +59,9 @@ namespace ECTDatev
         /// <param name="e"></param>
         private void bExport_Click(object sender, EventArgs e)
         {
-            if (this.BookingList.Count > 0)
+            if (this.m_bookingList.Count > 0)
             {
-                this.BookingList.Clear();
+                this.m_bookingList.Clear();
             }
 
             // hier den Exportvorgang starten
@@ -72,7 +72,7 @@ namespace ECTDatev
                 {
                     if (lvi.Selected)
                     {
-                        this.BookingList.Add((Buchung)lvi.Tag);
+                        this.m_bookingList.Add((Buchung)lvi.Tag);
                         lvi.SubItems.Add("gesendet");
                     }
                 }
@@ -82,11 +82,11 @@ namespace ECTDatev
                 // all shown bookings will be exported
                 foreach (ListViewItem lvi in this.lvBookings.Items)
                 {
-                    this.BookingList.Add((Buchung)lvi.Tag);
+                    this.m_bookingList.Add((Buchung)lvi.Tag);
                     lvi.SubItems.Add("gesendet");
                 }
             }
-            (new ExportManager()).Export(this.BookingList, this.m_pgData);
+            (new ExportManager()).Export(this.m_bookingList, this.m_pgData);
         }
 
         [DllImport("user32.dll")]

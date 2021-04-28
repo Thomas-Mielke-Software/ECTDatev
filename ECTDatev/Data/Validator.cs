@@ -26,38 +26,41 @@ namespace ECTDatev.Data
                 throw new ArgumentNullException("buchungen");
 
             StringBuilder ret = new StringBuilder();
+            int bookingID = 0;
 
             switch (dataCategoryID)
             {
                 case 21:
+                    Dictionary<int, ColumnInfo> columnInfo = DatevFields.GenerateColumnInfos(dataCategoryID);
+                    bookingID = 0;
                     foreach (Buchung buchung in buchungen)
                     {
-                        Dictionary<int, ColumnInfo> columnInfo = DatevFields.GenerateColumnInfos(dataCategoryID);
-                        for (int i = 0; i < columnInfo.Count; i++)
+                        bookingID++;
+                        for (int j = 1; j <= columnInfo.Count; j++)
                         {
-                            if (i > 0)
+                            if (j > 0)
                             {
                                 ret.Append(Constants.FieldSeparator);
                             }
-                            switch (columnInfo[i].TypeText)
+                            switch (columnInfo[j].TypeText)
                             {
                                 case "Betrag":
-                                    ret.Append(ValidateBetrag(i, buchung, columnInfo[i]));
+                                    ret.Append(ValidateBetrag(dataCategoryID, j, buchung, columnInfo[j], bookingID));
                                     break;
                                 case "Datum":
-                                    ret.Append(ValidateDatum(i, buchung, columnInfo[i]));
+                                    ret.Append(ValidateDatum(dataCategoryID, j, buchung, columnInfo[j], bookingID));
                                     break;
                                 case "Konto":
-                                    ret.Append(ValidateKonto(i, buchung, columnInfo[i]));
+                                    ret.Append(ValidateKonto(dataCategoryID, j, buchung, columnInfo[j], bookingID));
                                     break;
                                 case "Text":
-                                    ret.Append(ValidateText(i, buchung, columnInfo[i]));
+                                    ret.Append(ValidateText(dataCategoryID, j, buchung, columnInfo[j], bookingID));
                                     break;
                                 case "Zahl":
-                                    ret.Append(ValidateZahl(i, buchung, columnInfo[i]));
+                                    ret.Append(ValidateZahl(dataCategoryID, j, buchung, columnInfo[j], bookingID));
                                     break;
                             }
-                            if (i == columnInfo.Count - 1)
+                            if (j == columnInfo.Count)
                             {
                                 ret.Append(Constants.LineEndTerminator);
                             }
@@ -68,11 +71,37 @@ namespace ECTDatev.Data
             return ret.ToString();
         }
 
-        private static string ValidateBetrag(int i, Buchung buchung, ColumnInfo columnInfo)
+        private static string ValidateBetrag(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
-
-            decimal d = buchung.Betrag;
+            decimal d = 0;
+            switch (dataCategoryID)
+            {
+                case 21:
+                    switch (columnID)
+                    {
+                        case 1:
+                            d = buchung.Betrag;
+                            break;
+                        case 5:
+                            break;
+                        case 13:
+                            break;
+                    }
+                    break;
+                case 65:
+                    switch (columnID)
+                    {
+                        case 3:
+                            d = buchung.Betrag;
+                            break;
+                        case 6:
+                            break;
+                        case 19:
+                            break;
+                    }
+                    break;
+            }
             string oi = columnInfo.OptionalInfo;
             if (oi != null)
             {
@@ -91,56 +120,56 @@ namespace ECTDatev.Data
                             {
                                 if (columnInfo.IsMandatory)
                                 {
-                                    throw new InvalidOperationException(string.Format("Round {0}: Mandatory data is zero, which is not allowed to be zero: {1}", i, oi));
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
                                 }
                             }
                         }
                     }
                     else
                     {
-                        throw new NotImplementedException(string.Format("Round {0}: Interpreter for macro not implemented: {1}", i, oi));
+                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                     }
                 }
-                else
+                else if (oi.Length > 0)
                 {
-                    throw new InvalidOperationException(string.Format("Round {0}: Invalid optional data: {1}", i, oi));
+                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Invalid optional data: {2}", bookingID, columnID, oi));
                 }
             }
-            string format = "0.".PadRight(columnInfo.DecimalPlaces, '0');
-            if (d == 0 && columnInfo.IsMandatory || d != 0)
+            string format = "0.".PadRight(2 + columnInfo.DecimalPlaces, '0');
+            if (columnInfo.IsMandatory || d != 0)
             {
                 ret.Append(d.ToString(format));
             }
             if (ret.ToString().Length > columnInfo.MaxLength)
             {
-                throw new InvalidOperationException(string.Format("Round {0}: The value is too long (expected max. {1} char): {2}", i, columnInfo.MaxLength, ret.ToString()));
+                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: The value is too long (expected max. {2} char): {3}", bookingID, columnID, columnInfo.MaxLength, ret.ToString()));
             }
 
             return ret.ToString();
         }
 
-        private static string ValidateDatum(int i, Buchung buchung, ColumnInfo columnInfo)
+        private static string ValidateDatum(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
             return ret.ToString();
         }
 
-        private static string ValidateKonto(int i, Buchung buchung, ColumnInfo columnInfo)
+        private static string ValidateKonto(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
             return ret.ToString();
         }
 
-        private static string ValidateText(int i, Buchung buchung, ColumnInfo columnInfo)
+        private static string ValidateText(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
             return ret.ToString();
         }
 
-        private static string ValidateZahl(int i, Buchung buchung, ColumnInfo columnInfo)
+        private static string ValidateZahl(int dataCategoryID, int i, Buchung buchung, ColumnInfo columnInfo, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
 
