@@ -236,7 +236,13 @@ namespace ECTDatev.Data
                     throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Invalid optional data: {2}", bookingID, columnID, oi));
                 }
             }
-
+            if (columnInfo.MaxLength > 0)
+            {
+                if (ret.ToString().Length > columnInfo.MaxLength)
+                {
+                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Field value is too long (expected max. {2} chars): {3}", bookingID, columnID, columnInfo.MaxLength, oi));
+                }
+            }
             return Tools.WrapData(ret.ToString());
         }
 
