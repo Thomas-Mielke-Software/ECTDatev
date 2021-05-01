@@ -37,18 +37,32 @@ namespace ECTDatev.Data
 
         public void CreateExportFile(int dataCategory, Collection<Buchung> buchungen, DatevPropertyItems propertyGridData)
         {
+            StringBuilder fileContent;
+            DatevHeader header;
+
             switch (dataCategory)
             {
                 case 21:
-                    StringBuilder fileContent = new StringBuilder();
+                    fileContent = new StringBuilder();
 
-                    DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
+                    header = new DatevHeader(ToDo.DataCategoryID);
                     fileContent.Append(header.GetHeader());
                     fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 
-                    fileContent.Append(Validator.Manager(dataCategory, buchungen));
+                    fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+
+                    // TODO save the file here
                     break;
                 case 20:
+                    fileContent = new StringBuilder();
+
+                    header = new DatevHeader(ToDo.DataCategoryID);
+                    fileContent.Append(header.GetHeader());
+                    fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+
+                    fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+                    
+                    // TODO save the file here
                     break;
                 default:
                     throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);

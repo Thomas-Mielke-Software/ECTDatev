@@ -141,7 +141,7 @@ namespace ECTDatev.Data
             {
                 if (GetOptionalInfo().StartsWith(macroKeyword))
                 {
-                    return OptionalInfo.Substring(macroKeyword.Length + Constants.FieldSeparator.Length).Split(new string[] { Constants.FieldSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    return GetOptionalInfo().Split(Constants.FieldSeparator.ToCharArray(), StringSplitOptions.None);
                 }
                 else
                     return new string[] { };
