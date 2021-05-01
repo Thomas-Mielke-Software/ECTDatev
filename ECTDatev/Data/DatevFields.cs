@@ -172,6 +172,27 @@ namespace ECTDatev.Data
                     return string.Empty;
             }
 
+            public bool HasMacro
+            {
+                get
+                {
+                    bool ret = false;
+                    if (HasOptionalInfo)
+                    {
+                        if (OptionalInfo.StartsWith(Constants.MacroStart) && OptionalInfo.EndsWith(Constants.MacroEnd))
+                        {
+                            ret = true;
+                        }
+                        else
+                        {
+                            throw new FormatException(string.Format("Seems to be not a well formed macro: {0}", OptionalInfo));
+                        }
+                    }
+                    
+                    return ret;
+                }
+            }
+
             public ColumnInfo(string name, string typeText, int length, int decimalPlaces, int maxLength, string mandatoryText = "No", string optionalInfo = "")
             {
                 Name = name;
