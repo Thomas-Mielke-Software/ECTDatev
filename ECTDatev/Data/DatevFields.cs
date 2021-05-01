@@ -533,7 +533,7 @@ namespace ECTDatev.Data
                 this.GroupName = groupName;
             }
 
-            public Collection<TaxInfo> GetTaxInfos(int year)
+            public static Collection<TaxInfo> GetTaxInfos(int year)
             {
                 Collection<TaxInfo> taxInfos = new Collection<TaxInfo>();
 
