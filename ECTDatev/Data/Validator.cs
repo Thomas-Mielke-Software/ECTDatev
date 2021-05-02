@@ -132,6 +132,7 @@ namespace ECTDatev.Data
                         }
                         else
                         {
+                            // TODO
                             if (columnInfo.IsMandatory)
                             {
                                 throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -140,6 +141,7 @@ namespace ECTDatev.Data
                     }
                     else
                     {
+                        // TODO
                         if (columnInfo.IsMandatory)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -348,6 +350,7 @@ namespace ECTDatev.Data
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
                     {
+                        // TODO
                         if (columnInfo.IsMandatory || str.Length > 0)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -453,6 +456,7 @@ namespace ECTDatev.Data
                         }
                         else
                         {
+                            // TODO
                             if (columnInfo.IsMandatory)
                             {
                                 throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -481,6 +485,7 @@ namespace ECTDatev.Data
                     }
                     else
                     {
+                        // TODO
                         if (columnInfo.IsMandatory)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
