@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ECTDatev.Data.DatevFields;
 
@@ -76,7 +77,8 @@ namespace ECTDatev.Data
         private static string ValidateBetrag(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, DatevPropertyItems propertyGridData, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
-            decimal d = 0;
+            decimal? d = null;
+            string format = "0";
             switch (dataCategoryID)
             {
                 case 21:
@@ -97,10 +99,10 @@ namespace ECTDatev.Data
                         case 3:
                             d = buchung.Betrag;
                             break;
-                        case 6:
-                            break;
-                        case 19:
-                            break;
+                        //case 6:
+                        //    break;
+                        //case 19:
+                        //    break;
                     }
                     break;
             }
@@ -111,37 +113,52 @@ namespace ECTDatev.Data
                     string oi = columnInfo.GetOptionalInfo(mc);
                     if (oi.StartsWith(Constants.MacroKeyword_Abs))
                     {
-                        d = Math.Abs(d);
+                        if (d.HasValue)
+                        {
+                            d = Math.Abs(d.Value);
+                        }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
                     {
-                        if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0))
+                        if (d.HasValue)
                         {
-                            if (d == 0)
+                            if (!string.IsNullOrEmpty(d.Value.ToString(format)))
                             {
-                                if (columnInfo.IsMandatory)
+                                string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_AllowedChars, mc);
+                                string pattern = string.Empty;
+                                for (int i = 1; i < strArr.Length; i++)
                                 {
-                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
+                                    switch (strArr[i])
+                                    {
+                                        case "Numbers":
+                                            pattern += "0-9";
+                                            break;
+                                        case "Letters":
+                                            pattern += "a-zA-Z";
+                                            break;
+                                        default:
+                                            pattern += Regex.Escape(strArr[i]);
+                                            break;
+                                    }
+                                }
+                                // Ok, now we know what is no allowed. Do we have any match?
+                                if (Regex.IsMatch(d.Value.ToString(format), "[" + pattern + "]"))
+                                {
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Not allowed char was found: {2} (expected: {3})", bookingID, columnID, d.Value.ToString(format), pattern));
                                 }
                                 else
                                 {
-                                    // number is 0, but 0 is not allowed => empty return
-                                    return ret.ToString();
+                                    if (!ret.ToString().EndsWith(d.Value.ToString(format)))
+                                    {
+                                        ret.Append(d.Value.ToString(format));
+                                    }
                                 }
-                            }
-                        }
-                        else
-                        {
-                            // TODO
-                            if (columnInfo.IsMandatory)
-                            {
-                                throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                             }
                         }
                     }
                     else
                     {
-                        // TODO
+                        // any new macro?
                         if (columnInfo.IsMandatory)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -149,15 +166,17 @@ namespace ECTDatev.Data
                     }
                 }
             }
-            string format = "0";
             if (columnInfo.DecimalPlaces > 0)
             {
                 format += ".";
                 format = format.PadRight(format.Length + columnInfo.DecimalPlaces, '0');
             }
-            if (columnInfo.IsMandatory || d != 0)
+            if (/*columnInfo.IsMandatory && */ d.HasValue)
             {
-                ret.Append(d.ToString(format));
+                if (!ret.ToString().EndsWith(d.Value.ToString(format)))
+                {
+                    ret.Append(d.Value.ToString(format));
+                }
             }
             if (columnInfo.MaxLength > 0)
             {
@@ -213,7 +232,10 @@ namespace ECTDatev.Data
                             string format = strArr[strArr.GetUpperBound(0)];
                             if (format.Length > 0)
                             {
-                                ret.Append(d.ToString(format));
+                                if (!ret.ToString().EndsWith(d.ToString(format)))
+                                {
+                                    ret.Append(d.ToString(format));
+                                }
                             }
                         }
                     }
@@ -254,7 +276,7 @@ namespace ECTDatev.Data
                             // TODO Gegenkonto
                             break;
                         case 13:
-                            // TODO Kontonummer
+                            // TODO Konto
                             break;
                     }
                     break;
@@ -272,11 +294,15 @@ namespace ECTDatev.Data
                 for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
                 {
                     string oi = columnInfo.GetOptionalInfo(mc);
+                    // TODO validate konto & gegenkonto
                 }
             }
             else
             {
-                ret.Append(str);
+                if (!ret.ToString().EndsWith(str))
+                {
+                    ret.Append(str);
+                }
             }
             if (columnInfo.MaxLength > 0)
             {
@@ -292,7 +318,7 @@ namespace ECTDatev.Data
         private static string ValidateText(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, DatevPropertyItems propertyGridData, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
-            decimal d = 0;
+            decimal? d = null;
             string str = string.Empty;
             bool mayBeShortened = false;
             switch (dataCategoryID)
@@ -312,6 +338,22 @@ namespace ECTDatev.Data
                         case 14:
                             str = buchung.Beschreibung;
                             mayBeShortened = true;
+                            break;
+                        case 37:
+                            // TODO "KOST1" nur für Ausgaben: behalten?
+                            //if (buchung.IstAusgabe)
+                            //{
+                            str = buchung.Konto;
+                            mayBeShortened = true;
+                            //}
+                            break;
+                        case 38:
+                            // TODO "KOST2" nur für Ausgaben: behalten?
+                            //if (buchung.IstAusgabe)
+                            //{
+                            str = buchung.Belegnummer;
+                            mayBeShortened = true;
+                            //}
                             break;
                         case 102:
                             str = propertyGridData.Origin;
@@ -334,39 +376,141 @@ namespace ECTDatev.Data
                     string oi = columnInfo.GetOptionalInfo(mc);
                     if (oi.StartsWith(Constants.MacroKeyword_SetDebitOrCredit))
                     {
-                        string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_SetDebitOrCredit);
-                        if (strArr.Length != 3)
+                        if (d.HasValue)
                         {
-                            throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Unexpected macro parameters (3 fields were expected): {2}", bookingID, columnID, oi));
-                        }
-                        if (Math.Sign(d) >= 0)
-                        {
-                            ret.Append(strArr[2]);
-                        }
-                        else if (Math.Sign(d) < 0)
-                        {
-                            ret.Append(strArr[1]);
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_SetDebitOrCredit);
+                            if (strArr.Length != 3)
+                            {
+                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Unexpected macro parameters (3 fields were expected): {2}", bookingID, columnID, oi));
+                            }
+                            if (Math.Sign(d.Value) >= 0)
+                            {
+                                if (!ret.ToString().EndsWith(strArr[2]))
+                                {
+                                    ret.Append(strArr[2]);
+                                }
+                            }
+                            else if (Math.Sign(d.Value) < 0)
+                            {
+                                if (!ret.ToString().EndsWith(strArr[1]))
+                                {
+                                    ret.Append(strArr[1]);
+                                }
+                            }
                         }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
                     {
-                        // TODO
-                        if (columnInfo.IsMandatory || str.Length > 0)
+                        if (!string.IsNullOrEmpty(str))
                         {
-                            throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_AllowedChars, mc);
+                            bool found = false;
+                            for (int i = 1; i < strArr.Length; i++)
+                            {
+                                if (string.Equals(str, strArr[i]))
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (found)
+                            {
+                                if (!ret.ToString().EndsWith(str))
+                                {
+                                    ret.Append(str);
+                                }
+                            }
+                            else
+                            {
+                                if (columnInfo.IsMandatory)
+                                {
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: A mandatory field was not found: {2} (macro: {3})", bookingID, columnID, str, oi));
+                                }
+                            }
                         }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_AllowedChars))
                     {
-                        // TODO
-                        ret.Append(str);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_AllowedChars, mc);
+                            string pattern = string.Empty;
+                            for (int i = 1; i < strArr.Length; i++)
+                            {
+                                switch (strArr[i])
+                                {
+                                    case "Numbers":
+                                        pattern += "0-9";
+                                        break;
+                                    case "Letters":
+                                        pattern += "a-zA-Z";
+                                        break;
+                                    default:
+                                        pattern += Regex.Escape(strArr[i]);
+                                        break;
+                                }
+                            }
+                            // Ok, now we know what is allowed. Do we have anything not allowed? => negate it
+                            if (Regex.IsMatch(str, "[^" + pattern + "]"))
+                            {
+                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Char outside of the allowed range was found: {2} (expected: {3})", bookingID, columnID, str, pattern));
+                            }
+                            else
+                            {
+                                if (!ret.ToString().EndsWith(str))
+                                {
+                                    ret.Append(str);
+                                }
+                            }
+                        }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
                     {
-                        // TODO
-                        ret.Append(str);
+                        if (!string.IsNullOrEmpty(str))
+                        {
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_NotAllowedChars, mc);
+                            string pattern = string.Empty;
+                            for (int i = 1; i < strArr.Length; i++)
+                            {
+                                switch (strArr[i])
+                                {
+                                    case "Numbers":
+                                        pattern += "0-9";
+                                        break;
+                                    case "Letters":
+                                        pattern += "a-zA-Z";
+                                        break;
+                                    default:
+                                        if (strArr[i].Length == 0)
+                                        {
+                                            // is the field separator char part of the field (is it doubbled)?
+                                            if (oi.Contains(Constants.FieldSeparator + Constants.FieldSeparator))
+                                            {
+                                                // fill up this empty field
+                                                strArr[i] = Constants.FieldSeparator;
+                                            }
+                                        }
+                                        pattern += Regex.Escape(strArr[i]);
+                                        break;
+                                }
+                            }
+                            // Ok, now we know what is no allowed. Do we have any match?
+                            if (Regex.IsMatch(str, "[" + pattern + "]"))
+                            {
+                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Not allowed char was found: {2} (expected: {3})", bookingID, columnID, str, pattern));
+                            }
+                            else
+                            {
+                                if (!ret.ToString().EndsWith(str))
+                                {
+                                    ret.Append(str);
+                                }
+                            }
+                        }
                     }
+                    else
                     {
+                        // any new macro?
                         if (columnInfo.IsMandatory)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -378,7 +522,10 @@ namespace ECTDatev.Data
             {
                 if (str.Length > 0)
                 {
-                    ret.Append(str);
+                    if (!ret.ToString().EndsWith(str))
+                    {
+                        ret.Append(str);
+                    }
                 }
             }
             if (columnInfo.MaxLength > 0)
@@ -405,16 +552,15 @@ namespace ECTDatev.Data
         private static string ValidateZahl(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, DatevPropertyItems propertyGridData, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
-            decimal d = 0;
+            decimal? d = null;
             string format = "0";
-            bool doIt = false;
             switch (dataCategoryID)
             {
                 case 21:
                     switch (columnID)
                     {
                         case 114:
-                            doIt = true;
+                            d = 0; // TODO can we keep it as 0? 0 = keine Festschreibung, 1 = Festschreibung
                             break;
                         default:
                             break;
@@ -435,57 +581,78 @@ namespace ECTDatev.Data
                     string oi = columnInfo.GetOptionalInfo(mc);
                     if (oi.StartsWith(Constants.MacroKeyword_Abs))
                     {
-                        d = Math.Abs(d);
+                        if (d.HasValue)
+                        {
+                            d = Math.Abs(d.Value);
+                        }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
                     {
-                        if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0))
+                        if (d.HasValue)
                         {
-                            if (d == 0)
+                            if (!string.IsNullOrEmpty(d.Value.ToString(format)))
                             {
-                                if (columnInfo.IsMandatory)
+                                string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_NotAllowedChars, mc);
+                                string pattern = string.Empty;
+                                for (int i = 1; i < strArr.Length; i++)
                                 {
-                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
+                                    switch (strArr[i])
+                                    {
+                                        case "Numbers":
+                                            pattern += "0-9";
+                                            break;
+                                        case "Letters":
+                                            pattern += "a-zA-Z";
+                                            break;
+                                        default:
+                                            pattern += Regex.Escape(strArr[i]);
+                                            break;
+                                    }
+                                }
+                                // Ok, now we know what is no allowed. Do we have any match?
+                                if (Regex.IsMatch(d.Value.ToString(format), "[" + pattern + "]"))
+                                {
+                                    if (columnInfo.IsMandatory)
+                                    {
+                                        throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Not allowed char was found: {2} (expected: {3})", bookingID, columnID, d.Value.ToString(format), pattern));
+                                    }
                                 }
                                 else
                                 {
-                                    // number is 0, but 0 is not allowed => empty return
-                                    return ret.ToString();
+                                    if (!ret.ToString().EndsWith(d.Value.ToString(format)))
+                                    {
+                                        ret.Append(d.Value.ToString(format));
+                                    }
                                 }
-                            }
-                        }
-                        else
-                        {
-                            // TODO
-                            if (columnInfo.IsMandatory)
-                            {
-                                throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                             }
                         }
                     }
                     else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
                     {
-                        string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_OneOf);
-                        bool found = false;
-                        for (int i = 1; i < strArr.Length; i++)
+                        if (d.HasValue)
                         {
-                            if (strArr[i] == d.ToString(format))
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_OneOf);
+                            bool found = false;
+                            for (int i = 1; i < strArr.Length; i++)
                             {
-                                found = true;
-                                break;
+                                if (string.Equals(strArr[i], d.Value.ToString(format)))
+                                {
+                                    found = true;
+                                    break;
+                                }
                             }
-                        }
-                        if (!found)
-                        {
-                            if (columnInfo.IsMandatory)
+                            if (!found)
                             {
-                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data wasn´t found: {2}", bookingID, columnID, oi));
+                                if (columnInfo.IsMandatory)
+                                {
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data wasn´t found: {2}", bookingID, columnID, oi));
+                                }
                             }
                         }
                     }
                     else
                     {
-                        // TODO
+                        // any new macro?
                         if (columnInfo.IsMandatory)
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
@@ -498,9 +665,12 @@ namespace ECTDatev.Data
                 format += ".";
                 format = format.PadRight(format.Length + columnInfo.DecimalPlaces, '0');
             }
-            if (columnInfo.IsMandatory || doIt)
+            if (columnInfo.IsMandatory || d.HasValue)
             {
-                ret.Append(d.ToString(format));
+                if (!ret.ToString().EndsWith(d.Value.ToString(format)))
+                {
+                    ret.Append(d.Value.ToString(format));
+                }
             }
             if (ret.ToString().Length > columnInfo.MaxLength)
             {

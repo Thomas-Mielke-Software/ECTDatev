@@ -84,6 +84,10 @@ namespace ECTDatev.Data
             { 1, "Festschreibung" }
         };
 
+        /// <summary>
+        ///  Information about the Datev columns (generated directly from the Datev documentation).
+        ///  See Datev documentation 3.5.1.
+        /// </summary>
         public class ColumnInfo
         {
             public string Name { get; set; }
@@ -94,6 +98,9 @@ namespace ECTDatev.Data
             public string MandatoryText { get; set; }
             public string OptionalInfo { get; set; }
 
+            /// <summary>
+            /// Whether this field is mandatory.
+            /// </summary>
             public bool IsMandatory
             {
                 get
@@ -103,7 +110,7 @@ namespace ECTDatev.Data
             }
 
             /// <summary>
-            /// Optional info for the verification of the given column (given in DATEV documentation)
+            /// Optional info for the verification of the given column (given in DATEV documentation).
             /// </summary>
             public bool HasOptionalInfo
             {
@@ -118,9 +125,9 @@ namespace ECTDatev.Data
             /// <summary>
             /// Returns the optional info as a string ohne <see cref="Constants.MacroStart"/> und <see cref="Constants.MacroEnd"/>.
             /// </summary>
-            /// <param name="number">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
+            /// <param name="macroNumber">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
             /// <returns>The optional info without the leading and ending macro recognizer chars (but starting with a macro keyword as one string with possible with separators) if there is any, otherwise an empty string.</returns>           
-            public string GetOptionalInfo(int number = 1)
+            public string GetOptionalInfo(int macroNumber = 1)
             {
                 if (HasOptionalInfo)
                 {
@@ -131,7 +138,7 @@ namespace ECTDatev.Data
                     else
                     {
                         string[] strArr = Regex.Split(OptionalInfo, Regex.Escape(Constants.MacroSeparator));
-                        return strArr[number - 1].Substring(Constants.MacroStart.Length, strArr[number - 1].Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
+                        return strArr[macroNumber - 1].Substring(Constants.MacroStart.Length, strArr[macroNumber - 1].Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
                     }
                 }
                 else
@@ -144,12 +151,13 @@ namespace ECTDatev.Data
             /// If the optional info has another macro in it than the given keyword, then an empty array will be returned.
             /// </summary>
             /// <param name="macroKeyword">The given macro keyword</param>
+            /// <param name="macroNumber">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
             /// <returns>This is already without the leading and ending macro recognizer chars and without the given macro keyword (as a string array without separators) if there is any, otherwise an empty string.</returns>
-            public string[] GetOptionalInfo(string macroKeyword)
+            public string[] GetOptionalInfo(string macroKeyword, int macroNumber = 1)
             {
-                if (GetOptionalInfo().StartsWith(macroKeyword))
+                if (GetOptionalInfo(macroNumber).StartsWith(macroKeyword))
                 {
-                    return GetOptionalInfo().Split(Constants.FieldSeparator.ToCharArray(), StringSplitOptions.None);
+                    return GetOptionalInfo(macroNumber).Split(Constants.FieldSeparator.ToCharArray(), StringSplitOptions.None);
                 }
                 else
                     return new string[] { };
@@ -159,27 +167,39 @@ namespace ECTDatev.Data
             /// Returns the full macro as string array.
             /// Both <see cref="Constants.MacroStart"/> und <see cref="Constants.MacroEnd"/> aren´t in that array.
             /// </summary>
+            /// <param name="macroNumber">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
             /// <returns>The full macro.</returns>
-            private string[] GetMacro()
+            private string[] GetMacro(int macroNumber = 1)
             {
                 if (HasOptionalInfo)
                 {
-                    return GetOptionalInfo().Split(new string[] { Constants.FieldSeparator }, StringSplitOptions.None);
+                    return GetOptionalInfo(macroNumber).Split(new string[] { Constants.FieldSeparator }, StringSplitOptions.None);
                 }
                 else
                     return new string[] { };
             }
 
-            public string GetMacroKeyword()
+            /// <summary>
+            /// Returns the macro keyword (the first part) of the macro.
+            /// </summary>
+            /// <param name="macroNumber">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
+            /// <returns>Returns the macro keyword (the first part) of the macro.</returns>
+            public string GetMacroKeyword(int macroNumber = 1)
             {
                 if (HasOptionalInfo)
                 {
-                    return GetMacro()[0];
+                    return GetMacro(macroNumber)[0];
                 }
                 else
                     return string.Empty;
             }
 
+            /// <summary>
+            /// Tells, whether this <seealso cref="ColumnInfo"/> has <see cref="OptionalInfo"/> and if yes, 
+            /// whether it starts with <see cref="Constants.MacroStart"/> and ends with <see cref="Constants.MacroEnd"/>,
+            /// otherwise throws <see cref="FormatException"/> for a not well formed macro.
+            /// </summary>
+            /// <exception cref="FormatException">Thrown if the macro is not well formed.</exception>
             public bool HasMacro
             {
                 get
@@ -203,6 +223,7 @@ namespace ECTDatev.Data
 
             /// <summary>
             /// Tells the number of joined macros in the given <see cref="OptionalInfo"/>.
+            /// The macros must be separated by <see cref="Constants.MacroSeparator"/>.
             /// </summary>
             /// <returns>The number of joined macros.</returns>
             public int GetNumberOfMacros()
@@ -228,6 +249,16 @@ namespace ECTDatev.Data
                 return ret;
             }
 
+            /// <summary>
+            /// Information about the Datev columns (generated directly from the Datev documentation).
+            /// </summary>
+            /// <param name="name"></param>
+            /// <param name="typeText"></param>
+            /// <param name="length"></param>
+            /// <param name="decimalPlaces"></param>
+            /// <param name="maxLength"></param>
+            /// <param name="mandatoryText"></param>
+            /// <param name="optionalInfo"></param>
             public ColumnInfo(string name, string typeText, int length, int decimalPlaces, int maxLength, string mandatoryText = "No", string optionalInfo = "")
             {
                 Name = name;
@@ -240,6 +271,11 @@ namespace ECTDatev.Data
             }
         }
 
+        /// <summary>
+        /// Used to validate all needed fields at run-time.
+        /// </summary>
+        /// <param name="dataCategoryID"></param>
+        /// <returns></returns>
         public static Dictionary<int, ColumnInfo> GenerateColumnInfos(int dataCategoryID)
         {
             Dictionary<int, ColumnInfo> columns = new Dictionary<int, ColumnInfo>();
@@ -261,7 +297,7 @@ namespace ECTDatev.Data
                         { 8, new ColumnInfo( "Gegenkonto (ohne BU-Schlüssel)", "Konto", 9, 0, 9, "Ja") },
                         { 9, new ColumnInfo( "BU-Schlüssel", "Text", 4, 0, 4) },
                         { 10, new ColumnInfo("Belegdatum", "Datum", 4, 0, 4, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_DateFormat + Constants.FieldSeparator + "ddMM" + Constants.MacroEnd) },
-                        { 11, new ColumnInfo("Belegfeld 1", "Text", 36, 0, 36, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_AllowedChars + Constants.FieldSeparator + "Numbers" + Constants.FieldSeparator + "Letters" + Constants.FieldSeparator + @"$&%*+-/" + Constants.MacroEnd + Constants.MacroSeparator + Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + " äöüß.,;:" + Constants.MacroEnd) },
+                        { 11, new ColumnInfo("Belegfeld 1", "Text", 36, 0, 36, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_AllowedChars + Constants.FieldSeparator + "Numbers" + Constants.FieldSeparator + "Letters" + Constants.FieldSeparator + @"$&%*+-/" + Constants.MacroEnd + Constants.MacroSeparator + Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + " äöüßÄÖÜ.,;;:" + Constants.MacroEnd) },
                         { 12, new ColumnInfo("Belegfeld 2", "Text", 12, 0, 12) },
                         { 13, new ColumnInfo("Skonto", "Betrag", 8, 2, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 14, new ColumnInfo("Buchungstext", "Text", 60, 0, 60) },
@@ -551,6 +587,10 @@ namespace ECTDatev.Data
             return columns;
         }
 
+        /// <summary>
+        /// See <c>Posting Key</c> (<c>BU-Schlüssel</c>) in Datev documentation 3.5.1, Nr. 9
+        /// and 
+        /// </summary>
         public class TaxInfo
         {
             public int TaxKey { get; set; }

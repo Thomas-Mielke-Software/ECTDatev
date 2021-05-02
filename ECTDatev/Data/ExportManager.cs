@@ -40,33 +40,41 @@ namespace ECTDatev.Data
             StringBuilder fileContent;
             DatevHeader header;
 
-            switch (dataCategory)
-            {
-                case 21:
-                    fileContent = new StringBuilder();
+            //try
+            //{
+                switch (dataCategory)
+                {
+                    case 21:
+                        fileContent = new StringBuilder();
 
-                    header = new DatevHeader(ToDo.DataCategoryID);
-                    fileContent.Append(header.GetHeader());
-                    fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+                        header = new DatevHeader(ToDo.DataCategoryID);
+                        fileContent.Append(header.GetHeader());
+                        fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 
-                    fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+                        fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
 
-                    // TODO save the file here
-                    break;
-                case 20:
-                    fileContent = new StringBuilder();
+                        // TODO save the file here
+                        break;
+                    case 20:
+                        fileContent = new StringBuilder();
 
-                    header = new DatevHeader(ToDo.DataCategoryID);
-                    fileContent.Append(header.GetHeader());
-                    fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+                        header = new DatevHeader(ToDo.DataCategoryID);
+                        fileContent.Append(header.GetHeader());
+                        fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
 
-                    fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
-                    
-                    // TODO save the file here
-                    break;
-                default:
-                    throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);
-            }
+                        fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+
+                        // TODO save the file here
+                        break;
+                    default:
+                        throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);
+                }
+            //}
+            //catch (Exception e)
+            //{
+            //    // TODO Handle the exception. Something went wrong during the export.
+            //    throw e;
+            //}
         }
     }
 }
