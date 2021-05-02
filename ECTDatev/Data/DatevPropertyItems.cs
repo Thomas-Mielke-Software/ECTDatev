@@ -33,9 +33,17 @@ namespace ECTDatev.Data
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Wenn Wahr bzw. True, dann werden nur die per Selektion ausgewählten Buchungen exportiert.")]
-        [Category("Basisdaten")]
-        [DisplayName("ExportPerSelektion")]
+        [Category("Einstellungen")]
+        [DisplayName("Export per Selektion")]
         public bool ExportSelected { get => this.m_ExportSelected; set => this.m_ExportSelected = value; }
+
+        private bool m_ShortenTextValuesWithoutException;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Überlange Textwerte werden auf die erlaubten Länge gekürzt, ohne jeweils dabei eine Exception auszulösen. Die Kürzung erfolgt am Ende des Textes. Manche Textwerte werden unabhängig von dieser Einstellung immer gekürzt.")]
+        [Category("Einstellungen")]
+        [DisplayName("Textwerte kürzen")]
+        public bool ShortenTextValuesWithoutException { get => this.m_ShortenTextValuesWithoutException; set => this.m_ShortenTextValuesWithoutException = value; }
 
         private string m_Origin;
         /// <summary>
@@ -43,7 +51,7 @@ namespace ECTDatev.Data
         /// </summary>
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Herkunfts-Kennzeichen. (2 Zeichen)")]
+        [Description("Herkunfts-Kennzeichen (2 Zeichen).")]
         [Category("Optionale Daten")]
         [DisplayName("Herkunft")]
         public string Origin { get => this.m_Origin; set => this.m_Origin = value; }
@@ -56,7 +64,7 @@ namespace ECTDatev.Data
         [ReadOnly(false)]
         [Description("Der Benutzername des Users, der den Export durchgeführt hat (max. 25 Zeichen).")]
         [Category("Optionale Daten")]
-        [DisplayName("ExportiertVon")]
+        [DisplayName("Exportiert von")]
         public string ExportedBy { get => this.m_ExportedBy; set => this.m_ExportedBy = value; }
 
         private string m_DatevSKR;
@@ -65,21 +73,10 @@ namespace ECTDatev.Data
         /// </summary>
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Datev-Kontenrahmen (2 Zeichen)")]
+        [Description("Datev-Kontenrahmen (2 Zeichen).")]
         [Category("Optionale Daten")]
         [DisplayName("Kontenrahmen")]
         public string DatevSKR { get => this.m_DatevSKR; set => this.m_DatevSKR = value; }
-
-        private DateTime m_UntilDate;
-        /// <summary>
-        /// s. Header 16
-        /// </summary>
-        [Browsable(true)]
-        [ReadOnly(false)]
-        [Description("Das Datum im Buchungsjahr bis dem die Buchungsdaten hier angezeigt werden")]
-        [Category("Datum")]
-        [DisplayName("Bis")]
-        public DateTime UntilDate { get => this.m_UntilDate; set => this.m_UntilDate = value; }
 
         private DateTime m_FromDate;
         /// <summary>
@@ -87,17 +84,28 @@ namespace ECTDatev.Data
         /// </summary>
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Das Datum im Buchungsjahr von dem die Buchungsdaten hier angezeigt werden")]
-        [Category("Datum")]
-        [DisplayName("Von")]
+        [Description("Das Datum im Buchungsjahr, von dem die Buchungsdaten hier angezeigt werden.")]
+        [Category("Datumsbereich der Buchungen")]
+        [DisplayName("Anfang")]
         public DateTime FromDate { get => this.m_FromDate; set => this.m_FromDate = value; }
+
+        private DateTime m_UntilDate;
+        /// <summary>
+        /// s. Header 16
+        /// </summary>
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("Das Datum im Buchungsjahr, bis dem die Buchungsdaten hier angezeigt werden.")]
+        [Category("Datumsbereich der Buchungen")]
+        [DisplayName("Ende")]
+        public DateTime UntilDate { get => this.m_UntilDate; set => this.m_UntilDate = value; }
 
         /// <summary>
         /// s. Header 22
         /// </summary>
         [Browsable(true)]
         [ReadOnly(true)]
-        [Description("Die Währung der Buchungen")]
+        [Description("Die Währung der Buchungen.")]
         [Category("Basisdaten")]
         [DisplayName("Währung")]
         public string CurrencyCode { get => this.m_axDokument.Waehrung; }
@@ -135,7 +143,7 @@ namespace ECTDatev.Data
         [ReadOnly(false)]
         [Description("Beginn des Wirtschaftsjahres")]
         [Category("Mussdaten")]
-        [DisplayName("Wirtschaftsjahresbeginn")]
+        [DisplayName("Beginn des Wirtschaftsjahres")]
         public DateTime BeginningOfFiscalYear { get => this.m_BeginningOfFiscalYear; set => this.m_BeginningOfFiscalYear = value; }
 
         private string m_LabelEntryBatch;
@@ -184,6 +192,7 @@ namespace ECTDatev.Data
             this.BeginningOfFiscalYear = new DateTime(this.BookingsYear, 1, 1);
             this.LabelEntryBatch = "Belege";
             this.Initials = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname").Substring(0, 1) + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name").Substring(0, 1);
+            this.ShortenTextValuesWithoutException = false;
         }
 
         /// <summary>

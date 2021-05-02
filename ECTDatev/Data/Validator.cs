@@ -320,7 +320,7 @@ namespace ECTDatev.Data
             StringBuilder ret = new StringBuilder();
             decimal? d = null;
             string str = string.Empty;
-            bool mayBeShortened = false;
+            bool mayBeShortened = propertyGridData.ShortenTextValuesWithoutException;
             switch (dataCategoryID)
             {
                 case 21:

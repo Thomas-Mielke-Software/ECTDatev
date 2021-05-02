@@ -40,8 +40,8 @@ namespace ECTDatev.Data
             StringBuilder fileContent;
             DatevHeader header;
 
-            //try
-            //{
+            try
+            {
                 switch (dataCategory)
                 {
                     case 21:
@@ -69,12 +69,12 @@ namespace ECTDatev.Data
                     default:
                         throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);
                 }
-            //}
-            //catch (Exception e)
-            //{
-            //    // TODO Handle the exception. Something went wrong during the export.
-            //    throw e;
-            //}
+            }
+            catch (Exception e)
+            {
+                // TODO Handle the exception. Something went wrong during the export.
+                throw e;
+            }
         }
     }
 }
