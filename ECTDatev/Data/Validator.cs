@@ -106,25 +106,35 @@ namespace ECTDatev.Data
             }
             if (columnInfo.HasMacro)
             {
-                string oi = columnInfo.GetOptionalInfo();
-                if (oi.StartsWith(Constants.MacroKeyword_Abs))
+                for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
                 {
-                    d = Math.Abs(d);
-                }
-                else if (oi.StartsWith(Constants.MacroKeyword_NotAllowed))
-                {
-                    if (oi.StartsWith(Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0))
+                    string oi = columnInfo.GetOptionalInfo(mc);
+                    if (oi.StartsWith(Constants.MacroKeyword_Abs))
                     {
-                        if (d == 0)
+                        d = Math.Abs(d);
+                    }
+                    else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
+                    {
+                        if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0))
+                        {
+                            if (d == 0)
+                            {
+                                if (columnInfo.IsMandatory)
+                                {
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
+                                }
+                                else
+                                {
+                                    // number is 0, but 0 is not allowed => empty return
+                                    return ret.ToString();
+                                }
+                            }
+                        }
+                        else
                         {
                             if (columnInfo.IsMandatory)
                             {
-                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
-                            }
-                            else
-                            {
-                                // number is 0, but 0 is not allowed => empty return
-                                return ret.ToString();
+                                throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                             }
                         }
                     }
@@ -134,13 +144,6 @@ namespace ECTDatev.Data
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                         }
-                    }
-                }
-                else
-                {
-                    if (columnInfo.IsMandatory)
-                    {
-                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                     }
                 }
             }
@@ -199,14 +202,17 @@ namespace ECTDatev.Data
             {
                 if (columnInfo.HasMacro)
                 {
-                    string oi = columnInfo.GetOptionalInfo();
-                    if (oi.StartsWith(Constants.MacroKeyword_DateFormat))
+                    for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
                     {
-                        string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_DateFormat);
-                        string format = strArr[strArr.GetUpperBound(0)];
-                        if (format.Length > 0)
+                        string oi = columnInfo.GetOptionalInfo(mc);
+                        if (oi.StartsWith(Constants.MacroKeyword_DateFormat))
                         {
-                            ret.Append(d.ToString(format));
+                            string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_DateFormat);
+                            string format = strArr[strArr.GetUpperBound(0)];
+                            if (format.Length > 0)
+                            {
+                                ret.Append(d.ToString(format));
+                            }
                         }
                     }
                 }
@@ -259,7 +265,17 @@ namespace ECTDatev.Data
                     }
                     break;
             }
-            ret.Append(str);
+            if (columnInfo.HasMacro)
+            {
+                for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
+                {
+                    string oi = columnInfo.GetOptionalInfo(mc);
+                }
+            }
+            else
+            {
+                ret.Append(str);
+            }
             if (columnInfo.MaxLength > 0)
             {
                 if (ret.ToString().Length > columnInfo.MaxLength)
@@ -311,40 +327,47 @@ namespace ECTDatev.Data
             }
             if (columnInfo.HasMacro)
             {
-                string oi = columnInfo.GetOptionalInfo();
-                if (oi.StartsWith(Constants.MacroKeyword_SetDebitOrCredit))
+                for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
                 {
-                    string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_SetDebitOrCredit);
-                    if (strArr.Length != 3)
+                    string oi = columnInfo.GetOptionalInfo(mc);
+                    if (oi.StartsWith(Constants.MacroKeyword_SetDebitOrCredit))
                     {
-                        throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Unexpected macro parameters (3 fields were expected): {2}", bookingID, columnID, oi));
+                        string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_SetDebitOrCredit);
+                        if (strArr.Length != 3)
+                        {
+                            throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Unexpected macro parameters (3 fields were expected): {2}", bookingID, columnID, oi));
+                        }
+                        if (Math.Sign(d) >= 0)
+                        {
+                            ret.Append(strArr[2]);
+                        }
+                        else if (Math.Sign(d) < 0)
+                        {
+                            ret.Append(strArr[1]);
+                        }
                     }
-                    if (Math.Sign(d) >= 0)
+                    else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
                     {
-                        ret.Append(strArr[2]);
+                        if (columnInfo.IsMandatory || str.Length > 0)
+                        {
+                            throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                        }
                     }
-                    else if (Math.Sign(d) < 0)
+                    else if (oi.StartsWith(Constants.MacroKeyword_AllowedChars))
                     {
-                        ret.Append(strArr[1]);
+                        // TODO
+                        ret.Append(str);
                     }
-                }
-                else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
-                {
-                    if (columnInfo.IsMandatory || str.Length > 0)
+                    else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
                     {
-                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                        // TODO
+                        ret.Append(str);
                     }
-                }
-                else if (oi.StartsWith(Constants.MacroKeyword_AllowedChars))
-                {
-                    // TODO
-                    ret.Append(str);
-                }
-                else
-                {
-                    if (columnInfo.IsMandatory)
                     {
-                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                        if (columnInfo.IsMandatory)
+                        {
+                            throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
+                        }
                     }
                 }
             }
@@ -404,25 +427,55 @@ namespace ECTDatev.Data
             }
             if (columnInfo.HasMacro)
             {
-                string oi = columnInfo.GetOptionalInfo();
-                if (oi.StartsWith(Constants.MacroKeyword_Abs))
+                for (int mc = 1; mc <= columnInfo.GetNumberOfMacros(); mc++)
                 {
-                    d = Math.Abs(d);
-                }
-                else if (oi.StartsWith(Constants.MacroKeyword_NotAllowed))
-                {
-                    if (oi.StartsWith(Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0))
+                    string oi = columnInfo.GetOptionalInfo(mc);
+                    if (oi.StartsWith(Constants.MacroKeyword_Abs))
                     {
-                        if (d == 0)
+                        d = Math.Abs(d);
+                    }
+                    else if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars))
+                    {
+                        if (oi.StartsWith(Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0))
+                        {
+                            if (d == 0)
+                            {
+                                if (columnInfo.IsMandatory)
+                                {
+                                    throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
+                                }
+                                else
+                                {
+                                    // number is 0, but 0 is not allowed => empty return
+                                    return ret.ToString();
+                                }
+                            }
+                        }
+                        else
                         {
                             if (columnInfo.IsMandatory)
                             {
-                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data is zero, which is not allowed to be zero: {2}", bookingID, columnID, oi));
+                                throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                             }
-                            else
+                        }
+                    }
+                    else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
+                    {
+                        string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_OneOf);
+                        bool found = false;
+                        for (int i = 1; i < strArr.Length; i++)
+                        {
+                            if (strArr[i] == d.ToString(format))
                             {
-                                // number is 0, but 0 is not allowed => empty return
-                                return ret.ToString();
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            if (columnInfo.IsMandatory)
+                            {
+                                throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data wasn´t found: {2}", bookingID, columnID, oi));
                             }
                         }
                     }
@@ -432,33 +485,6 @@ namespace ECTDatev.Data
                         {
                             throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                         }
-                    }
-                }
-                else if (oi.StartsWith(Constants.MacroKeyword_OneOf))
-                {
-                    string[] strArr = columnInfo.GetOptionalInfo(Constants.MacroKeyword_OneOf);
-                    bool found = false;
-                    for (int i = 1; i < strArr.Length; i++)
-                    {
-                        if (strArr[i] == d.ToString(format))
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        if (columnInfo.IsMandatory)
-                        {
-                            throw new InvalidOperationException(string.Format("{0}. booking, {1}. column: Mandatory data wasn´t found: {2}", bookingID, columnID, oi));
-                        }
-                    }
-                }
-                else
-                {
-                    if (columnInfo.IsMandatory)
-                    {
-                        throw new NotImplementedException(string.Format("{0}. booking, {1}. column: Interpreter for macro not implemented: {2}", bookingID, columnID, oi));
                     }
                 }
             }

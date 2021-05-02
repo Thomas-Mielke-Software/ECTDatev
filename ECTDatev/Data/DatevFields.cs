@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ECTDatev.Data
@@ -117,14 +118,21 @@ namespace ECTDatev.Data
             /// <summary>
             /// Returns the optional info as a string ohne <see cref="Constants.MacroStart"/> und <see cref="Constants.MacroEnd"/>.
             /// </summary>
-            ///
-            /// <returns>The optional info without the leading and ending macro recognizer chars (but starting with a macro keyword as one string with possible with separators) if there is any, otherwise an empty string.</returns>
-            ///
-            public string GetOptionalInfo()
+            /// <param name="number">The (1 based) order number of the macro in this <see cref="OptionalInfo"/></param>
+            /// <returns>The optional info without the leading and ending macro recognizer chars (but starting with a macro keyword as one string with possible with separators) if there is any, otherwise an empty string.</returns>           
+            public string GetOptionalInfo(int number = 1)
             {
                 if (HasOptionalInfo)
                 {
-                    return OptionalInfo.Substring(Constants.MacroStart.Length, OptionalInfo.Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
+                    if (GetNumberOfMacros() == 1)
+                    {
+                        return OptionalInfo.Substring(Constants.MacroStart.Length, OptionalInfo.Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
+                    }
+                    else
+                    {
+                        string[] strArr = Regex.Split(OptionalInfo, Regex.Escape(Constants.MacroSeparator));
+                        return strArr[number - 1].Substring(Constants.MacroStart.Length, strArr[number - 1].Length - Constants.MacroStart.Length - Constants.MacroEnd.Length);
+                    }
                 }
                 else
                     return string.Empty;
@@ -193,6 +201,33 @@ namespace ECTDatev.Data
                 }
             }
 
+            /// <summary>
+            /// Tells the number of joined macros in the given <see cref="OptionalInfo"/>.
+            /// </summary>
+            /// <returns>The number of joined macros.</returns>
+            public int GetNumberOfMacros()
+            {
+                int ret = 0;
+
+                if (HasOptionalInfo)
+                {
+                    MatchCollection mc = Regex.Matches(OptionalInfo, Regex.Escape(Constants.MacroSeparator));
+                    if (mc.Count == 0)
+                    {
+                        if (HasMacro)
+                        {
+                            ret = 1;
+                        }
+                    }
+                    else
+                    {
+                        ret = mc.Count + 1;
+                    }
+                }
+                
+                return ret;
+            }
+
             public ColumnInfo(string name, string typeText, int length, int decimalPlaces, int maxLength, string mandatoryText = "No", string optionalInfo = "")
             {
                 Name = name;
@@ -219,16 +254,16 @@ namespace ECTDatev.Data
                         { 1, new ColumnInfo( "Umsatz (ohne Soll/Haben-Kz)", "Betrag", 10, 2, 13, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_Abs + Constants.MacroEnd) },
                         { 2, new ColumnInfo( "Soll/Haben-Kennzeichen", "Text", 1, 0, 1, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_SetDebitOrCredit + Constants.FieldSeparator + "S" + Constants.FieldSeparator + "H" + Constants.MacroEnd) },
                         { 3, new ColumnInfo( "WKZ Umsatz", "Text", 3, 0, 3) },
-                        { 4, new ColumnInfo( "Kurs", "Zahl", 4, 6, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 4, new ColumnInfo( "Kurs", "Zahl", 4, 6, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 5, new ColumnInfo( "Basis-Umsatz", "Betrag", 10, 2, 13) },
                         { 6, new ColumnInfo( "WKZ Basis-Umsatz", "Text", 3, 0, 3) },
                         { 7, new ColumnInfo( "Konto", "Konto", 9, 0, 9, "Ja") },
                         { 8, new ColumnInfo( "Gegenkonto (ohne BU-Schlüssel)", "Konto", 9, 0, 9, "Ja") },
                         { 9, new ColumnInfo( "BU-Schlüssel", "Text", 4, 0, 4) },
                         { 10, new ColumnInfo("Belegdatum", "Datum", 4, 0, 4, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_DateFormat + Constants.FieldSeparator + "ddMM" + Constants.MacroEnd) },
-                        { 11, new ColumnInfo("Belegfeld 1", "Text", 36, 0, 36, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_AllowedChars + Constants.FieldSeparator + "Numbers" + Constants.FieldSeparator + "Letters" + Constants.FieldSeparator + @"$&%*+-/" + Constants.MacroEnd) },
+                        { 11, new ColumnInfo("Belegfeld 1", "Text", 36, 0, 36, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_AllowedChars + Constants.FieldSeparator + "Numbers" + Constants.FieldSeparator + "Letters" + Constants.FieldSeparator + @"$&%*+-/" + Constants.MacroEnd + Constants.MacroSeparator + Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + " äöüß.,;:" + Constants.MacroEnd) },
                         { 12, new ColumnInfo("Belegfeld 2", "Text", 12, 0, 12) },
-                        { 13, new ColumnInfo("Skonto", "Betrag", 8, 2, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 13, new ColumnInfo("Skonto", "Betrag", 8, 2, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 14, new ColumnInfo("Buchungstext", "Text", 60, 0, 60) },
                         { 15, new ColumnInfo("Postensperre", "Zahl", 1, 0, 1, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_OneOf + Constants.FieldSeparator + 0 + Constants.FieldSeparator + 1 + Constants.MacroEnd) },
                         { 16, new ColumnInfo("Diverse Adressnummer", "Text", 9, 0, 9) },
@@ -258,8 +293,8 @@ namespace ECTDatev.Data
                         { 40, new ColumnInfo("EU-Land u. UStID", "Text", 15, 0, 15) },
                         { 41, new ColumnInfo("EU-Steuersatz", "Zahl", 2, 2, 5) },
                         { 42, new ColumnInfo("Abw. Versteuerungsart", "Text", 1, 0, 1, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_OneOf + Constants.FieldSeparator + "I" + Constants.FieldSeparator + "K" + Constants.FieldSeparator + "P" + Constants.FieldSeparator + "S" + Constants.MacroEnd) },
-                        { 43, new ColumnInfo("Sachverhalt L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
-                        { 44, new ColumnInfo("Funktionsergänzung L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 43, new ColumnInfo("Sachverhalt L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 44, new ColumnInfo("Funktionsergänzung L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 45, new ColumnInfo("BU 49 Hauptfunktionstyp", "Zahl", 1, 0, 1) },
                         { 46, new ColumnInfo("BU 49 Hauptfunktionsnummer", "Zahl", 2, 0, 2) },
                         { 47, new ColumnInfo("BU 49 Funktionsergänzung", "Zahl", 3, 0, 3) },
@@ -314,7 +349,7 @@ namespace ECTDatev.Data
                         { 96, new ColumnInfo("Buchungstyp", "Text", 2, 0, 2, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_OneOf + Constants.FieldSeparator + "AA" + Constants.FieldSeparator + "AG" + Constants.FieldSeparator + "AV" + Constants.FieldSeparator + "SR" + Constants.FieldSeparator + "SU" + Constants.FieldSeparator + "SG" + Constants.FieldSeparator + "SO" + Constants.MacroEnd) },
                         { 97, new ColumnInfo("USt-Schlüssel (Anzahlungen)", "Zahl", 2, 0, 2) },
                         { 98, new ColumnInfo("EU-Land (Anzahlungen)", "Text", 2, 0, 2) },
-                        { 99, new ColumnInfo("Sachverhalt L+L (Anzahlungen)", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 99, new ColumnInfo("Sachverhalt L+L (Anzahlungen)", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 100, new ColumnInfo("EU-Steuersatz (Anzahlungen)", "Zahl", 2, 2, 5) },
                         { 101, new ColumnInfo("Erlöskonto (Anzahlungen)", "Konto", 8, 0, 8) },
                         { 102, new ColumnInfo("Herkunft-Kz", "Text", 2, 0, 2) },
@@ -347,7 +382,7 @@ namespace ECTDatev.Data
                         { 2, new ColumnInfo( "WKZ (Umsatz)", "Text", 3, 0, 3) },
                         { 3, new ColumnInfo( "Umsatz (ohne Soll/Haben-Kz)", "Betrag", 10, 2, 13, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_Abs + Constants.MacroEnd) },
                         { 4, new ColumnInfo( "Soll/Haben-Kennzeichen", "Text", 1, 0, 1, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_SetDebitOrCredit + Constants.FieldSeparator + "S" + Constants.FieldSeparator + "H" + Constants.MacroEnd) },
-                        { 5, new ColumnInfo( "Kurs", "Zahl", 4, 6, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 5, new ColumnInfo( "Kurs", "Zahl", 4, 6, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 6, new ColumnInfo( "Basis-Umsatz", "Betrag", 10, 2, 13) },
                         { 7, new ColumnInfo( "WKZ Basis-Umsatz", "Text", 3, 0, 3) },
                         { 8, new ColumnInfo( "BU-Schlüssel", "Text", 4, 0, 4) },
@@ -361,7 +396,7 @@ namespace ECTDatev.Data
                         { 16, new ColumnInfo("KOST1-Kostenstelle", "Text", 36, 0, 36) },
                         { 17, new ColumnInfo("KOST2-Kostenstelle", "Text", 36, 0, 36) },
                         { 18, new ColumnInfo("KOST-Menge", "Zahl", 12, 4, 17) },
-                        { 19, new ColumnInfo("Skonto", "Betrag", 8, 2, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 19, new ColumnInfo("Skonto", "Betrag", 8, 2, 11, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 20, new ColumnInfo("Buchungstext", "Text", 60, 0, 60) },
                         { 21, new ColumnInfo("Postensperre", "Zahl", 1, 0, 1, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_OneOf + Constants.FieldSeparator + 0 + Constants.FieldSeparator + 1 + Constants.MacroEnd) },
                         { 22, new ColumnInfo("Diverse Adressnummer", "Text", 9, 0, 9) },
@@ -372,7 +407,7 @@ namespace ECTDatev.Data
                         { 27, new ColumnInfo("EU-Land u. UStId", "Text", 15, 0, 15) },
                         { 28, new ColumnInfo("EU-Steuersatz", "Zahl", 2, 2, 5) },
                         { 29, new ColumnInfo("Leerfeld", "Text", 1, 0, 1) },
-                        { 30, new ColumnInfo("Sachverhalt L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 30, new ColumnInfo("Sachverhalt L+L", "Zahl", 3, 0, 3, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 31, new ColumnInfo("BU 49 Hauptfunktionstyp", "Zahl", 1, 0, 1) },
                         { 32, new ColumnInfo("BU 49 Hauptfunktionsnummer", "Zahl", 2, 0, 2) },
                         { 33, new ColumnInfo("BU 49 Funktionsergänzung", "Zahl", 3, 0, 3) },
@@ -494,7 +529,7 @@ namespace ECTDatev.Data
                     Dictionary<int, ColumnInfo> columns63 = new Dictionary<int, ColumnInfo>()
                     {
                         { 1, new ColumnInfo("Bereich", "Zahl", 2, 0, 2, optionalInfo: Constants.MacroStart + Constants.MacroKeyword_OneOf + Constants.FieldSeparator + 0 + Constants.FieldSeparator + 50 + Constants.FieldSeparator + 30 + Constants.FieldSeparator + 40 + Constants.FieldSeparator + 11 + Constants.FieldSeparator + 12 + Constants.FieldSeparator + 64 + Constants.MacroEnd) },
-                        { 2, new ColumnInfo("Kontonummer", "Zahl", 8, 0, 8, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowed + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
+                        { 2, new ColumnInfo("Kontonummer", "Zahl", 8, 0, 8, "Ja", optionalInfo: Constants.MacroStart + Constants.MacroKeyword_NotAllowedChars + Constants.FieldSeparator + 0 + Constants.MacroEnd) },
                         { 3, new ColumnInfo("Buchungssatztyp", "Text", 3, 0, 3, "Ja") },
                         { 4, new ColumnInfo("KontonummerSoll", "Zahl", 8, 0, 8, "Ja") },
                         { 5, new ColumnInfo("KontonummerHaben", "Zahl", 8, 0, 8, "Ja") },

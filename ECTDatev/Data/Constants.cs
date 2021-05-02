@@ -40,13 +40,17 @@ namespace ECTDatev.Data
         /// </summary>
         public const string MacroEnd = "|*}";
         /// <summary>
+        /// You can join macros by this separator.
+        /// </summary>
+        public const string MacroSeparator = "|;|";
+        /// <summary>
         /// The <code>OneOf</code> macro. The first item in the list is the default value and will be used if the empty column is mandatory.
         /// </summary>
         public const string MacroKeyword_OneOf = "ONE OF";
         /// <summary>
-        /// The <code>NotAllowed</code> macro. List the not allowed items.
+        /// The <code>NotAllowedChars</code> macro. Lists the not allowed chars.
         /// </summary>
-        public const string MacroKeyword_NotAllowed = "NOT ALLOWED";
+        public const string MacroKeyword_NotAllowedChars = "NOT ALLOWED CHARS";
         /// <summary>
         /// The <code>DateFormat</code> macro.
         /// </summary>
