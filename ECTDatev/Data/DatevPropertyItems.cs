@@ -110,7 +110,7 @@ namespace ECTDatev.Data
         [DisplayName("Währung")]
         public string CurrencyCode { get => this.m_axDokument.Waehrung; }
 
-        private int m_ConsultantID;
+        private int? m_ConsultantID;
         /// <summary>
         /// s. Header 11
         /// Consultant number, value between 1001 and 9999999
@@ -120,9 +120,9 @@ namespace ECTDatev.Data
         [Description("Beraternummer, Wert zwischen 1001 und 9999999")]
         [Category("Mussdaten")]
         [DisplayName("Beraternummer")]
-        public int ConsultantID { get => this.m_ConsultantID; set => this.m_ConsultantID = value; }
+        public int? ConsultantID { get => this.m_ConsultantID; set => this.m_ConsultantID = value; }
 
-        private int m_ClientID;
+        private int? m_ClientID;
         /// <summary>
         /// s. Header 12
         /// Client number, value between 1 and 99999
@@ -132,7 +132,7 @@ namespace ECTDatev.Data
         [Description("Mandantennummer, Wert zwischen 1 und 99999. Diese Angabe befindet sich normalerweise auf der Rechnung der Steuerberater.")]
         [Category("Mussdaten")]
         [DisplayName("Mandantennummer")]
-        public int ClientID { get => this.m_ClientID; set => this.m_ClientID = value; }
+        public int? ClientID { get => this.m_ClientID; set => this.m_ClientID = value; }
 
         private DateTime m_BeginningOfFiscalYear;
         /// <summary>
@@ -154,7 +154,7 @@ namespace ECTDatev.Data
         [Browsable(true)]
         [ReadOnly(false)]
         [Description("Bezeichnung des Buchungsstapels (30 Zeichen)")]
-        [Category("Mussdaten")]
+        [Category("Optionale Daten")]
         [DisplayName("Buchungsstapel")]
         public string LabelEntryBatch { get => this.m_LabelEntryBatch; set => this.m_LabelEntryBatch = value; }
 
@@ -193,6 +193,8 @@ namespace ECTDatev.Data
             this.LabelEntryBatch = "Belege";
             this.Initials = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname").Substring(0, 1) + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name").Substring(0, 1);
             this.ShortenTextValuesWithoutException = false;
+            this.ClientID = null;
+            this.ConsultantID = null;
         }
 
         /// <summary>
@@ -207,14 +209,15 @@ namespace ECTDatev.Data
         public bool DataValidator()
         {
             // TODO: There shall be a nice and automatic way to do it with PropertyDescriptorCollection 
-            return (
-                this.ConsultantID != 0 &&
-                this.ClientID != 0 &&
+            return
+            (
+                this.ConsultantID.HasValue && this.ConsultantID.Value > 0 &&
+                this.ClientID.HasValue && this.ClientID.Value > 0 &&
                 this.BeginningOfFiscalYear != null &&
                 this.LabelEntryBatch != null &&
                 this.FromDate != null &&
                 this.UntilDate != null
-                );
+            );
 
         }
     }
