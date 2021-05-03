@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ECTDatev.Data
 {
@@ -214,9 +215,7 @@ namespace ECTDatev.Data
                 this.ConsultantID.HasValue && this.ConsultantID.Value > 0 &&
                 this.ClientID.HasValue && this.ClientID.Value > 0 &&
                 this.BeginningOfFiscalYear != null &&
-                this.LabelEntryBatch != null &&
-                this.FromDate != null &&
-                this.UntilDate != null
+                this.FromDate != null && this.UntilDate != null && this.FromDate <= this.UntilDate
             );
 
         }

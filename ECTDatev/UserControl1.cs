@@ -161,7 +161,7 @@ namespace ECTDatev
                 this.lvBookings.Groups["ausgaben"].Items.Add(listViewItem);
             }
 
-            this.bExport_CheckEnabled();
+            this.ValidateButtons(false);
 
 #if DEBUG
             DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
@@ -186,11 +186,6 @@ namespace ECTDatev
             }            
         }
 
-        private void bExport_CheckEnabled()
-        {
-            this.bExport.Enabled = this.lvBookings.Items.Count > 0 && this.m_pgData.DataValidator();
-        }
-
         DatevPropertyItems m_pgData;
         private void InitializePG()
         {
@@ -199,17 +194,21 @@ namespace ECTDatev
             this.lvBookings.MultiSelect = this.m_pgData.ExportSelected;
         }
 
-        private void ValidateButtons(bool oneOfThedateValuesChanged = true)
+        private void ValidateButtons(bool oneOfFromDateOrUntilDateValuesChanged = true)
         {
-            if (this.m_pgData.UntilDate < this.m_pgData.FromDate || this.m_pgData.FromDate > this.m_pgData.UntilDate)
+            if (this.m_pgData.UntilDate < this.m_pgData.FromDate)
             {
                 this.bFillList.Enabled = false;
                 this.bExport.Enabled = false;
             }
             else
             {
-                this.bFillList.Enabled = oneOfThedateValuesChanged;
-                this.bExport.Enabled = !oneOfThedateValuesChanged && this.lvBookings.Items.Count > 0;
+                this.bFillList.Enabled = true;
+                this.bExport.Enabled =
+                    !oneOfFromDateOrUntilDateValuesChanged && 
+                    this.lvBookings.Items.Count > 0 &&
+                    this.m_pgData.DataValidator() &&
+                    ((this.m_pgData.ExportSelected) ? (this.lvBookings.SelectedItems.Count > 0) : true);
             }
         }
 
@@ -217,15 +216,15 @@ namespace ECTDatev
         {
             switch (e.ChangedItem.PropertyDescriptor.DisplayName)
             {
-                case "Von":
+                case "Anfang":
                     this.ValidateButtons();
                     this.bExport.Enabled = false;
                     break;
-                case "Bis":
+                case "Ende":
                     this.ValidateButtons();
                     this.bExport.Enabled = false;
                     break;
-                case "ExportPerSelektion":
+                case "Export per Selektion":
                     this.lvBookings.MultiSelect = this.m_pgData.ExportSelected;
                     if (!this.m_pgData.ExportSelected)
                     {
@@ -234,9 +233,10 @@ namespace ECTDatev
                             lvi.Selected = false;
                         }
                     }
+                    this.ValidateButtons(false);
                     break;
                 default:
-                    this.bExport_CheckEnabled();
+                    this.ValidateButtons(false);
                     break;
             }
         }
@@ -250,6 +250,7 @@ namespace ECTDatev
                     e.Item.Selected = false;
                 }
             }
+            this.ValidateButtons(false);
         }
     }
 }
