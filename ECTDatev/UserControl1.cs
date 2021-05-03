@@ -118,7 +118,7 @@ namespace ECTDatev
             foreach (Buchung b in einnahmen)
             {
                 // filtering by date
-                if (b.Datum < this.m_pgData.FromDate || this.m_pgData.UntilDate < b.Datum)
+                if (b.Datum.Date < this.m_pgData.FromDate.Date || this.m_pgData.UntilDate.Date < b.Datum.Date)
                 {
                     continue; 
                 }
@@ -142,7 +142,7 @@ namespace ECTDatev
             foreach (Buchung b in ausgaben)
             {
                 // filtering by date
-                if (b.Datum < this.m_pgData.FromDate || this.m_pgData.UntilDate < b.Datum)
+                if (b.Datum.Date < this.m_pgData.FromDate.Date || this.m_pgData.UntilDate.Date < b.Datum.Date)
                 {
                     continue;
                 }

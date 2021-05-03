@@ -199,7 +199,7 @@ namespace ECTDatev.Data
                     switch (columnID)
                     {
                         case 10:
-                            d = buchung.Datum;
+                            d = buchung.Datum.Date;
                             break;
                     }
                     break;
