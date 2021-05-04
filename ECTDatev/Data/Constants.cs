@@ -87,6 +87,24 @@ namespace ECTDatev.Data
         /// <summary>
         /// Used in <see cref="Constants.MacroKeyword_AllowedChars"/>.
         /// </summary>
-        public const string ReplacementForNotAllowedChars = "-";
+        public const string ReplacementForNotAllowedChars = "";
+
+        /// <summary>
+        /// If an overlong text get shortened, then this marker will be put to the end of the shortened text in order to show it was cut off
+        /// </summary>
+        public const string TextShortenedMarkerPostfix = "...";
+
+        /// <summary>
+        ///The prefix for the cut off text.
+        /// </summary>
+        public const string CutOffTextMarkerPrefix = "...";
+
+        /// <summary>
+        /// If overlong cut off field content get saved in one of those 20 <c>Additional invoice information</c> fields
+        /// (if <see cref="DatevPropertyItems.SaveOverlongTextValues"/> is true),
+        /// the <c>Additional invoice information type</c> will contain the name of the cut off field (the text is coming from)
+        /// followed by a space char and the part counter (in how many parts that text was saved).
+        /// </summary>
+        public const string FormatForShortenedPartsCounter = " 0";
     }
 }

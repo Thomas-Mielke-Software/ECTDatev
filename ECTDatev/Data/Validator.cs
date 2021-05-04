@@ -16,6 +16,21 @@ namespace ECTDatev.Data
     public static class Validator
     {
         /// <summary>
+        /// Used for cropped overlong text.
+        /// </summary>
+        private static Collection<TextSafeInfo> m_TextSafe = new Collection<TextSafeInfo>();
+
+        /// <summary>
+        /// Used for cropped overlong text in <see cref="ValidateText(int, int, Buchung, ColumnInfo, DatevPropertyItems, int)"/>.
+        /// </summary>
+        internal static Collection<TextSafeInfo> TextSafe { get => m_TextSafe; set => m_TextSafe = value; }
+
+        /// <summary>
+        /// Just to save the <see cref="ColumnInfo"/> objects.
+        /// </summary>
+        internal static Dictionary<int, ColumnInfo> ColumnInfos { get; set; }
+
+        /// <summary>
         /// Manages the export of the data.
         /// </summary>
         /// <param name="dataCategoryID"></param>
@@ -29,40 +44,45 @@ namespace ECTDatev.Data
 
             StringBuilder ret = new StringBuilder();
             int bookingID = 0;
+            TextSafe.Clear();
 
             switch (dataCategoryID)
             {
                 case 21:
-                    Dictionary<int, ColumnInfo> columnInfo = DatevFields.GenerateColumnInfos(dataCategoryID);
+                    ColumnInfos = DatevFields.GenerateColumnInfos(dataCategoryID);
                     bookingID = 0;
+                    if (TextSafe.Count > 0)
+                    {
+                        TextSafe.Clear(); // This may never happen! (only if there wasn´t enough space to save the content of the previous line)
+                    }
                     foreach (Buchung buchung in buchungen)
                     {
                         bookingID++;
-                        for (int j = 1; j <= columnInfo.Count; j++)
+                        for (int j = 1; j <= ColumnInfos.Count; j++)
                         {
                             if (j > 1)
                             {
                                 ret.Append(Constants.FieldSeparator);
                             }
-                            switch (columnInfo[j].TypeText)
+                            switch (ColumnInfos[j].TypeText)
                             {
                                 case "Betrag":
-                                    ret.Append(ValidateBetrag(dataCategoryID, j, buchung, columnInfo[j], propertyGridData, bookingID));
+                                    ret.Append(ValidateBetrag(dataCategoryID, j, buchung, ColumnInfos[j], propertyGridData, bookingID));
                                     break;
                                 case "Datum":
-                                    ret.Append(ValidateDatum(dataCategoryID, j, buchung, columnInfo[j], propertyGridData, bookingID));
+                                    ret.Append(ValidateDatum(dataCategoryID, j, buchung, ColumnInfos[j], propertyGridData, bookingID));
                                     break;
                                 case "Konto":
-                                    ret.Append(ValidateKonto(dataCategoryID, j, buchung, columnInfo[j], propertyGridData, bookingID));
+                                    ret.Append(ValidateKonto(dataCategoryID, j, buchung, ColumnInfos[j], propertyGridData, bookingID));
                                     break;
                                 case "Text":
-                                    ret.Append(ValidateText(dataCategoryID, j, buchung, columnInfo[j], propertyGridData, bookingID));
+                                    ret.Append(ValidateText(dataCategoryID, j, buchung, ColumnInfos[j], propertyGridData, bookingID));
                                     break;
                                 case "Zahl":
-                                    ret.Append(ValidateZahl(dataCategoryID, j, buchung, columnInfo[j], propertyGridData, bookingID));
+                                    ret.Append(ValidateZahl(dataCategoryID, j, buchung, ColumnInfos[j], propertyGridData, bookingID));
                                     break;
                             }
-                            if (j == columnInfo.Count)
+                            if (j == ColumnInfos.Count)
                             {
                                 ret.Append(Constants.LineEndTerminator);
                             }
@@ -315,12 +335,43 @@ namespace ECTDatev.Data
             return ret.ToString();
         }
 
+        internal class TextSafeInfo
+        {
+            /// <summary>
+            /// The order number of the column.
+            /// </summary>
+            public int FieldID { get; set; }
+
+            /// <summary>
+            /// The name of the field.
+            /// </summary>
+            public string Fieldname { get; set; }
+
+            /// <summary>
+            /// The text saved in this object.
+            /// </summary>
+            public string Content { get; set; }
+
+            /// <summary>
+            /// If an overlong text has to be saved in more than one parts. This number tells, how many parts were already saved from this content.
+            /// </summary>
+            public int PartsCounter { get; set; }
+            public TextSafeInfo(int fielID, string fieldname, string content, int partsCounter)
+            {
+                FieldID = FieldID;
+                Fieldname = fieldname;
+                Content = content;
+                PartsCounter = partsCounter;
+            }
+        }
+
         private static string ValidateText(int dataCategoryID, int columnID, Buchung buchung, ColumnInfo columnInfo, DatevPropertyItems propertyGridData, int bookingID)
         {
             StringBuilder ret = new StringBuilder();
             decimal? d = null;
             string str = string.Empty;
-            bool mayBeShortened = propertyGridData.ShortenTextValuesWithoutException;
+            bool mayBeShortened = propertyGridData.ShortenOverlongTextValues;
+            
             switch (dataCategoryID)
             {
                 case 21:
@@ -354,6 +405,99 @@ namespace ECTDatev.Data
                             str = buchung.Belegnummer;
                             mayBeShortened = true;
                             //}
+                            break;
+                        case 48:
+                        case 50:
+                        case 52:
+                        case 54:
+                        case 56:
+                        case 58:
+                        case 60:
+                        case 62:
+                        case 64:
+                        case 66:
+                        case 68:
+                        case 70:
+                        case 72:
+                        case 74:
+                        case 76:
+                        case 78:
+                        case 80:
+                        case 82:
+                        case 84:
+                        case 86:
+                            // is it allowed to use textsafe for the cut off parts?
+                            if (propertyGridData.SaveOverlongTextValues)
+                            {
+                                // do we have items in the safe?
+                                if (TextSafe.Count > 0)
+                                {
+                                    // the increased parts number will be used at the end of the fieldname
+                                    string partsSuffix = (++TextSafe.First<TextSafeInfo>().PartsCounter).ToString(Constants.FormatForShortenedPartsCounter);
+                                    // is the name of colum in the safe overlong?
+                                    if (TextSafe.First<TextSafeInfo>().Fieldname.Length + partsSuffix.Length > columnInfo.MaxLength)
+                                    {
+                                        StringBuilder sb = new StringBuilder();
+                                        // take the allowed length -5 (or 6) (3 for "..." and 2 (or 3) for " <number of fields used for this content, can be 1 or 2 digits>")
+                                        sb.Append(TextSafe.First<TextSafeInfo>().Fieldname.Substring(0, columnInfo.MaxLength - Constants.TextShortenedMarkerPostfix.Length - partsSuffix.Length));
+                                        // append the shortened marker and the part counter
+                                        sb.Append(Constants.TextShortenedMarkerPostfix);
+                                        // append the part counter
+                                        sb.Append(partsSuffix);
+                                        str = sb.ToString();
+                                    }
+                                    else
+                                    {
+                                        StringBuilder sb = new StringBuilder();
+                                        // take the allowed length -2 (or 3) (2 (or 3) for " <number of fields used for this content, can be 1 or 2 digits>")
+                                        sb.Append(TextSafe.First<TextSafeInfo>().Fieldname);
+                                        // append the part counter
+                                        sb.Append(partsSuffix);
+                                        str = sb.ToString();
+                                    }
+                                }
+                            }
+                            break;
+                        case 49:
+                        case 51:
+                        case 53:
+                        case 55:
+                        case 57:
+                        case 59:
+                        case 61:
+                        case 63:
+                        case 65:
+                        case 67:
+                        case 69:
+                        case 71:
+                        case 73:
+                        case 75:
+                        case 77:
+                        case 79:
+                        case 81:
+                        case 83:
+                        case 85:
+                        case 87:
+                            // is it allowed to use textsafe for the cut off parts?
+                            if (propertyGridData.SaveOverlongTextValues)
+                            {
+                                // is there any text saved in a textsafe?
+                                if (TextSafe.Count > 0)
+                                {
+                                    if (Constants.CutOffTextMarkerPrefix.Length + TextSafe.First<TextSafeInfo>().Content.Length + Constants.CutOffTextMarkerPrefix.Length > columnInfo.MaxLength)
+                                    {
+                                        // we cannot save the whole content in this columnInfo => the remaining content shall be kept for the next possible block - if any (the field PartsCounter was already increased)
+                                        str = Constants.CutOffTextMarkerPrefix + TextSafe.First<TextSafeInfo>().Content.Substring(0, columnInfo.MaxLength - Constants.CutOffTextMarkerPrefix.Length - Constants.TextShortenedMarkerPostfix.Length) + Constants.TextShortenedMarkerPostfix;
+                                        TextSafe.First<TextSafeInfo>().Content = TextSafe.First<TextSafeInfo>().Content.Remove(0, columnInfo.MaxLength - Constants.CutOffTextMarkerPrefix.Length - Constants.TextShortenedMarkerPostfix.Length);
+                                    }
+                                    else
+                                    {
+                                        // we can save the whole content in this field => this TextSafeInfo shall be removed
+                                        str = Constants.CutOffTextMarkerPrefix + TextSafe.First<TextSafeInfo>().Content;
+                                        TextSafe.Remove(TextSafe.First<TextSafeInfo>());
+                                    }
+                                }
+                            }
                             break;
                         case 102:
                             str = propertyGridData.Origin;
@@ -530,14 +674,24 @@ namespace ECTDatev.Data
             }
             if (columnInfo.MaxLength > 0)
             {
+                // is the text too long?
                 if (ret.ToString().Length > columnInfo.MaxLength)
                 {
                     if (mayBeShortened)
                     {
-                        // take the first part of the text
+                        // take the first part of the text for the normal export:
                         str = ret.ToString();
                         ret.Clear();
-                        ret.Append(str.Substring(0, columnInfo.MaxLength));
+                        // take out that many text, which fits in this field (less the marker for shortened text´s length)
+                        ret.Append(str.Substring(0, columnInfo.MaxLength - Constants.TextShortenedMarkerPostfix.Length));
+                        // append the marker
+                        ret.Append(Constants.TextShortenedMarkerPostfix);
+                        // is the option for savin the cut off part switched on?
+                        if (propertyGridData.SaveOverlongTextValues)
+                        {
+                            // put in the safe the cut off part
+                            TextSafe.Add(new TextSafeInfo(columnID, columnInfo.Name.Split()[0], str.Remove(0, columnInfo.MaxLength - Constants.TextShortenedMarkerPostfix.Length), 0));
+                        }
                     }
                     else
                     {

@@ -38,13 +38,21 @@ namespace ECTDatev.Data
         [DisplayName("Export per Selektion")]
         public bool ExportSelected { get => this.m_ExportSelected; set => this.m_ExportSelected = value; }
 
-        private bool m_ShortenTextValuesWithoutException;
+        private bool m_ShortenOverlongTextValues;
         [Browsable(true)]
         [ReadOnly(false)]
-        [Description("Überlange Textwerte werden auf die erlaubten Länge gekürzt, ohne jeweils dabei eine Exception auszulösen. Die Kürzung erfolgt am Ende des Textes. Manche Textwerte werden unabhängig von dieser Einstellung immer gekürzt.")]
+        [Description("Überlange Textwerte werden auf die erlaubten Länge gekürzt, ohne jeweils dabei eine Exception auszulösen. Die Kürzung erfolgt am Ende des Textes. Manche Textwerte werden unabhängig von dieser Einstellung immer gekürzt. Werden die Texte nicht gekürzt, dann wird der Export mit einem Fehler abgebrochen, wenn ein überlanger Text gefunden wird. Wird dieser Wert auf 'False' gesetzt, dann wird 'Überlange Textwerte speichern' automatisch mit auf 'False' gesetzt.")]
         [Category("Einstellungen")]
         [DisplayName("Textwerte kürzen")]
-        public bool ShortenTextValuesWithoutException { get => this.m_ShortenTextValuesWithoutException; set => this.m_ShortenTextValuesWithoutException = value; }
+        public bool ShortenOverlongTextValues { get => this.m_ShortenOverlongTextValues; set => this.m_ShortenOverlongTextValues = value; }
+
+        private bool m_SaveOverlongTextValues;
+        [Browsable(true)]
+        [ReadOnly(false)]
+        [Description("20 Bereiche mit jeweils 210 Zeichen können verwendet werden, um abgeschnittene Texte zu übertragen. Geöffnete Bereiche können nicht für unterschiedliche Texte verwendet werden, auch dann nicht, wenn diese nicht voll befüllt sind. Die Bereiche werden nach Badarf verwendet und somit ist es nicht garantiert, dass alle abgeschnittenen Texte übertragen werden können.")]
+        [Category("Einstellungen")]
+        [DisplayName("Überlange Textwerte speichern")]
+        public bool SaveOverlongTextValues { get => this.m_SaveOverlongTextValues; set => this.m_SaveOverlongTextValues = value; }
 
         private string m_Origin;
         /// <summary>
@@ -193,7 +201,8 @@ namespace ECTDatev.Data
             this.BeginningOfFiscalYear = new DateTime(this.BookingsYear, 1, 1);
             this.LabelEntryBatch = "Belege";
             this.Initials = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname").Substring(0, 1) + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name").Substring(0, 1);
-            this.ShortenTextValuesWithoutException = false;
+            this.ShortenOverlongTextValues = true;
+            this.SaveOverlongTextValues = true;
             this.ClientID = null;
             this.ConsultantID = null;
         }

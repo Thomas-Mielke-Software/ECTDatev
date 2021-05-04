@@ -235,6 +235,12 @@ namespace ECTDatev
                     }
                     this.ValidateButtons(false);
                     break;
+                case "Textwerte kürzen":
+                    if (!this.m_pgData.ShortenOverlongTextValues)
+                    {
+                        this.m_pgData.SaveOverlongTextValues = false;
+                    }
+                    break;
                 default:
                     this.ValidateButtons(false);
                     break;
