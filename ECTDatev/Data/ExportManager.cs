@@ -25,9 +25,9 @@ namespace ECTDatev.Data
 
             this.m_dataCategoryList = new List<int>() { 21, 20 }; // list of needed actions for above data
 
-            foreach (int dataCategory in this.m_dataCategoryList)
+            foreach (int dataCategoryID in this.m_dataCategoryList)
             {
-                CreateExportFile(dataCategory, this.m_Buchungen, this.m_PropertyGridData);
+                CreateExportFile(dataCategoryID, this.m_Buchungen, this.m_PropertyGridData);
             }
         }
 
@@ -35,39 +35,39 @@ namespace ECTDatev.Data
         private DatevPropertyItems m_PropertyGridData; // additional data (in property grid)
         private List<int> m_dataCategoryList; // the list of action for the given data
 
-        public void CreateExportFile(int dataCategory, Collection<Buchung> buchungen, DatevPropertyItems propertyGridData)
+        public void CreateExportFile(int dataCategoryID, Collection<Buchung> buchungen, DatevPropertyItems propertyGridData)
         {
             StringBuilder fileContent;
             DatevHeader header;
 
             try
             {
-                switch (dataCategory)
+                switch (dataCategoryID)
                 {
                     case 21:
                         fileContent = new StringBuilder();
 
-                        header = new DatevHeader(ToDo.DataCategoryID);
+                        header = new DatevHeader(dataCategoryID);
                         fileContent.Append(header.GetHeader());
-                        fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+                        fileContent.Append(DatevHeadline.GetHeadline(dataCategoryID));
 
-                        fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+                        fileContent.Append(Validator.Manager(dataCategoryID, buchungen, propertyGridData));
 
                         // TODO save the file here
                         break;
                     case 20:
                         fileContent = new StringBuilder();
 
-                        header = new DatevHeader(ToDo.DataCategoryID);
+                        header = new DatevHeader(dataCategoryID);
                         fileContent.Append(header.GetHeader());
-                        fileContent.Append(DatevHeadline.GetHeadline(ToDo.DataCategoryID));
+                        fileContent.Append(DatevHeadline.GetHeadline(dataCategoryID));
 
-                        fileContent.Append(Validator.Manager(dataCategory, buchungen, propertyGridData));
+                        fileContent.Append(Validator.Manager(dataCategoryID, buchungen, propertyGridData));
 
                         // TODO save the file here
                         break;
                     default:
-                        throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategory);
+                        throw new NotImplementedException("CreateExportFile: dataCategory: " + dataCategoryID);
                 }
             }
             catch (Exception e)

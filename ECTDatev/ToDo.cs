@@ -15,12 +15,6 @@ namespace ECTDatev
     public class ToDo
     {
         /// <summary>
-        /// s. Header 3
-        /// Wird je nach Aufgabenstellung ermittelt.
-        /// </summary>
-        public static int DataCategoryID { get => 21; }
-
-        /// <summary>
         /// s. UI -> Herkunft
         /// </summary>
         public static string Origin { get => Constants.OriginDefault; }

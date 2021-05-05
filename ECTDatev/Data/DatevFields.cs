@@ -629,6 +629,14 @@ namespace ECTDatev.Data
                 this.GroupName = groupName;
             }
 
+            /// <summary>
+            /// see 
+            /// https://apps.datev.de/dnlexka/document/1002086 
+            /// and 
+            /// https://apps.datev.de/dnlexka/document/0904313
+            /// </summary>
+            /// <param name="year"></param>
+            /// <returns></returns>
             public static Collection<TaxInfo> GetTaxInfos(int year)
             {
                 Collection<TaxInfo> taxInfos = new Collection<TaxInfo>();

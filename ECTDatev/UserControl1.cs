@@ -162,12 +162,6 @@ namespace ECTDatev
             }
 
             this.ValidateButtons(false);
-
-#if DEBUG
-            DatevHeader header = new DatevHeader(ToDo.DataCategoryID);
-            System.Diagnostics.Debug.WriteLine("Header (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + header.GetHeader());
-            System.Diagnostics.Debug.WriteLine("Headline (" + ToDo.DataCategoryID.ToString() + ": " + Data.DatevFields.DataCategory[ToDo.DataCategoryID] + "):" + Environment.NewLine + DatevHeadline.GetHeadline(ToDo.DataCategoryID));
-#endif
         }
 
         private void btnCheckErsteBuchungsbeschreibung_Click(object sender, EventArgs e)
