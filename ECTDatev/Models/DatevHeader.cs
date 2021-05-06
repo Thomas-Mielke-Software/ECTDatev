@@ -74,7 +74,8 @@ namespace ECTDatev.Models
         // TODO Check out whether the property values are needed in case of empty columns!
 
         // 14 G/L Account Number Length
-        // TODO: set the length for the remaing cases (possible values: 5(if data category==16) , 8-9(if personal accounts?))
+        // TODO Set the length for the remaing cases (possible values: 5(if data category==16) , 8-9(if personal accounts?))
+        // TODO Create the linkage between this value and 7+8 (account+countra account) of 3.5.1 (Datev docu)
         public int GLAccountNumberLength { get => 4; }
         // 15 Date From
         public DateTime DateFrom { get => this.m_propertyGridData.FromDate; }
@@ -147,7 +148,6 @@ namespace ECTDatev.Models
             // 12 Client
             header.Append(Constants.FieldSeparator + Tools.WrapData(this.Client));
             // 13 Beginning of FY
-            //TODO: check the possible alternatives for the start of FY
             header.Append(Constants.FieldSeparator + Tools.WrapData(this.BeginningOfFY.ToString(Constants.DateFormat_StartFiscalYear), false));
 
             // Following header columns might be empty, s. isShortHeader
