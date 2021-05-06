@@ -47,7 +47,7 @@ namespace ECTDatev.Data
                     case 21:
                         fileContent = new StringBuilder();
 
-                        header = new DatevHeader(dataCategoryID);
+                        header = new DatevHeader(dataCategoryID, propertyGridData);
                         fileContent.Append(header.GetHeader());
                         fileContent.Append(DatevHeadline.GetHeadline(dataCategoryID));
 
@@ -58,7 +58,7 @@ namespace ECTDatev.Data
                     case 20:
                         fileContent = new StringBuilder();
 
-                        header = new DatevHeader(dataCategoryID);
+                        header = new DatevHeader(dataCategoryID, propertyGridData);
                         fileContent.Append(header.GetHeader());
                         fileContent.Append(DatevHeadline.GetHeadline(dataCategoryID));
 

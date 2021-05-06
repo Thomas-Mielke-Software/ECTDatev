@@ -15,24 +15,26 @@ namespace ECTDatev.Models
     /// </summary>
     public class DatevHeader
     {
-        private readonly int dataCategoryID;
-        private readonly DateTime createdOn;
+        private readonly int m_dataCategoryID;
+        private readonly DateTime m_createdOn;
         /// <summary>
         /// s. Datev-Doku 3.3: 
         /// The header for master data contains less information than the header for transaction data.
         /// </summary>
-        private readonly bool isShortHeader;
+        private readonly bool m_isShortHeader;
+        private DatevPropertyItems m_propertyGridData;
 
-        public DatevHeader(int dataCategoryID)
+        public DatevHeader(int dataCategoryID, DatevPropertyItems propertyGridData)
         {
             if (!DatevFields.IsDataCategoryValid(dataCategoryID))
             {
                 throw new KeyNotFoundException("dataCategoryID: " + dataCategoryID.ToString());
             }
 
-            this.dataCategoryID = dataCategoryID;
-            this.createdOn = DateTime.Now;
-            isShortHeader = dataCategoryID != 21 && dataCategoryID != 65;
+            this.m_dataCategoryID = dataCategoryID;
+            this.m_propertyGridData = propertyGridData;
+            this.m_createdOn = DateTime.Now;
+            this.m_isShortHeader = dataCategoryID != 21 && dataCategoryID != 65;
         }
 
         // 1 DATEV Format Identifier
@@ -40,53 +42,59 @@ namespace ECTDatev.Models
         // 2 Version Number
         public int VersionNumber { get => Constants.DATEVFormatVersion; }
         // 3 Data Category
-        public int DataCategoryID { get => this.dataCategoryID; }
+        public int DataCategoryID { get => this.m_dataCategoryID; }
         // 4 Format Name
         public string FormatName { get => DatevFields.DataCategory[this.DataCategoryID]; }
         // 5 Format Version
         public int FormatVersion { get => DatevFields.FormatVersion[DatevFields.DataCategory[this.DataCategoryID]]; }
         // 6 Created On
-        public DateTime CreatedOn { get => this.createdOn; }
+        public DateTime CreatedOn { get => this.m_createdOn; }
         // 7 Imported
         public int? Imported { get => null; }
         // 8 Origin
-        public string Origin { get => ToDo.Origin; }
+        public string Origin { get => this.m_propertyGridData.Origin; }
         // 9 Exported By
-        public string ExportedBy { get => ToDo.ExportedBy; }
+        public string ExportedBy { get => this.m_propertyGridData.ExportedBy; }
         // 10 Imported By
         public string ImportedBy { get => string.Empty; }
         // 11 Consultant
-        public int Consultant { get => ToDo.ConsultantID; }
+        /// <summary>
+        /// ConsultantID if set, otherwise -1.
+        /// </summary>
+        public int Consultant { get => this.m_propertyGridData.ConsultantID ?? -1; }
         // 12 Client
-        public int Client { get => ToDo.Client; }
+        /// <summary>
+        /// ClientID is set, otherwise -1.
+        /// </summary>
+        public int Client { get => this.m_propertyGridData.ClientID ?? -1; }
         // 13 Beginning of FY
-        // TODO: check the possible alternatives for the start of FY
-        public DateTime BeginningOfFY { get => new DateTime(ToDo.Buchungsjahr, 1, 1); }
+        public DateTime BeginningOfFY { get => this.m_propertyGridData.BeginningOfFiscalYear; }
  
         // Following header columns might be empty, s. isShortHeader
         // TODO Check out whether the property values are needed in case of empty columns!
 
         // 14 G/L Account Number Length
-        // TODO: set the length for for the remaing cases (possible values: 5(if data category==16) , 8-9(if personal accounts?))
+        // TODO: set the length for the remaing cases (possible values: 5(if data category==16) , 8-9(if personal accounts?))
         public int GLAccountNumberLength { get => 4; }
         // 15 Date From
-        public DateTime DateFrom { get => ToDo.DateFrom; }
+        public DateTime DateFrom { get => this.m_propertyGridData.FromDate; }
         // 16 Date Until
-        public DateTime DateUntil { get => ToDo.DateUntil; }
+        public DateTime DateUntil { get => this.m_propertyGridData.UntilDate; }
         // 17 Label (entry batch)
-        public string LabelEntryBatch { get => ToDo.LabelEntryBatch; }
+        public string LabelEntryBatch { get => this.m_propertyGridData.LabelEntryBatch; }
         // 18 Initials
-        public string Initials { get => ToDo.Initials; }
+        public string Initials { get => this.m_propertyGridData.Initials; }
         // 19 Record Type
-        //TODO Set the correct Record Type, currently: Keep it empty, thus, it will be interpreted as 1 = Financial accounting (alternative would be: 2 = Annual financial statements)
-        public int? RecordType { get => ToDo.RecordType; }
+        // TODO Set the correct Record Type, currently: Keep it empty, thus, it will be interpreted as 1 = Financial accounting (alternative would be: 2 = Annual financial statements)
+        public int? RecordType { get => 1; }
         // 20 Accounting Reason
-        //TODO Check out whether other reasons are also needed! s. DatevFiels.AccountingReason
+        // TODO Check out whether other reasons are also needed! s. DatevFiels.AccountingReason
         public int AccountingReason { get => 0; }
         // 21 Locking
-        public int Locking { get => ToDo.Locking; }
+        // TODO Check out whether there are cases locking (1) is needed!
+        public int Locking { get => 0; }
         // 22 Currency Code
-        public string CurrencyCode { get => ToDo.CurrencyCode; }
+        public string CurrencyCode { get => this.m_propertyGridData.CurrencyCode; }
         // 23 Reserved
         public int? Reserved23 { get => null; }
         // 24 Derivatives Flag
@@ -96,7 +104,7 @@ namespace ECTDatev.Models
         // 26 Reserved
         public int? Reserved26 { get => null; }
         // 27 COA (Datev-SKR)
-        public string DatevSKR { get => ToDo.DatevSKR; }
+        public string DatevSKR { get => this.m_propertyGridData.DatevSKR; }
         // 28 Industry Solution ID
         public int? IndustrySolutionID { get => null; }
         // 29 Reserved
@@ -104,7 +112,7 @@ namespace ECTDatev.Models
         // 30 Reserved
         public string Reserved30 { get => string.Empty; }
         // 31 Application Information
-        public string ApplicationInformation { get => ToDo.ApplicationInformation; }
+        public string ApplicationInformation { get => this.m_propertyGridData.ApplicationInformation; }
 
         /// <summary>
         /// Creates the header line.
@@ -145,41 +153,41 @@ namespace ECTDatev.Models
             // Following header columns might be empty, s. isShortHeader
 
             // 14 G/L Account Number Length
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.GLAccountNumberLength)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.GLAccountNumberLength)));
             // 15 Date From
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateFrom.ToString(Constants.DateFormat_FromUntil), false)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateFrom.ToString(Constants.DateFormat_FromUntil), false)));
             // 16 Date Until
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateUntil.ToString(Constants.DateFormat_FromUntil), false)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.DateUntil.ToString(Constants.DateFormat_FromUntil), false)));
             // 17 Label (entry batch)
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.LabelEntryBatch)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.LabelEntryBatch)));
             // 18 Initials
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Initials)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Initials)));
             // 19 Record Type
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.RecordType) /* Keep it empty, thus, it will be  1 = Financial accounting (alternative would be: 2 = Annual financial statements) */ ));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.RecordType) /* Keep it empty, thus, it will be  1 = Financial accounting (alternative would be: 2 = Annual financial statements) */ ));
             // 20 Accounting Reason
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.AccountingReason) /* Keep it empty, thus, it becomes 0 = not tied to a specific assessment area */ ));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.AccountingReason) /* Keep it empty, thus, it becomes 0 = not tied to a specific assessment area */ ));
             // 21 Locking
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Locking)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Locking)));
             // 22 Currency Code
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.CurrencyCode)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.CurrencyCode)));
             // 23 Reserved
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved23)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved23)));
             // 24 Derivatives Flag
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DerivativesFlag)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DerivativesFlag)));
             // 25 Reserved
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved25)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved25)));
             // 26 Reserved
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved26)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved26)));
             // 27 COA (Datev-SKR)
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DatevSKR)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.DatevSKR)));
             // 28 Industry Solution ID
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.IndustrySolutionID)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.IndustrySolutionID)));
             // 29 Reserved
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved29)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, false) : Tools.WrapData(this.Reserved29)));
             // 30 Reserved
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Reserved30)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.Reserved30)));
             // 31 Application Information
-            header.Append(Constants.FieldSeparator + (this.isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.ApplicationInformation)));
+            header.Append(Constants.FieldSeparator + (this.m_isShortHeader ? Tools.WrapData(string.Empty, true) : Tools.WrapData(this.ApplicationInformation)));
 
             header.Append(Constants.LineEndTerminator);
 
