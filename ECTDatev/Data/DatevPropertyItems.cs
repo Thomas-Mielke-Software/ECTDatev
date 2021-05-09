@@ -194,13 +194,15 @@ namespace ECTDatev.Data
         [Browsable(false)]
         private void InitValues()
         {
+            string vorname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname");
+            string nachname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
             this.Origin = Constants.OriginDefault;
             this.FromDate = new DateTime(this.BookingsYear, 1, 1);
             this.UntilDate = new DateTime(this.BookingsYear, 12, 31);
-            this.ExportedBy = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname") + " " + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+            this.ExportedBy = vorname + " " + nachname;
             this.BeginningOfFiscalYear = new DateTime(this.BookingsYear, 1, 1);
             this.LabelEntryBatch = "Belege";
-            this.Initials = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname").Substring(0, 1) + this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name").Substring(0, 1);
+            this.Initials = (vorname.Length > 0 ? vorname.Substring(0, 1) : "X") + (nachname.Length > 0 ? nachname.Substring(0, 1) : "X");
             this.ShortenOverlongTextValues = true;
             this.SaveOverlongTextValues = true;
             this.ClientID = null;
