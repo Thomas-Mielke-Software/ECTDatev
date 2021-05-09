@@ -112,7 +112,6 @@ namespace ECTDatev
             this.lvBookings.Items.Clear();
 
             var culture = new System.Globalization.CultureInfo("de-DE");  // wir brauchen DE-Format für DATEV -- unabhängig von den
-                                                                          // 
                                                                           // Einnahmen
             var einnahmen = new EinnahmenBuchungen(axDokument, axBuchung);
             foreach (Buchung b in einnahmen)

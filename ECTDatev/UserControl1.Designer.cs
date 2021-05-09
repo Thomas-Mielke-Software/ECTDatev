@@ -57,8 +57,8 @@ namespace ECTDatev
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControl1));
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Einnahmen", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Ausgaben", System.Windows.Forms.HorizontalAlignment.Left);
             this.axEinstellung = new AxEASYCTXLib.AxEinstellung();
             this.axBuchung = new AxEASYCTXLib.AxBuchung();
             this.axDokument = new AxEASYCTXLib.AxDokument();
@@ -89,27 +89,30 @@ namespace ECTDatev
             // 
             this.axEinstellung.Enabled = true;
             this.axEinstellung.Location = new System.Drawing.Point(496, 476);
+            this.axEinstellung.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.axEinstellung.Name = "axEinstellung";
             this.axEinstellung.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axEinstellung.OcxState")));
-            this.axEinstellung.Size = new System.Drawing.Size(32, 29);
+            this.axEinstellung.Size = new System.Drawing.Size(40, 36);
             this.axEinstellung.TabIndex = 2;
             // 
             // axBuchung
             // 
             this.axBuchung.Enabled = true;
             this.axBuchung.Location = new System.Drawing.Point(456, 476);
+            this.axBuchung.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.axBuchung.Name = "axBuchung";
             this.axBuchung.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axBuchung.OcxState")));
-            this.axBuchung.Size = new System.Drawing.Size(34, 29);
+            this.axBuchung.Size = new System.Drawing.Size(43, 36);
             this.axBuchung.TabIndex = 3;
             // 
             // axDokument
             // 
             this.axDokument.Enabled = true;
             this.axDokument.Location = new System.Drawing.Point(417, 476);
+            this.axDokument.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.axDokument.Name = "axDokument";
             this.axDokument.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axDokument.OcxState")));
-            this.axDokument.Size = new System.Drawing.Size(33, 29);
+            this.axDokument.Size = new System.Drawing.Size(41, 36);
             this.axDokument.TabIndex = 4;
             // 
             // lvBookings
@@ -128,17 +131,18 @@ namespace ECTDatev
             this.exportStatus});
             this.lvBookings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvBookings.FullRowSelect = true;
-            listViewGroup3.Header = "Einnahmen";
-            listViewGroup3.Name = "einnahmen";
-            listViewGroup4.Header = "Ausgaben";
-            listViewGroup4.Name = "ausgaben";
+            listViewGroup1.Header = "Einnahmen";
+            listViewGroup1.Name = "einnahmen";
+            listViewGroup2.Header = "Ausgaben";
+            listViewGroup2.Name = "ausgaben";
             this.lvBookings.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
             this.lvBookings.HideSelection = false;
-            this.lvBookings.Location = new System.Drawing.Point(9, 276);
+            this.lvBookings.Location = new System.Drawing.Point(12, 340);
+            this.lvBookings.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvBookings.Name = "lvBookings";
-            this.lvBookings.Size = new System.Drawing.Size(871, 532);
+            this.lvBookings.Size = new System.Drawing.Size(808, 6254);
             this.lvBookings.TabIndex = 5;
             this.lvBookings.UseCompatibleStateImageBehavior = false;
             this.lvBookings.View = System.Windows.Forms.View.Details;
@@ -192,9 +196,10 @@ namespace ECTDatev
             this.bFillList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bFillList.AutoSize = true;
             this.bFillList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.bFillList.Location = new System.Drawing.Point(6, 29);
+            this.bFillList.Location = new System.Drawing.Point(13, 36);
+            this.bFillList.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bFillList.Name = "bFillList";
-            this.bFillList.Size = new System.Drawing.Size(61, 23);
+            this.bFillList.Size = new System.Drawing.Size(77, 27);
             this.bFillList.TabIndex = 6;
             this.bFillList.Text = "Anzeigen";
             this.bFillList.UseVisualStyleBackColor = true;
@@ -207,9 +212,10 @@ namespace ECTDatev
             // bExport
             // 
             this.bExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bExport.Location = new System.Drawing.Point(752, 197);
+            this.bExport.Location = new System.Drawing.Point(651, 242);
+            this.bExport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(61, 23);
+            this.bExport.Size = new System.Drawing.Size(81, 28);
             this.bExport.TabIndex = 9;
             this.bExport.Text = "Export";
             this.bExport.UseVisualStyleBackColor = true;
@@ -218,9 +224,10 @@ namespace ECTDatev
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(816, 197);
+            this.bCancel.Location = new System.Drawing.Point(736, 242);
+            this.bCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(67, 23);
+            this.bCancel.Size = new System.Drawing.Size(89, 28);
             this.bCancel.TabIndex = 10;
             this.bCancel.Text = "Abbrechen";
             this.bCancel.UseVisualStyleBackColor = true;
@@ -230,9 +237,11 @@ namespace ECTDatev
             // 
             this.gbBuchungen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbBuchungen.Controls.Add(this.bFillList);
-            this.gbBuchungen.Location = new System.Drawing.Point(752, 25);
+            this.gbBuchungen.Location = new System.Drawing.Point(651, 31);
+            this.gbBuchungen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gbBuchungen.Name = "gbBuchungen";
-            this.gbBuchungen.Size = new System.Drawing.Size(128, 78);
+            this.gbBuchungen.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbBuchungen.Size = new System.Drawing.Size(171, 96);
             this.gbBuchungen.TabIndex = 11;
             this.gbBuchungen.TabStop = false;
             this.gbBuchungen.Text = "Buchungen";
@@ -241,18 +250,20 @@ namespace ECTDatev
             // 
             this.pgDatevHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgDatevHeader.Location = new System.Drawing.Point(9, 0);
+            this.pgDatevHeader.Location = new System.Drawing.Point(12, 0);
+            this.pgDatevHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pgDatevHeader.Name = "pgDatevHeader";
-            this.pgDatevHeader.Size = new System.Drawing.Size(733, 270);
+            this.pgDatevHeader.Size = new System.Drawing.Size(625, 332);
             this.pgDatevHeader.TabIndex = 13;
             this.pgDatevHeader.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.pgDatevHeader_PropertyValueChanged);
             // 
             // btnCheckErsteBuchungsbeschreibung
             // 
             this.btnCheckErsteBuchungsbeschreibung.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCheckErsteBuchungsbeschreibung.Location = new System.Drawing.Point(752, 109);
+            this.btnCheckErsteBuchungsbeschreibung.Location = new System.Drawing.Point(651, 134);
+            this.btnCheckErsteBuchungsbeschreibung.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCheckErsteBuchungsbeschreibung.Name = "btnCheckErsteBuchungsbeschreibung";
-            this.btnCheckErsteBuchungsbeschreibung.Size = new System.Drawing.Size(128, 40);
+            this.btnCheckErsteBuchungsbeschreibung.Size = new System.Drawing.Size(171, 49);
             this.btnCheckErsteBuchungsbeschreibung.TabIndex = 14;
             this.btnCheckErsteBuchungsbeschreibung.Text = "Checke erste Buchungsbeschreibung";
             this.btnCheckErsteBuchungsbeschreibung.UseVisualStyleBackColor = true;
@@ -260,7 +271,7 @@ namespace ECTDatev
             // 
             // UserControl1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -273,8 +284,9 @@ namespace ECTDatev
             this.Controls.Add(this.axDokument);
             this.Controls.Add(this.axBuchung);
             this.Controls.Add(this.axEinstellung);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "UserControl1";
-            this.Size = new System.Drawing.Size(892, 819);
+            this.Size = new System.Drawing.Size(540, 6419);
             ((System.ComponentModel.ISupportInitialize)(this.axEinstellung)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axBuchung)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axDokument)).EndInit();

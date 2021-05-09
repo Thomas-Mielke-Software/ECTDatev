@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace ECTDatev.Data
         [DisplayName("Herkunft")]
         public string Origin { get => this.m_Origin; set => this.m_Origin = value; }
 
-        private string m_ExportedBy;
+        private string exportedBy;
         /// <summary>
         ///  s. Header 9
         /// </summary>
@@ -74,7 +75,41 @@ namespace ECTDatev.Data
         [Description("Der Benutzername des Users, der den Export durchgeführt hat (max. 25 Zeichen).")]
         [Category("Optionale Daten")]
         [DisplayName("Exportiert von")]
-        public string ExportedBy { get => this.m_ExportedBy; set => this.m_ExportedBy = value; }
+        public string ExportedBy
+        {
+            get
+            {
+                if (exportedBy == null)
+                {
+                    ExportedBy = m_axEinstellung.HoleEinstellung("[ECTDatev]ExportedBy");
+                    if (exportedBy == "")   // noch nicht extra für das Plugin gespeichert?
+                    {                       // dann aus privaten Einstellungen holen
+                        string vorname = m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname");
+                        string nachname = m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+                        ExportedBy = (vorname.Length > 0 ? vorname + " " : "") + nachname;
+                    }
+                }
+
+                return exportedBy;
+            }
+            set
+            {
+                if (exportedBy != value)
+                {
+                    if (value != null)
+                    {
+                        string vorname = m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname");
+                        string nachname = m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+                        if (exportedBy == (vorname.Length > 0 ? vorname + " " : "") + nachname)   // entspricht dem Namen unter pers. Einstellungen?
+                            m_axEinstellung.SpeichereEinstellung("[ECTDatev]ExportedBy", "");  // dann nicht extra speichern
+                        else
+                            m_axEinstellung.SpeichereEinstellung("[ECTDatev]ExportedBy", value);
+                    }
+
+                    exportedBy = value;
+                }
+            }
+        }
 
         private string m_DatevSKR;
         /// <summary>
@@ -119,7 +154,7 @@ namespace ECTDatev.Data
         [DisplayName("Währung")]
         public string CurrencyCode { get => this.m_axDokument.Waehrung; }
 
-        private int? m_ConsultantID;
+        private int? consultantID;
         /// <summary>
         /// s. Header 11
         /// Consultant number, value between 1001 and 9999999
@@ -129,9 +164,30 @@ namespace ECTDatev.Data
         [Description("Beraternummer, Wert zwischen 1001 und 9999999")]
         [Category("Mussdaten")]
         [DisplayName("Beraternummer")]
-        public int? ConsultantID { get => this.m_ConsultantID; set => this.m_ConsultantID = value; }
+        public int? ConsultantID
+        {
+            get
+            {
+                if (this.consultantID == null)
+                {
+                    int n;
+                    if (Int32.TryParse(m_axEinstellung.HoleEinstellung("[ECTDatev]ConsultantID"), out n))
+                        ConsultantID = n;
+                }
+                return this.consultantID;
+            }
+            set
+            {
+                if (value != consultantID)
+                {
+                    this.consultantID = value;
+                    if (value != null)
+                        m_axEinstellung.SpeichereEinstellung("[ECTDatev]ConsultantID", value.ToString());
+                }
+            }
+        }
 
-        private int? m_ClientID;
+        private int? clientID;
         /// <summary>
         /// s. Header 12
         /// Client number, value between 1 and 99999
@@ -141,7 +197,28 @@ namespace ECTDatev.Data
         [Description("Mandantennummer, Wert zwischen 1 und 99999. Diese Angabe befindet sich normalerweise auf der Rechnung der Steuerberater.")]
         [Category("Mussdaten")]
         [DisplayName("Mandantennummer")]
-        public int? ClientID { get => this.m_ClientID; set => this.m_ClientID = value; }
+        public int? ClientID
+        {
+            get
+            {
+                if (this.clientID == null)
+                {
+                    int n;
+                    if (Int32.TryParse(m_axEinstellung.HoleEinstellung("[ECTDatev]ClientID"), out n))
+                        ClientID = n;
+                }
+                return this.clientID;
+            }
+            set
+            {
+                if (value != clientID)
+                {
+                    clientID = value;
+                    if (value != null)
+                        m_axEinstellung.SpeichereEinstellung("[ECTDatev]ClientID", value.ToString());
+                }
+            }
+        }
 
         private DateTime m_BeginningOfFiscalYear;
         /// <summary>
@@ -167,7 +244,7 @@ namespace ECTDatev.Data
         [DisplayName("Buchungsstapel")]
         public string LabelEntryBatch { get => this.m_LabelEntryBatch; set => this.m_LabelEntryBatch = value; }
 
-        private string m_Initials;
+        private string initials;
         /// <summary>
         /// s. Header 18
         /// the initials are used from the exported entry batch
@@ -177,7 +254,33 @@ namespace ECTDatev.Data
         [Description("Das Diktatkürzel wird aus dem exportierten Buchungsstapel verwendet. (2 Zeichen)")]
         [Category("Optionale Daten")]
         [DisplayName("Diktatkürzel")]
-        public string Initials { get => this.m_Initials; set => this.m_Initials = value; }
+        public string Initials
+        {
+            get
+            {
+                if (initials == null)
+                {
+                    Initials = m_axEinstellung.HoleEinstellung("[ECTDatev]Initials");
+                    if (initials == "")
+                    {
+                        string vorname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname");
+                        string nachname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
+                        Initials = (vorname.Length > 0 ? vorname.Substring(0, 1) : "X") + (nachname.Length > 0 ? nachname.Substring(0, 1) : "X");
+                    }
+                }
+
+                return initials;
+            }
+            set
+            {
+                if (value != initials)
+                {
+                    if (value != null)
+                        m_axEinstellung.SpeichereEinstellung("[ECTDatev]Initials", value);
+                    initials = value;
+                }
+            }
+        }
 
         private string m_ApplicationInformation;
         /// <summary>
@@ -194,15 +297,11 @@ namespace ECTDatev.Data
         [Browsable(false)]
         private void InitValues()
         {
-            string vorname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]vorname");
-            string nachname = this.m_axEinstellung.HoleEinstellung("[Persoenliche_Daten]name");
             this.Origin = Constants.OriginDefault;
             this.FromDate = new DateTime(this.BookingsYear, 1, 1);
             this.UntilDate = new DateTime(this.BookingsYear, 12, 31);
-            this.ExportedBy = vorname + " " + nachname;
             this.BeginningOfFiscalYear = new DateTime(this.BookingsYear, 1, 1);
             this.LabelEntryBatch = "Belege";
-            this.Initials = (vorname.Length > 0 ? vorname.Substring(0, 1) : "X") + (nachname.Length > 0 ? nachname.Substring(0, 1) : "X");
             this.ShortenOverlongTextValues = true;
             this.SaveOverlongTextValues = true;
             this.ClientID = null;
@@ -228,7 +327,16 @@ namespace ECTDatev.Data
                 this.BeginningOfFiscalYear != null &&
                 this.FromDate != null && this.UntilDate != null && this.FromDate <= this.UntilDate
             );
+        }
 
+        /// <summary>
+        /// Returns the property name as string via introspection
+        /// </summary>
+        private string GetPropertyName()
+        {
+            StackTrace callStackTrace = new StackTrace();
+            StackFrame propertyFrame = callStackTrace.GetFrame(2); // 2: below GetPropertyName frame
+            return propertyFrame.GetMethod().Name;
         }
     }
 }
